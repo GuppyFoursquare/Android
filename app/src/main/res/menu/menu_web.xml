@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.youbaku.apps.placesnear.web.WebActivity">
+    <item android:id="@+id/open_with_app"
+        android:icon="@drawable/buttonshare"
+        android:title="@string/donebuttonlabel"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>

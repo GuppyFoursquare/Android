@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_filter_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/keywordlabel"
+        android:layout_margin="5dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/keyword_filter_fragment"
+        android:layout_marginBottom="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@android:color/white"
+        android:hint="@string/searchboxplaceholderlabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_margin="5dp"
+        android:text="@string/placefilterssectionlabel"
+        android:id="@+id/textView8" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@android:color/white">
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New ToggleButton"
+            android:id="@+id/open_toggle_filter_fragment"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/opennowfilterlabel"
+            android:layout_toLeftOf="@id/open_toggle_filter_fragment"
+            android:id="@+id/textView7"
+            android:gravity="center_vertical"
+            android:layout_alignTop="@+id/open_toggle_filter_fragment"
+            android:layout_alignBottom="@+id/open_toggle_filter_fragment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/open_toggle_filter_fragment"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/divider"
+            android:id="@+id/divider_filter_fragment"/>
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New ToggleButton"
+            android:id="@+id/popular_toggle_filter_fragment"
+            android:layout_below="@+id/divider_filter_fragment"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/isverifiedfilterlabel"
+            android:id="@+id/textView77"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/popular_toggle_filter_fragment"
+            android:layout_alignTop="@+id/popular_toggle_filter_fragment"
+            android:layout_alignBottom="@+id/popular_toggle_filter_fragment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:layout_margin="5dp"
+        android:id="@+id/limit_info_text_filter_fragment" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:gravity="center"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="10"
+            android:id="@+id/limit_ten_filter_fragment" />
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:paddingTop="50dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="20"
+            android:id="@+id/limit_twenty_filter_fragment" />
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="30"
+            android:id="@+id/limit_thirty_filter_fragment" />
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="40"
+            android:id="@+id/limit_fourty_filter_fragment" />
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="50"
+            android:id="@+id/limit_fifty_filter_fragment" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/distanceunitsectionlabel"
+        android:id="@+id/distance_info_text_filter_fragment"
+        android:layout_margin="5dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/kilometerlabel"
+            android:id="@+id/kilometer_filter_fragment"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/kilometer_filter_fragment"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/divider"
+            android:id="@+id/divider_two_filter_fragment"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/mileslabel"
+            android:id="@+id/miles_filter_fragment"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/divider_two_filter_fragment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/kilometer_filter_fragment"
+            android:id="@+id/distance_type_filter_fragment"/>
+        </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/distancelabel"
+        android:layout_margin="5dp"
+        android:id="@+id/distance_length_info_text_filter_fragment" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@android:color/white">
+
+        <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/seek_bar_filter_fragment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+
+            android:layout_below="@+id/seek_bar_start_text_filter_fragment"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="100m"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/seek_bar_filter_fragment"
+            android:id="@+id/seek_bar_start_text_filter_fragment"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="15km"
+            android:layout_above="@+id/seek_bar_filter_fragment"
+            android:layout_alignRight="@+id/seek_bar_filter_fragment"
+            android:id="@+id/seek_bar_end_text_filter_fragment"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/sortsectionlabel"
+        android:layout_margin="5dp"
+        android:id="@+id/sort_info_text_filter_fragment" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@android:color/white">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/sort_image_filter_fragment"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/sortbydistancelabel"
+            android:id="@+id/sort_distance_filter_fragment"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/sort_image_filter_fragment"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/sort_distance_filter_fragment"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/divider"
+            android:id="@+id/divider_three_filter_fragment"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/sortbyratinglabel"
+            android:id="@+id/sort_rating_filter_fragment"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/sort_image_filter_fragment"
+            android:layout_below="@+id/divider_three_filter_fragment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/sort_rating_filter_fragment"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/divider"
+            android:id="@+id/divider_four_filter_fragment"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/sortbylikeslabel"
+            android:id="@+id/sort_likes_filter_fragment"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/sort_image_filter_fragment"
+            android:layout_below="@+id/divider_four_filter_fragment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+</LinearLayout>
+</ScrollView>

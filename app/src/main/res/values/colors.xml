@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="selected">#F6FCFF</drawable>
+    <color name="divider_color">#ccc</color>
+
+    <color name="black_overlay">#66000000</color>
+</resources>

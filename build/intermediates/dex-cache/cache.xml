@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/kemal/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.4.0/f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2/picasso-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/picasso-2.4.0-7c8e41d57f57df95d2d231dfd4dbbfe091e7789a.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/Desktop/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-d8b9f0a65b23953ea9c800b0a074da019e95f03a.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-f544eb280ed2394b75d9b02a95404d00c4f1e1fe.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-93acb6e707a60bd445811dd50e0b0445fce0116a.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/libs/androidsvg-1.2.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d0cb3453e18fffeb053e9b7f052af3dcec9f75b4">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/androidsvg-1.2.1-572c91964cc06e77913c672262c8a80632eb0abe.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-1bba99d7851d756dddef03ec028368d1e2e23886.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.15/9093a362d18c5f81f58e49d86dece57d9b6e1cb7/library-1.0.15.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9093a362d18c5f81f58e49d86dece57d9b6e1cb7">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/library-1.0.15-5a0e475f432659f78d2b75a61addac178d49ff8a.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-8bfef373ce91ef1bfc876467eaf4df66615162f0.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/libs/svg-android-1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9f7c80e87e9925b691875dc9388869d87515f7d2">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/svg-android-1.1-7870f66c443ace6a6d2fcb9db3a96d7562a4acd0.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-618ade6830b04d761ce6a58b8813c64025666953.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/libs/Parse-1.8.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c2cb0bfe37cbefd855b6faa3c9a5be833aba7300">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/Parse-1.8.2-cf24062fbd1b79e4069cdfd047bc67cc50fb19dc.jar" />
+    </item>
+
+</items>

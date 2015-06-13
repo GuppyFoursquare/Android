@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.youbaku.apps.placesnear.place.PlaceDetailActivity">
+
+    <item android:id="@+id/write_review_second_detail_menu"
+        android:title="@string/writereviewbuttonlabel"
+        android:icon="@drawable/buttonwritereview"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <!-- @string/openwithtwitterlabel -->
+    <item android:id="@+id/open_with_second_detail_menu"
+        android:title=""
+        android:icon="@drawable/buttonshare"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/get_directions_second_detail_menu"
+        android:title="@string/writereviewbuttonlabel"
+        android:icon="@drawable/buttondirections"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item android:id="@+id/send_review_second_detail_menu"
+        android:title="@string/sendbuttonlabel"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>

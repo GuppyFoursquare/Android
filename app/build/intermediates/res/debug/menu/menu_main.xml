@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/add_place_main_menu"
+        android:title="@string/addbuttonlabel"
+        android:icon="@drawable/button_add_places_near"
+        app:showAsAction="always" />
+    <item android:id="@+id/done_main_menu"
+        android:title="@string/addbuttonlabel"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>
+<!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/menu/menu_main.xml -->

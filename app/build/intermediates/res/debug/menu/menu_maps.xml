@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MapsActivity">
+    <item android:id="@+id/location_selected"
+        android:title="@string/selectbuttonlabel"
+        app:showAsAction="always" />
+    <item android:id="@+id/get_directions_maps_menu"
+        android:title="direction"
+        android:icon="@drawable/buttondirections"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>
+<!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/menu/menu_maps.xml -->

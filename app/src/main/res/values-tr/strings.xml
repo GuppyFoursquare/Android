@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    //---------------------------------------------- APP ----------------------------------------------/
+    <string name="language_code">tr</string>
+    <string name="app_name">YouBaku</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="loadingtext">Yükleniyor</string>
+    //---------------------------------------------- APP ----------------------------------------------/
+
+
+
+
+    //-------------------------------------------- MESSAGES -------------------------------------------/
+    <string name="networkconnectionerrormessage">Etkin bir internet bağlantısı bulunamadı. Lütfen bağlantı ayarlarınızı kontrol ederek tekrar deneyin</string>
+    <string name="loadingdataerrormessage">Veriler yüklenirken bir hata oluştu. Lütfen tekrar deneyin</string>
+    <string name="novenuemessage">Hiç mekan bulunamadı!\nYeni bir filtre uygulayabilir veya kategorilere geri dönebilirsiniz</string>
+    <string name="nofavoritedvenuemessage">Hiç favori mekanınız yok. Mekan sayfasından mekanları favorilerinize ekleyebiirsiniz.</string>
+    <string name="openmapsappmessage">%1$s konumuna yol tarifi için Haritalar uygulaması açmak istiyor musunuz?</string>
+    <string name="locationserviceserrormessagefordisabled">Yakınınızdaki mekanların bulunabilmesi için konumunuzun tespit edilmesi gerekiyor. Lütfen Ayarlar\'dan Konum Servislerini etkinleştirin</string>
+    <string name="locationserviceserrormessageforauthorizationstatusdenied">Lütfen konumunuzun bulunabilmesi için Ayarlar\'dan Konum Servislerini %1$s uygulaması için etkinleştirin.</string>
+    <string name="locationserviceserrormessageforgetdirections">Yol tarifi alabilmeniz için şuanki konumunuzun tespit edilmesi gerekiyor. Lütfen Konum Servislerini etkinleştirin.</string>
+    <string name="locationserviceserrormessageforinvalidlocation">Konumunuz bulunamadı. Lütfen tekrar deneyin</string>
+    //-------------------------------------------- MESSAGES -------------------------------------------/
+
+
+
+
+    //---------------------------------------- FILTER STRINGS -----------------------------------------/
+    <string name="categorydistanceradius">%1$s içinde, %2$s mekan</string>
+
+    <string name="keywordlabel">ANAHTAR KELİME</string>
+    <string name="searchboxplaceholderlabel">bir anahtar kelime yazın</string>
+
+    <string name="placefilterssectionlabel">MEKAN FILTRELERI</string>
+    <string name="opennowfilterlabel">Şuan açık olanlar</string>
+    <string name="isverifiedfilterlabel">Popüler mekanlar</string>
+
+    <string name="resultcountsectionlabel">EN İYİ %1$s MEKANI GÖSTER</string>
+
+    <string name="distanceunitsectionlabel">UZAKLIK BİRİMİ</string>
+    <string name="kilometerlabel">Kilometre/Metre</string>
+    <string name="mileslabel">Mil/Yard</string>
+
+    <string name="sortsectionlabel">SIRALAMA TÜRÜ</string>
+    <string name="sortbydistancelabel">Uzaklığa göre sırala</string>
+    <string name="sortbyratinglabel">Puana göre sırala</string>
+    <string name="sortbylikeslabel">Beğenilere göre sırala</string>
+
+    <string name="distancelabel">UZAKLIK</string>
+    <string name="likeslabel">BEĞENİLER</string>
+    <string name="ratingslabel">PUAN</string>
+    //---------------------------------------- FILTER STRINGS -----------------------------------------/
+
+
+
+
+    //-------------------------------------- ADD PLACE STRINGS ----------------------------------------/
+    <string name="addplacetitlelabel">Mekan Ekle</string>
+
+    <string name="placenamesectionlabel">MEKAN ADI</string>
+    <string name="namefieldplaceholder">Mekanın adını yazın</string>
+
+    <string name="placecategorysectionlabel">KATEGORİ</string>
+
+    <string name="placelocationsectionlabel">KONUM</string>
+    <string name="locationfieldplaceholder">Haritadan konum seçin</string>
+    <string name="selectlocationtitlelabel">Konum Seçimi</string>
+    <string name="selectlocationsubtitlelabel">Konum seçmek için haritaya dokunun</string>
+
+    <string name="addresssectionlabel">ADRES</string>
+    <string name="placeaddresssectionlabel">ADRES</string>
+    <string name="addressfieldplaceholder">Mekanın adresini yazın</string>
+
+    <string name="placedescriptionsectionlabel">AÇIKLAMA</string>
+    <string name="descriptionfieldplaceholder">Mekan için açıklama yazın</string>
+
+    <string name="placewebpagesectionlabel">WEB SAYFASI</string>
+    <string name="webpagefieldplaceholder">Web sayfasının adresini yazın</string>
+
+    <string name="placephonesectionlabel">TELEFON NUMARASI</string>
+    <string name="phonefieldplaceholder">Telefon numarasını yazın</string>
+
+    <string name="placetwittersectionlabel">TWITTER</string>
+    <string name="twitterfieldplaceholder">Twitter kullanıcı adını yazın</string>
+
+    <string name="placefacebooksectionlabel">FACEBOOK</string>
+    <string name="facebookfieldplaceholder">Facebook kullanıcı adını yazın</string>
+
+    <string name="placephotosectionlabel">FOTOĞRAF</string>
+    <string name="selectphotobuttonlabel">Fotoğraf Seçin</string>
+
+    <string name="formvalidationmessage">Tüm alanları doldurun!</string>
+    <string name="addplacesubtitlelabel">Tüm alanları doldurun</string>
+    <string name="placesentsuccessmessage">Teşekkürler! Mekanınız eklendi.</string>
+    <string name="placesentunsuccessmessage">Mekanı şuan ekleyemiyoruz. En kısa zamanda yeniden deneyin!</string>
+    //-------------------------------------- ADD PLACE STRINGS ----------------------------------------/
+
+
+
+
+    //------------------------------------- PLACE DETAIL STRINGS --------------------------------------/
+    <string name="openbuttonlabel">AÇIK</string>
+    <string name="closedbuttonlabel">KAPALI</string>
+
+    <string name="tipssectionlabel">TAVSİYELER</string>
+    <string name="allphotossectionlabel">FOTOĞRAFLAR</string>
+    <string name="dealssectionlabel">FIRSATLAR</string>
+
+    <string name="likebuttonlabel">Beğen</string>
+    <string name="addtofavoriteslabel">Favorilere ekle</string>
+    <string name="removefromfavoriteslabel">Favorilerden sil</string>
+    <string name="writereviewbuttonlabel">Tavsiye yaz</string>
+    <string name="uploadphotolabel">Fotoğraf yükle</string>
+
+    <string name="titledistancelabel">uzakta</string>
+
+    <string name="uplaodinglabel">Yükleniyor...</string>
+    <string name="uploadfailedlabel">Yükleme başarısız!</string>
+    <string name="uploadsuccesslabel">Fotoğraf yüklendi</string>
+
+    <string name="ratinglabl">Puan: </string>
+    //------------------------------------- PLACE DETAIL STRINGS --------------------------------------/
+
+
+
+
+    //------------------------------------- WRITE REVIEW STRINGS --------------------------------------/
+    <string name="ratingsectionlabel">PUAN</string>
+
+    <string name="fullnamesectionlabel">AD VE SOYAD</string>
+    <string name="namefieldplaceholderlabel">Adınızı ve Soyadınızı yazın</string>
+
+    <string name="emailsectionlabel">E-POSTA ADRESİ</string>
+    <string name="emailfieldplaceholderlabel">E-posta adresinizi yazın</string>
+
+    <string name="reviewsectionlabel">TAVSİYENİZ</string>
+    <string name="reviewplaceholderlabel">Tavsiyenizi yazın</string>
+
+    <string name="reviewsentsuccessmessage">Teşekkürle! Tavsiyeniz gönderildi.</string>
+    <string name="reviewsentunsuccessmessage">Tavsiyenizi şuan gönderemiyoruz. En kısa zamanda tekrar deneyin!</string>
+    //------------------------------------- WRITE REVIEW STRINGS --------------------------------------/
+
+
+
+    //----------------------------------------- BUTTON LABELS -----------------------------------------/
+    <string name="alertokbuttonlabel">Tamam</string>
+    <string name="alertcancelbuttonlabel">İptal</string>
+    <string name="retrybuttonlabel">Yeniden Dene</string>
+    <string name="filterbuttonlabel">Filtrele</string>
+    <string name="donebuttonlabel">Bitti</string>
+    <string name="newfilterbuttonlabel">Yeni Filtre</string>
+    <string name="sendbuttonlabel">Gönder</string>
+    <string name="selectbuttonlabel">Seç</string>
+    <string name="addbuttonlabel">Ekle</string>
+    //----------------------------------------- BUTTON LABELS -----------------------------------------/
+
+
+
+
+    //----------------------------------------- OTHER STRINGS ----------------------------------------/
+    <string name="title_activity_place">PlaceActivity</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_photo">PhotoActivity</string>
+    <string name="title_activity_web">WebActivity</string>
+    <string name="title_activity_place_detail">PlaceDetailActivity</string>
+    //----------------------------------------- OTHER STRINGS ----------------------------------------/
+
+
+
+</resources>

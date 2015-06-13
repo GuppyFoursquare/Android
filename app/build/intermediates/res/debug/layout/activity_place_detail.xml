@@ -1,0 +1,11 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:id="@+id/main_activity_place_detail"
+    tools:context="com.youbaku.apps.placesnear.place.PlaceDetailActivity">
+
+
+</RelativeLayout>
+<!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/activity_place_detail.xml -->

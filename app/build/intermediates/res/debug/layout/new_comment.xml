@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/ratingsectionlabel"
+        android:padding="5dp"
+        android:id="@+id/textView10" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/inputFields">
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rating_new_comment"
+            android:layout_centerInParent="true"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="3.5"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/fullnamesectionlabel"
+        android:padding="5dp"
+        android:id="@+id/textView13" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        style="@style/inputFields"
+        android:hint="@string/namefieldplaceholderlabel"
+        android:ems="10"
+        android:id="@+id/name_new_comment" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/emailsectionlabel"
+        android:padding="5dp"
+        android:id="@+id/textView14" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        style="@style/inputFields"
+        android:hint="@string/emailfieldplaceholderlabel"
+        android:ems="10"
+        android:id="@+id/email_new_comment" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/reviewsectionlabel"
+        android:padding="5dp"
+        android:id="@+id/textView15" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        style="@style/inputFields"
+        android:hint="@string/reviewplaceholderlabel"
+        android:ems="10"
+        android:minLines="4"
+        android:id="@+id/comment_new_comment" />
+</LinearLayout>
+</ScrollView><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/new_comment.xml -->
