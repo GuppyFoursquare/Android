@@ -21,4 +21,4 @@
         android:layout_toRightOf="@id/imageview_category_spinner_item"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"/>
-</RelativeLayout><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/category_spinner_item.xml -->
+</RelativeLayout><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/category_spinner_item.xml -->

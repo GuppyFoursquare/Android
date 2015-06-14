@@ -45,4 +45,4 @@
         android:layout_below="@+id/info_deal_list_item"
         android:layout_toRightOf="@+id/image_deal_list_item"
         android:layout_toEndOf="@+id/image_deal_list_item" />
-</RelativeLayout><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/deal_list_item.xml -->
+</RelativeLayout><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/deal_list_item.xml -->

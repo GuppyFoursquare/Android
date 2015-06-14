@@ -5,4 +5,4 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
-<!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/menu/menu_place_favorite.xml -->
+<!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/menu/menu_place_favorite.xml -->

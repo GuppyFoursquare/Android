@@ -180,4 +180,4 @@
                 android:src="@drawable/placeholder_placelist"/>
         </LinearLayout>
     </ScrollView>
-</RelativeLayout><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/add_place.xml -->
+</RelativeLayout><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/add_place.xml -->
