@@ -8,16 +8,19 @@
 
 package com.youbaku.apps.placesnear.category;
 
-import com.youbaku.apps.placesnear.App;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CategoryList{
     private ArrayList<Category> list;
@@ -50,7 +53,77 @@ public class CategoryList{
     }
 
     private void pullList(){
-        ParseQuery<ParseObject> query=ParseQuery.getQuery(App.PARSE_CATEGORIES);
+
+        /***************************************************************************************
+         ***************************************************************************************
+         *                          SAMPLE API CALL
+         ***************************************************************************************
+         **************************************************************************************/
+        String url = "http://192.168.1.38/youbaku/api/category.php";
+        JSONObject apiResponse = null;
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            downloadError=false;
+                            list=new ArrayList<Category>();
+                            JSONArray jArray = response.getJSONArray("content");
+                            FavoriteCategory f=new FavoriteCategory();
+                            list.add(f);
+
+                            //Read JsonArray
+                            for (int i = 0; i < jArray.length(); i++) {
+                                JSONObject obj = jArray.getJSONObject(i);
+                                final Category c=new Category();
+
+                                c.title=obj.getString("cat_name")+"";
+                                c.iconURL=obj.getString("cat_image");
+                                list.add(c);
+//                                c.color=obj.getString("color")+"";
+//                                c.objectId=obj.getObjectId()+"";
+//                                ParseFile marker=obj.getParseFile("pinicon");
+//                                c.markerURL=marker.getUrl();
+//                                ParseFile icon=obj.getParseFile("icon");
+//
+//                                list.add(c);
+//                                String cat_name = obj.getString("cat_name");
+
+                                Log.i("GUPPY", c.title);
+                            }
+                            downloader.categoryDownloaded(list);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+
+
+
+
+        /***************************************************************************************
+         ***************************************************************************************
+         *                          SAMPLE API CALL
+         ***************************************************************************************
+         **************************************************************************************/
+
+       /* ParseQuery<ParseObject> query= ParseQuery.getQuery(App.PARSE_CATEGORIES);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
@@ -84,7 +157,7 @@ public class CategoryList{
             }
         }
 
-        );
+        );*/
     }
 
     public boolean isInProgress(){

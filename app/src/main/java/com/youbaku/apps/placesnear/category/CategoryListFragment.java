@@ -22,24 +22,22 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
-public  class CategoryListFragment extends Fragment{
+public class CategoryListFragment extends Fragment {
     private ArrayList<Category> list;
     private CategoryAdapter adap;
     private test.OnFragmentInteractionListener mListener;
@@ -52,17 +50,19 @@ public  class CategoryListFragment extends Fragment{
 
         }
     }
-    public void setList(ArrayList<Category> cat){
-        list=cat;
+
+    public void setList(ArrayList<Category> cat) {
+        list = cat;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-      view=inflater.inflate(R.layout.category_layout, container, false);
+        view = inflater.inflate(R.layout.category_layout, container, false);
 
-        adap=new CategoryAdapter(getActivity(),list);
-        GridView grLv=(GridView)view.findViewById(R.id.gridView1);
+        adap = new CategoryAdapter(getActivity(), list);
+        GridView grLv = (GridView) view.findViewById(R.id.gridView1);
         grLv.setAdapter(adap);
 
         grLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,18 +70,18 @@ public  class CategoryListFragment extends Fragment{
                                     int position, long id) {
                 Toast.makeText(getActivity(), "başarılı" + position + "-" + list.get(position).objectId,
                         Toast.LENGTH_SHORT).show();
-                Intent in=new Intent(getActivity(), PlaceActivity.class);
-                in.putExtra(PlaceActivity.COLOR,list.get(position).color);
-                in.putExtra(PlaceActivity.TITLE,list.get(position).getName());
-                in.putExtra(Place.ID,list.get(position).objectId);
-                Category.SELECTED_CATEGORY_ID=list.get(position).objectId;
+                Intent in = new Intent(getActivity(), PlaceActivity.class);
+                in.putExtra(PlaceActivity.COLOR, list.get(position).color);
+                in.putExtra(PlaceActivity.TITLE, list.get(position).getName());
+                in.putExtra(Place.ID, list.get(position).objectId);
+                Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
 
-            /***************************************************************************************
-             ***************************************************************************************
-             *                          SAMPLE API CALL
-             ***************************************************************************************
-             **************************************************************************************/
-                String url = "http://192.168.2.50/youbaku/api/restaurant.php";
+                /***************************************************************************************
+                 ***************************************************************************************
+                 *                          SAMPLE API CALL
+                 ***************************************************************************************
+                 **************************************************************************************/
+                String url = "http://192.168.1.38/youbaku/api/category.php";
                 JSONObject apiResponse = null;
                 // Request a json response
                 JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -92,10 +92,31 @@ public  class CategoryListFragment extends Fragment{
 
                                 try {
 
-                                    String glossary = response.getJSONObject("glossary").getJSONObject("GlossDiv").getJSONObject("GlossList").getJSONObject("GlossEntry").getString("Abbrev");
-                                    //String title = glossary.getString("title");
+                                    list=new ArrayList<Category>();
+                                    JSONArray jArray = response.getJSONArray("content");
+                                    FavoriteCategory f=new FavoriteCategory();
+                                    list.add(f);
 
-                                    Log.i("GUPPY" , glossary);
+                                    //Read JsonArray
+                                    for (int i = 0; i < jArray.length(); i++) {
+                                        JSONObject obj = jArray.getJSONObject(i);
+                                        final Category c=new Category();
+
+                                        c.title=obj.getString("cat_name")+"";
+                                        list.add(c);
+//                                c.color=obj.getString("color")+"";
+//                                c.objectId=obj.getObjectId()+"";
+//                                ParseFile marker=obj.getParseFile("pinicon");
+//                                c.markerURL=marker.getUrl();
+//                                ParseFile icon=obj.getParseFile("icon");
+//                                c.iconURL=icon.getUrl();
+//                                list.add(c);
+//                                String cat_name = obj.getString("cat_name");
+
+                                        Log.i("GUPPY", c.title);
+                                        Log.i("GUPPY", getActivity().toString());
+                                    }
+
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -112,13 +133,13 @@ public  class CategoryListFragment extends Fragment{
                         });
 
                 // Add the request to the queue
-                VolleySingleton.getInstance(getActivity()).getRequestQueue().add(jsObjRequest);
+                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
-            /***************************************************************************************
-             ***************************************************************************************
-             *                          SAMPLE API CALL
-             ***************************************************************************************
-             **************************************************************************************/
+                /***************************************************************************************
+                 ***************************************************************************************
+                 *                          SAMPLE API CALL
+                 ***************************************************************************************
+                 **************************************************************************************/
 
 
                 //startActivity(in);
@@ -128,6 +149,7 @@ public  class CategoryListFragment extends Fragment{
 
         return view;
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -147,6 +169,7 @@ public  class CategoryListFragment extends Fragment{
     public CategoryListFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onDetach() {
         super.onDetach();

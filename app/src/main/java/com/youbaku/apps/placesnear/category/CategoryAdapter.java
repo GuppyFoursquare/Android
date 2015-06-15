@@ -9,25 +9,22 @@
 package com.youbaku.apps.placesnear.category;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.youbaku.apps.placesnear.App;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.R;
-import com.squareup.picasso.Picasso;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import java.util.ArrayList;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
     private ArrayList<Category> list;
+    private ImageLoader mImageLoader;
 
     public CategoryAdapter(Context context, ArrayList<Category> list) {
         super(context, R.layout.category_list_item);
@@ -49,7 +46,20 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         Category c = list.get(position);
         TextView t=((TextView)convertView.findViewById(R.id.text_category_list_item));
         t.setText(c.getName());
-        t.setTextColor(Color.parseColor(App.CategoryListLabelColor));
+
+
+        //Image Location
+        String url = "http://youbaku.com/uploads/category_images/"+c.iconURL; // URL of the image
+
+        mImageLoader = VolleySingleton.getInstance().getImageLoader();
+        NetworkImageView image = (NetworkImageView)convertView.findViewById(R.id.image_category_list_item);
+
+        image.setImageUrl(url,mImageLoader);
+
+
+
+
+        /*t.setTextColor(Color.parseColor(App.CategoryListLabelColor));
         ImageView i=((ImageView)convertView.findViewById(R.id.image_category_list_item));
         int px=App.dpTopx(getContext(),100);
         Drawable dr=getContext().getResources().getDrawable(R.drawable.placeholder_category);
@@ -65,7 +75,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                     .load(R.drawable.favoritescategoryicon)
                     .placeholder(new BitmapDrawable(getContext().getResources(),b))
                     .resize(px,px)
-                    .into(i);
+                    .into(i);*/
 
         return convertView;
     }

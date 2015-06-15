@@ -9,12 +9,13 @@
 
 package com.youbaku.apps.placesnear.apicall;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.youbaku.apps.placesnear.MyApplication;
 
 public class VolleySingleton {
 
@@ -22,8 +23,8 @@ public class VolleySingleton {
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
 
-    private VolleySingleton(Context context) {
-        requestQueue = Volley.newRequestQueue(context);
+    private VolleySingleton() {
+        requestQueue = Volley.newRequestQueue(MyApplication.getAppContext());
         imageLoader = null;
 
         imageLoader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
@@ -43,9 +44,10 @@ public class VolleySingleton {
 
     }
 
-    public static VolleySingleton getInstance(Context context) {
+    public static VolleySingleton getInstance() {
+
         if (instance == null) {
-            instance = new VolleySingleton(context);
+            instance = new VolleySingleton();
         }
         return instance;
     }
