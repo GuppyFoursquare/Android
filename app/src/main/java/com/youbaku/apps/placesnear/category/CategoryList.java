@@ -15,6 +15,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.utils.Category;
+import com.youbaku.apps.placesnear.utils.FavoriteCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +42,7 @@ public class CategoryList{
             instance=new CategoryList();
             instance.downloader=downloader;
             instance.pullList();
+
         }else{
             downloader.categoryDownloaded(instance.list);
         }
@@ -78,19 +81,13 @@ public class CategoryList{
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
-                                final Category c=new Category();
 
+                                final Category c=new Category();
                                 c.title=obj.getString("cat_name")+"";
+                                c.setObjectId(obj.getString("cat_id"));
                                 c.iconURL=obj.getString("cat_image");
                                 list.add(c);
-//                                c.color=obj.getString("color")+"";
-//                                c.objectId=obj.getObjectId()+"";
-//                                ParseFile marker=obj.getParseFile("pinicon");
-//                                c.markerURL=marker.getUrl();
-//                                ParseFile icon=obj.getParseFile("icon");
-//
-//                                list.add(c);
-//                                String cat_name = obj.getString("cat_name");
+
 
                                 Log.i("GUPPY", c.title);
                             }
@@ -116,12 +113,15 @@ public class CategoryList{
 
 
 
-
         /***************************************************************************************
          ***************************************************************************************
          *                          SAMPLE API CALL
          ***************************************************************************************
          **************************************************************************************/
+
+
+
+
 
        /* ParseQuery<ParseObject> query= ParseQuery.getQuery(App.PARSE_CATEGORIES);
         query.findInBackground(new FindCallback<ParseObject>() {

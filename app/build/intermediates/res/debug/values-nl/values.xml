@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values-nl/values.xml -->
+    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-nl/values.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navigeren naar startpositie"</string>
-    <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
-    <string msgid="6623331958280229229" name="abc_action_bar_home_subtitle_description_format">"%1$s, %2$s, %3$s"</string>
     <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Omhoog navigeren"</string>
     <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Meer opties"</string>
     <string msgid="4076576682505996667" name="abc_action_mode_done">"Gereed"</string>
@@ -32,11 +30,11 @@
     <string name="app_name">Places Near</string>
     <string name="categorydistanceradius">in %1$s, %2$s places</string>
     <string name="closedbuttonlabel">CLOSED</string>
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values-nl/common_strings.xml -->
+    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/res/values-nl/common_strings.xml -->
     <eat-comment/>
     <string msgid="473679118463211576" name="common_android_wear_notification_needs_update_text">"Er is een update van de Android Wear-app vereist voor een bepaalde app."</string>
-    <string msgid="3046420540094071256" name="common_android_wear_update_text">"Deze app wordt niet uitgevoerd, tenzij u de Android Wear-app bijwerkt."</string>
-    <string msgid="1366439133145190222" name="common_android_wear_update_title">"Android Wear bijwerken"</string>
+    <string msgid="3046420540094071256" name="common_android_wear_update_text">"Deze app wordt niet uitgevoerd, tenzij u de Android Wear-app updatet."</string>
+    <string msgid="1366439133145190222" name="common_android_wear_update_title">"Android Wear updaten"</string>
     <string msgid="4181637455539816337" name="common_google_play_services_enable_button">"Google Play-services inschak."</string>
     <string msgid="7627896071867667758" name="common_google_play_services_enable_text">"Deze app werkt niet, tenzij u Google Play-services inschakelt."</string>
     <string msgid="529078775174559253" name="common_google_play_services_enable_title">"Google Play-services inschakelen"</string>
@@ -53,6 +51,8 @@
     <string msgid="8120534356798772974" name="common_google_play_services_notification_needs_installation_title">"Google Play-services moet zijn geïnstalleerd voor een app."</string>
     <string msgid="1388129345631079938" name="common_google_play_services_notification_needs_update_title">"Google Play-services moet worden geüpdatet voor een app."</string>
     <string msgid="1852570676146674985" name="common_google_play_services_notification_ticker">"Fout met Google Play-services"</string>
+    <string msgid="5194079840165204725" name="common_google_play_services_sign_in_failed_text">"Fout bij inloggen op het opgegeven account. Kies een ander account."</string>
+    <string msgid="8164948898147532159" name="common_google_play_services_sign_in_failed_title">"Inloggen mislukt"</string>
     <string msgid="4762332809710093730" name="common_google_play_services_unknown_issue">"Onbekend probleem met Google Play-services."</string>
     <string msgid="3542578567569488671" name="common_google_play_services_unsupported_text">"Google Play-services, dat vereist is voor een aantal van uw applicaties, wordt niet ondersteund door uw apparaat. Neem contact op met de fabrikant voor ondersteuning."</string>
     <string msgid="6334768798839376943" name="common_google_play_services_unsupported_title">"Google Play-services"</string>
@@ -62,6 +62,7 @@
     <string msgid="411506735369601515" name="common_open_on_phone">"Openen op telefoon"</string>
     <string msgid="9071884888741449141" name="common_signin_button_text">"Inloggen"</string>
     <string msgid="2429381841831957106" name="common_signin_button_text_long">"Inloggen met Google"</string>
+    <string msgid="5000919058582214855" name="commono_google_play_services_api_unavailable_text">"Voor deze app zijn een of meer Google Play-services vereist die momenteel niet beschikbaar zijn. Neem contact op met de ontwikkelaar voor ondersteuning."</string>
     <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/values-nl/strings.xml -->
     <eat-comment/>
     <string name="dealssectionlabel">DEALS</string>

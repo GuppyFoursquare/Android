@@ -9,6 +9,12 @@
     tools:context=".MainActivity"
     android:background="@android:color/white">
 
+    <FrameLayout
+        android:id="@+id/content_frame2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </FrameLayout>
+
     <GridView
         android:id="@+id/gridView1"
         android:layout_width="fill_parent"

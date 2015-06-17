@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.larvalabs.svgandroid.SVGParser;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.category.Category;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.category.CategoryList;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
 import com.squareup.picasso.Picasso;

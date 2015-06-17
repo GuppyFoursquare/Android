@@ -8,6 +8,8 @@
 
 package com.youbaku.apps.placesnear.category;
 
+import com.youbaku.apps.placesnear.utils.Category;
+
 import java.util.ArrayList;
 
 /**

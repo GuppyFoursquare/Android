@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.youbaku.apps.placesnear.category.SubCategoryListActivty"
+    android:id="@+id/main_activity_subcategory">
+
+
+    <GridView
+        android:id="@+id/subGridView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:columnWidth="80dp"
+        android:gravity="center"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:verticalScrollbarPosition="right"
+        android:scrollbars="vertical">
+    </GridView>
+</RelativeLayout><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/activity_sub_category_list_activty.xml -->

@@ -56,6 +56,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youbaku.apps.placesnear.MainActivity" />
         </activity>
+        <activity
+            android:name="com.youbaku.apps.placesnear.category.SubCategoryListActivty"
+            android:label="@string/title_activity_sub_category_list_activty"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.youbaku.apps.placesnear.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.youbaku.apps.placesnear.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
-
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" >
@@ -15,7 +14,7 @@
 
     <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="API_KEY"/>
+        android:value="API_KEY" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
@@ -24,15 +23,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-
-        android:allowBackup="true"
         android:name=".MyApplication"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:logo="@drawable/app_logo"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.youbaku.apps.placesnear.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
@@ -43,10 +41,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.youbaku.apps.placesnear.place.PlaceActivity"
+            android:name=".place.PlaceActivity"
             android:label="@string/title_activity_place"
             android:launchMode="singleTop"
-            android:parentActivityName="com.youbaku.apps.placesnear.MainActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.youbaku.apps.placesnear.MainActivity" />
+        </activity>
+        <activity
+            android:name=".category.SubCategoryListActivty"
+            android:label="@string/title_activity_sub_category_list_activty"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,31 +69,33 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.youbaku.apps.placesnear.location.MapsActivity"
+            android:name=".location.MapsActivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
-            android:name="com.youbaku.apps.placesnear.photo.PhotoActivity"
+            android:name=".photo.PhotoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_photo"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.youbaku.apps.placesnear.web.WebActivity"
+            android:name=".web.WebActivity"
             android:label="@string/title_activity_web"
-            android:parentActivityName="com.youbaku.apps.placesnear.place.PlaceDetailActivity"
+            android:parentActivityName=".place.PlaceDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.youbaku.apps.placesnear.place.PlaceDetailActivity"
+            android:name=".place.PlaceDetailActivity"
             android:label="@string/title_activity_place_detail"
-            android:parentActivityName="com.youbaku.apps.placesnear.place.PlaceActivity"
+            android:parentActivityName=".place.PlaceActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youbaku.apps.placesnear.place.PlaceActivity" />
         </activity>
+
     </application>
 
 </manifest>

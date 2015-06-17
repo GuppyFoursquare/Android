@@ -30,7 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.youbaku.apps.placesnear.category.Category;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.category.CategoryDownloaded;
 import com.youbaku.apps.placesnear.category.CategoryList;
 import com.youbaku.apps.placesnear.category.CategoryListFragment;
@@ -92,10 +92,11 @@ public class MainActivity extends ActionBarActivity implements CategoryDownloade
         ((ProgressBar)findViewById(R.id.progress_bar_activity_main)).setVisibility(View.VISIBLE);
         categories=CategoryList.getCategoryList(this);
 
+
         if(Build.VERSION.SDK_INT>10){
             ProgressBar bar=(ProgressBar)findViewById(R.id.progress_bar_activity_main);
             SpinKitDrawable1 spin=new SpinKitDrawable1(this);
-            spin.setColorFilter(Color.parseColor(App.DefaultActionBarColor), PorterDuff.Mode.SRC_OVER);
+            spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
             bar.setIndeterminateDrawable(spin);
         }
 
@@ -173,6 +174,10 @@ public class MainActivity extends ActionBarActivity implements CategoryDownloade
         super.onBackPressed();
     }
 
+
+
+
+    ///BURASI INCELENMESI LAZIM
     @Override
     public void categoryDownloaded(ArrayList<Category> list) {
         ((RelativeLayout)findViewById(R.id.main_activity_main)).setBackgroundColor(Color.parseColor(App.DefaultBackgroundColor));
@@ -196,6 +201,9 @@ public class MainActivity extends ActionBarActivity implements CategoryDownloade
         bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel),null);
         bu.show();
     }
+
+
+
 
     FragmentManager.OnBackStackChangedListener stackChangedListener=new FragmentManager.OnBackStackChangedListener() {
         @Override

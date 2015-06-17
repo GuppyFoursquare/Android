@@ -36,7 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.category.Category;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.category.CategoryList;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;

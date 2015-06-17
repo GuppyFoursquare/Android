@@ -8,6 +8,7 @@
 
 package com.youbaku.apps.placesnear.place;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,10 +34,16 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.SpinKitDrawable1;
-import com.youbaku.apps.placesnear.category.Category;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.category.CategoryList;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.location.MyLocationSet;
@@ -49,12 +56,6 @@ import com.youbaku.apps.placesnear.place.favorites.FavoritesCallback;
 import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
 import com.youbaku.apps.placesnear.place.filter.FilterFragment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +86,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     private PlaceListFragment listFragment;
     private FilterFragment fi;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +100,10 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         filter.category=in.getStringExtra(Place.ID);
 
         ActionBar act=((ActionBar)getSupportActionBar());
-        act.setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
+
+        //Burası Category tıklandıktan sora Action Barın rengini değişir
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor(App.DefaultActionBarColor));
+        act.setBackgroundDrawable(colorDrawable);
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setDisplayShowCustomEnabled(true);
         act.setTitle(title);
@@ -120,7 +125,9 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         if(Build.VERSION.SDK_INT>10){
             bar=(ProgressBar)findViewById(R.id.progressBar);
             SpinKitDrawable1 spin=new SpinKitDrawable1(this);
-            spin.setColorFilter(Color.parseColor(color), PorterDuff.Mode.SRC_OVER);
+
+            //Burası loader'in rengini değişir
+            spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
             bar.setIndeterminateDrawable(spin);
         }
 

@@ -37,9 +37,9 @@ import android.widget.Toast;
 
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.category.Category;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.category.CategoryList;
-import com.youbaku.apps.placesnear.category.CategorySpinnerAdapter;
+import com.youbaku.apps.placesnear.category.adapters.CategorySpinnerAdapter;
 import com.youbaku.apps.placesnear.location.MapsActivity;
 import com.parse.ParseException;
 import com.parse.ParseFile;

@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +20,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.place.Place;
-import com.youbaku.apps.placesnear.place.PlaceActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.youbaku.apps.placesnear.category.adapters.CategoryAdapter;
+import com.youbaku.apps.placesnear.utils.Category;
 
 import java.util.ArrayList;
 
@@ -42,6 +32,7 @@ public class CategoryListFragment extends Fragment {
     private CategoryAdapter adap;
     private test.OnFragmentInteractionListener mListener;
     View view;
+    Fragment newFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +53,7 @@ public class CategoryListFragment extends Fragment {
         view = inflater.inflate(R.layout.category_layout, container, false);
 
         adap = new CategoryAdapter(getActivity(), list);
-        GridView grLv = (GridView) view.findViewById(R.id.gridView1);
+        final GridView grLv = (GridView) view.findViewById(R.id.gridView1);
         grLv.setAdapter(adap);
 
         grLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,79 +61,23 @@ public class CategoryListFragment extends Fragment {
                                     int position, long id) {
                 Toast.makeText(getActivity(), "başarılı" + position + "-" + list.get(position).objectId,
                         Toast.LENGTH_SHORT).show();
-                Intent in = new Intent(getActivity(), PlaceActivity.class);
-                in.putExtra(PlaceActivity.COLOR, list.get(position).color);
-                in.putExtra(PlaceActivity.TITLE, list.get(position).getName());
-                in.putExtra(Place.ID, list.get(position).objectId);
+                Intent in = new Intent(getActivity(), SubCategoryListActivty.class);
+
+
+                /* *************************************************
+                *********************IMPORTANT *********************
+                *******************************************************
+                 */
+                in.putExtra("ListId", list.get(position).objectId);
+                in.putExtra("title", list.get(position).getTitle());
+
+
                 Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
 
-                /***************************************************************************************
-                 ***************************************************************************************
-                 *                          SAMPLE API CALL
-                 ***************************************************************************************
-                 **************************************************************************************/
-                String url = "http://192.168.1.38/youbaku/api/category.php";
-                JSONObject apiResponse = null;
-                // Request a json response
-                JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                        (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>() {
-
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                try {
-
-                                    list=new ArrayList<Category>();
-                                    JSONArray jArray = response.getJSONArray("content");
-                                    FavoriteCategory f=new FavoriteCategory();
-                                    list.add(f);
-
-                                    //Read JsonArray
-                                    for (int i = 0; i < jArray.length(); i++) {
-                                        JSONObject obj = jArray.getJSONObject(i);
-                                        final Category c=new Category();
-
-                                        c.title=obj.getString("cat_name")+"";
-                                        list.add(c);
-//                                c.color=obj.getString("color")+"";
-//                                c.objectId=obj.getObjectId()+"";
-//                                ParseFile marker=obj.getParseFile("pinicon");
-//                                c.markerURL=marker.getUrl();
-//                                ParseFile icon=obj.getParseFile("icon");
-//                                c.iconURL=icon.getUrl();
-//                                list.add(c);
-//                                String cat_name = obj.getString("cat_name");
-
-                                        Log.i("GUPPY", c.title);
-                                        Log.i("GUPPY", getActivity().toString());
-                                    }
 
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                startActivity(in);
 
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // TODO Auto-generated method stub
-
-                            }
-                        });
-
-                // Add the request to the queue
-                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-                /***************************************************************************************
-                 ***************************************************************************************
-                 *                          SAMPLE API CALL
-                 ***************************************************************************************
-                 **************************************************************************************/
-
-
-                //startActivity(in);
             }
         });
 

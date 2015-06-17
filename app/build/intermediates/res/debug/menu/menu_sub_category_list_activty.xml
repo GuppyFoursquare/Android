@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.youbaku.apps.placesnear.category.SubCategoryListActivty">
+
+
+</menu>
+<!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/menu/menu_sub_category_list_activty.xml -->

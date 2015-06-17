@@ -67,6 +67,8 @@ public class App extends Application {
     public static final String FacebookColor              = "#3B5998";
     public static final String TwitterColor               = "#2CA6EF";
     public static final String SVGPassiveColor            = "#777777";
+    public static final String LoaderColor                = "#FFDE3B";
+    public static final String ButtonColor                = "#c5273f";
     //------------------------------------- DEFAULT COLORS ---------------------------------------/
 
 
