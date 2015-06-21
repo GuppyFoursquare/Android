@@ -22,7 +22,7 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="API_KEY" />
     <!--
- The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -99,6 +99,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youbaku.apps.placesnear.place.PlaceActivity" />
+        </activity>
+        <activity
+            android:name="com.youbaku.apps.placesnear.TestActivty"
+            android:label="@string/title_activity_test_activty" >
         </activity>
     </application>
 

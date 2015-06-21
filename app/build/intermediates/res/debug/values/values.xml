@@ -425,6 +425,7 @@ https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend
     <string name="title_activity_place_detail">PlaceDetailActivity</string>
     <string name="title_activity_place_favorite">PlaceFavoriteActivity</string>
     <string name="title_activity_sub_category_list_activty">SubCategoryListActivty</string>
+    <string name="title_activity_test_activty">TestActivty</string>
     <string name="title_activity_web">WebActivity</string>
     <string name="titledistancelabel">away from you</string>
     <string name="twitterfieldplaceholder">Type twitter user name</string>

@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.FavoriteCategory;
@@ -62,7 +63,8 @@ public class CategoryList{
          *                          SAMPLE API CALL
          ***************************************************************************************
          **************************************************************************************/
-        String url = "http://192.168.1.38/youbaku/api/category.php";
+        String url = App.SitePath+"api/category.php";
+
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -75,8 +77,10 @@ public class CategoryList{
                             downloadError=false;
                             list=new ArrayList<Category>();
                             JSONArray jArray = response.getJSONArray("content");
-                            FavoriteCategory f=new FavoriteCategory();
-                            list.add(f);
+
+                             // We dont need favourite category for now
+                            // FavoriteCategory f=new FavoriteCategory();
+                           // list.add(f);
 
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {

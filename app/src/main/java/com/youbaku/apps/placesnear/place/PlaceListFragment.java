@@ -52,7 +52,7 @@ public class PlaceListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((App)getActivity().getApplication()).track(App.ANALYSIS_PLACES);
+        ((App)getActivity().getApplicationContext()).track(App.ANALYSIS_PLACES);
 
         getListView().setDivider(new ColorDrawable(Color.parseColor(App.BackgroundGrayColor)));
         getListView().setDividerHeight(App.dpTopx(getActivity(), 20));

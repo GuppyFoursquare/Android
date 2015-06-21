@@ -16,7 +16,7 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="API_KEY" />
     <!--
- The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -73,7 +73,6 @@
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name=".photo.PhotoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -86,6 +85,7 @@
             android:parentActivityName=".place.PlaceDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name=".place.PlaceDetailActivity"
             android:label="@string/title_activity_place_detail"
@@ -95,7 +95,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youbaku.apps.placesnear.place.PlaceActivity" />
         </activity>
-
+        <activity
+            android:name=".TestActivty"
+            android:label="@string/title_activity_test_activty" >
+        </activity>
     </application>
 
 </manifest>

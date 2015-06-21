@@ -245,25 +245,25 @@ ADDED from AndroidManifest.xml:71:9
 	android:name
 		ADDED from AndroidManifest.xml:72:13
 activity#com.youbaku.apps.placesnear.photo.PhotoActivity
-ADDED from AndroidManifest.xml:77:9
+ADDED from AndroidManifest.xml:76:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:81:13
-	android:label
 		ADDED from AndroidManifest.xml:80:13
-	android:configChanges
-		ADDED from AndroidManifest.xml:79:13
-	android:name
-		ADDED from AndroidManifest.xml:78:13
-activity#com.youbaku.apps.placesnear.web.WebActivity
-ADDED from AndroidManifest.xml:83:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:87:13
 	android:label
-		ADDED from AndroidManifest.xml:85:13
-	android:parentActivityName
-		ADDED from AndroidManifest.xml:86:13
+		ADDED from AndroidManifest.xml:79:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:78:13
 	android:name
+		ADDED from AndroidManifest.xml:77:13
+activity#com.youbaku.apps.placesnear.web.WebActivity
+ADDED from AndroidManifest.xml:82:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:86:13
+	android:label
 		ADDED from AndroidManifest.xml:84:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:85:13
+	android:name
+		ADDED from AndroidManifest.xml:83:13
 activity#com.youbaku.apps.placesnear.place.PlaceDetailActivity
 ADDED from AndroidManifest.xml:89:9
 	android:screenOrientation
@@ -274,6 +274,12 @@ ADDED from AndroidManifest.xml:89:9
 		ADDED from AndroidManifest.xml:92:13
 	android:name
 		ADDED from AndroidManifest.xml:90:13
+activity#com.youbaku.apps.placesnear.TestActivty
+ADDED from AndroidManifest.xml:98:9
+	android:label
+		ADDED from AndroidManifest.xml:100:13
+	android:name
+		ADDED from AndroidManifest.xml:99:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.1.1:20:5

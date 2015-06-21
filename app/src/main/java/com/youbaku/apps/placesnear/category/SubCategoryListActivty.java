@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,7 +42,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
     private ArrayList<SubCategory> sublist;
     private String color="";
     private String title="";
-
+    private static SubCategoryListActivty instance;
     private Screen screen=Screen.list;
     private boolean onScreen=true;
     private boolean firstFilter=false;
@@ -56,6 +55,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
     private MenuItem doFilter;
     private Category c =new Category();
     private ProgressBar bar;
+    GridView grLv;
 
 
     @Override
@@ -68,9 +68,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
         Intent in=getIntent();
         //color=in.getStringExtra(COLOR);
         title=in.getStringExtra("title");
-        final String cat_id=in.getStringExtra("ListId");
-        Toast.makeText(getApplicationContext(), "Guppppy " + cat_id,
-                Toast.LENGTH_SHORT).show();
+        final String cat_id=in.getStringExtra("CatId");
 
 
         ActionBar act=((ActionBar)getSupportActionBar());
@@ -79,7 +77,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setDisplayShowCustomEnabled(true);
         act.setTitle(title);
-        act.setSubtitle("YouBaku");
+        act.setSubtitle("Select Category for "+title);
 
         ActionBar.LayoutParams params=new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity=0x05;
@@ -94,7 +92,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
 
 
 
-        String url2 = "http://192.168.1.38/youbaku/api/category.php?cat_id="+cat_id;
+        String url2 = App.SitePath+"api/category.php?cat_id="+cat_id;
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -117,17 +115,17 @@ public class SubCategoryListActivty extends ActionBarActivity {
 
 
                                 s.setTitle(obj.getString("cat_name"));
-                                Toast.makeText(getApplicationContext(), s.getTitle(),
-                                        Toast.LENGTH_SHORT).show();
-
-
                                 sublist.add(s);
 
 
                             }
                             adap = new SubCategoryAdapter(getApplicationContext(),sublist);
-                            final GridView grLv = (GridView) findViewById(R.id.subGridView);
+                            grLv = (GridView) findViewById(R.id.subGridView);
                             grLv.setAdapter(adap);
+
+
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -145,7 +143,6 @@ public class SubCategoryListActivty extends ActionBarActivity {
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
 
 
 
@@ -218,4 +215,15 @@ public class SubCategoryListActivty extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public static SubCategory getSubCategory(String Id){
+        if(instance==null)
+            return null;
+        for(int i=0;i<instance.sublist.size();i++){
+            if(instance.sublist.get(i).getId().equals(Id))
+                return instance.sublist.get(i);
+        }
+        return null;
+    }
+
 }

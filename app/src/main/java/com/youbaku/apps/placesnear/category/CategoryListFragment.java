@@ -68,11 +68,11 @@ public class CategoryListFragment extends Fragment {
                 *********************IMPORTANT *********************
                 *******************************************************
                  */
-                in.putExtra("ListId", list.get(position).objectId);
+                in.putExtra("CatId", list.get(position).objectId);
                 in.putExtra("title", list.get(position).getTitle());
 
 
-                Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
+                //Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
 
 
 

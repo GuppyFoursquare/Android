@@ -20,23 +20,25 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Place {
-    public static final String NAME="name";
+    public static final String ID="plc_id";
+    public static final String NAME="plc_name";
+    public static final String PHOTO="plc_header_image";
+    public static final String WEBPAGE="plc_website";
     public static final String POSITION="position";
-    public static final String PHONE="phone";
+    public static final String ADDRESS="plc_address";
+    public static final String PHONE="plc_contact";
+    public static final String OPENHOUR="plc_intime";
+    public static final String CLOSEHOUR="plc_outtime";
     public static final String LIKES="likescount";
     public static final String TWITTER="twitter";
     public static final String CATEGORY="category";
     public static final String ISACTIVE="isactive";
-    public static final String OPENHOUR="openhour";
-    public static final String CLOSEHOUR="closehour";
-    public static final String ADDRESS="address";
-    public static final String WEBPAGE="webpage";
+
+
     public static final String DESCRIPTION="description";
-    public static final String ID="objectId";
     public static final String FACEBOOK="facebook";
     public static final String RATING="rating";
     public static final String PLACE="place";
-    public static final String PHOTO="photo";
     public static final String DISTANCE="distance";
     public static Place FOR_DETAIL;
 
@@ -70,6 +72,8 @@ public class Place {
     public Place() {
     }
 
+
+
     public void setLocation(double latitude, double longitude){
         this.latitude=latitude;
         this.longitude=longitude;
@@ -102,6 +106,26 @@ public class Place {
 
     public boolean isLocationSet(){
         return locationSet;
+    }
+
+    public static String getID() {
+        return ID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 

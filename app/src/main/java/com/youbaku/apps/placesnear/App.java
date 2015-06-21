@@ -42,6 +42,13 @@ public class App extends Application {
     //----------------------------------------- API KEYS -----------------------------------------/
 
 
+    //----------------------------------------- HTTP LINKS -----------------------------------------/
+    public static final String SitePath         = "http://192.168.2.220/youbaku/";
+
+    //----------------------------------------- HTTP LINKS-----------------------------------------/
+
+
+
     //---------------------------------- DEFAULT PLACE FILTERS -----------------------------------/
     public static final String  keyword                   = "";
     public static final boolean isOpen                    = false;

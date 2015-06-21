@@ -9,29 +9,21 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.larvalabs.svgandroid.SVGParser;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.utils.Category;
-import com.youbaku.apps.placesnear.category.CategoryList;
-import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -78,24 +70,30 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
             iDist.setLayoutParams(params);
 
             ((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setTextColor(color);
-            ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setTextColor(color);
+            ((TextView)convertView.findViewById(R.id.           location_text_place_list_item)).setTextColor(color);
             ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setTextColor(color);
         }
         Drawable dr=getContext().getResources().getDrawable(R.drawable.rating_background);
         dr.setColorFilter(color, PorterDuff.Mode.SRC_OVER);
 
-        ((TextView)convertView.findViewById(R.id.name_place_list_item)).setText(list.get(position).name);
-        ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).getName());
-        ((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
-        ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics,list.get(position).distance[0]));
-        ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).comments.size()+"");
-        final ImageView im = ((ImageView) convertView.findViewById(R.id.image_place_list_item));
+        ((TextView)convertView.findViewById(R.id.name_place_list_item)).setText(list.get(position).getName());
+        //((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).getName());
+        //((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
+        //((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics,list.get(position).distance[0]));
+       // ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).comments.size()+"");
+        //((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).getId()+"");
+
+       /* final ImageView im = ((ImageView) convertView.findViewById(R.id.image_place_list_item));
         WindowManager windowManager = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display= windowManager.getDefaultDisplay();
         LinearLayout.LayoutParams params=(LinearLayout.LayoutParams)im.getLayoutParams();
         int width=0;
 
         if(Build.VERSION.SDK_INT>12){
+            *//**
+             * Constructs a new String by converting the specified array of
+             * bytes using the platform's default character encoding.
+             *//*
             Point s=new Point();
             display.getSize(s);
             width=s.x;
@@ -115,7 +113,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);
         }
-
+*/
         if(Build.VERSION.SDK_INT<16){
             ((TextView)convertView.findViewById(R.id.rating_place_list_item)).setBackgroundDrawable(dr);
         }else{
