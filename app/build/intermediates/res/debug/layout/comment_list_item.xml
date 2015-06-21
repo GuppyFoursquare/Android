@@ -38,4 +38,4 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/comment_comment_list_item"
         android:layout_toRightOf="@id/image_comment_list_item"/>
-</RelativeLayout><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/comment_list_item.xml -->
+</RelativeLayout><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/comment_list_item.xml -->

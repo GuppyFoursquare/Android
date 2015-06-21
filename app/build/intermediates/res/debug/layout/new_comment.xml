@@ -82,4 +82,4 @@
         android:minLines="4"
         android:id="@+id/comment_new_comment" />
 </LinearLayout>
-</ScrollView><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/new_comment.xml -->
+</ScrollView><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/new_comment.xml -->

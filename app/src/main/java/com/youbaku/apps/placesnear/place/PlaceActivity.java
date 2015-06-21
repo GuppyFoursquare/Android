@@ -89,7 +89,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
     private String color="";
     private String title="";
-    private ArrayList<Place> list=new ArrayList<>();
+    private ArrayList<Place> list=new ArrayList();
     private boolean onScreen=true;//if this activity still on screen
     private boolean firstFilter=false;
     private boolean placesDownload=false;

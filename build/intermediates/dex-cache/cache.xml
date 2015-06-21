@@ -2,214 +2,214 @@
 <items version="2" >
 
     <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.3.0/classes.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.3.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="fe3e0c6de7cceed888b277487238b6af9a1cc299">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-fda7d93e04051d7ce7414f39f37bcc9fe6f3a23e.jar" />
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-635e5dc71b21cd356ec2451172c25a2ef24cdadd.jar" />
     </item>
     <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="bb36004beb02b69562cbec9aa7d6a3cf16bf5d1b">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-18a9635340336a3c3d48bc92b685d6bdc1d57eae.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/libs/svg-android-1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="9f7c80e87e9925b691875dc9388869d87515f7d2">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/svg-android-1.1-b562b3a904c2d5ceece472574fa3a5cfcf8dc8fd.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3b4ff5c39dace8f3b4ab4cab8191785547a0815f">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-7d68eb7aca6cdeea1bca4559e200d5a06fff3d7f.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-dd3dcc5f55d8b41daa7c5a36c535cee37e86bf40.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="b2c07cdb814fe988ad05f7b4d767a841514a5991">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-f22c60dfa4087661f0777dfd93c2f9eb18d5afe0.jar" />
-    </item>
-    <item
-        jar="/home/orxan/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-e873e14eff57284d39ea798394c0caec1c776ea1.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-3daba01e9de4d5711b9c6ed96cef9cf9efd6f5ac.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e5bf453b070c1e39297986144960e45afa0fdfad">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-6e89a235267a4bf203b0b450517aeb627ba89cc1.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/libs/Parse-1.8.2.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c2cb0bfe37cbefd855b6faa3c9a5be833aba7300">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/Parse-1.8.2-ad2bbe2f85d2698ba0a9839a9d3c4b0bdf18a585.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-3ed814ebb58483375f7f17f497cc9d1ce026db5f.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-2d800a29bf7801e63e11cc6a43748afe295afd3e.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/libs/androidsvg-1.2.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d0cb3453e18fffeb053e9b7f052af3dcec9f75b4">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/androidsvg-1.2.1-ef3a442933e5759970c7278134fdf15987f53437.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-dd428fc5d813e802ff18012ff1ff231dd5119eed.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-1d49e8db90e5d233eb009a811c1677b412cdd1b1.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="565a01f90f1529f73362707c4c185d0623a68782">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-4e12c4124ebf6fdd0a69ba6223ea4cdeab833377.jar" />
-    </item>
-    <item
-        jar="/home/orxan/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-cedece2f6ee7102d5ab3a603be976b1f1acb14a2.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.3.0/classes.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.3.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="0180d031a7b54dabb93b4af3869468b55dc938bd">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-5a418b75cf903dc6285e1e866c8eab259e740b27.jar" />
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-35787c290a00af7a9187e0c13f391a0be6cf0cd2.jar" />
     </item>
     <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/classes.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.3.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-4d40f864b1e220762a914f36cc44d7d0444af14e.jar" />
+        sha1="b2c07cdb814fe988ad05f7b4d767a841514a5991">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-7b389888ab1aabfb55381a5024fddef00de8bf5b.jar" />
     </item>
     <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.3.0/classes.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.3.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-815db78682f62d41462525349f9b2a44386c2598.jar" />
+        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-27b43a2d03e09471d299bce61595c232e3f10332.jar" />
     </item>
     <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-bea0d2c0d02579ae7ced86b5a1067ac0d8bb5ec3.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-a7fc936c839f5ee09a19e199b5514c5d121d628f.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-7bb69db20c40d666d324e597ed69ab655b0aabde.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-b4c5b4581451a977cd8ce8ff983660084a51f94b.jar" />
-    </item>
-    <item
-        jar="/home/orxan/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.15/9093a362d18c5f81f58e49d86dece57d9b6e1cb7/library-1.0.15.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="9093a362d18c5f81f58e49d86dece57d9b6e1cb7">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/library-1.0.15-61ac59971de14f011a5e1bfe61bb5ea1044db837.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-e4dc84539773364abebab447dbd2a15e7f99bb2a.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.3.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-7c833a2f38f75c5818e244b2aff214b0c9781a23.jar" />
-    </item>
-    <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.3.0/classes.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.3.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="9c9dea9e85aceb09d95df5e6f7bc8a43fc286068">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-ff737156beddea756005e3ec610657c77169c188.jar" />
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-9540f85a3c210962290c35c7ce156a1294067dd5.jar" />
     </item>
     <item
-        jar="/home/orxan/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.4.0/f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2/picasso-2.4.0.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-eb84f04e9055e1c72ade03c74faf9adb0af85ce2.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-42c1f8c8ac77bf5fc9a72939487bd787c7b9a14b.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-8ed80a8c0ef8f64c5fc302c558be92507bb714de.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.15/9093a362d18c5f81f58e49d86dece57d9b6e1cb7/library-1.0.15.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9093a362d18c5f81f58e49d86dece57d9b6e1cb7">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/library-1.0.15-5a0e475f432659f78d2b75a61addac178d49ff8a.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/Desktop/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-66b5f63e223db0d22f877481674fc6b93ba0a1b6.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-494bae0c0837876cee62e5ece96bf0f4ba75c1ad.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3b4ff5c39dace8f3b4ab4cab8191785547a0815f">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-835b8b23976157511cf4e9a033541437e3c5ba1f.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-09ea7d3d83aca3c3a356756f549f631833b52f77.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/libs/Parse-1.8.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c2cb0bfe37cbefd855b6faa3c9a5be833aba7300">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/Parse-1.8.2-cf24062fbd1b79e4069cdfd047bc67cc50fb19dc.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.4.0/f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2/picasso-2.4.0.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/picasso-2.4.0-7a3faa658109eebf83b15ebd2121ad38536a3226.jar" />
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/picasso-2.4.0-7c8e41d57f57df95d2d231dfd4dbbfe091e7789a.jar" />
     </item>
     <item
-        jar="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/classes.jar"
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-0edb43d0e285ead8cae8760cb9e99b92cac7c4e6.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-8d1eb5efb0c95901035c664423e27ece9688f79d.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-509ac14894d0b7f068c28940c4354f7118277cd9.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-db6b16dea97c2f9416e6ee6dc972fc1b44713916.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/pre-dexed/debug/classes-0d54552463cee879330d644cd6e4c2f9ddb25b4b.jar" />
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-15a783ba3333fe684e6dc7601cf3e342885751c3.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-f544eb280ed2394b75d9b02a95404d00c4f1e1fe.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/libs/androidsvg-1.2.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d0cb3453e18fffeb053e9b7f052af3dcec9f75b4">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/androidsvg-1.2.1-572c91964cc06e77913c672262c8a80632eb0abe.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-b3c3f2ad63fdfc0d67c75787cdfb3f22d20e1990.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="bb36004beb02b69562cbec9aa7d6a3cf16bf5d1b">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-610f3aeab10763a9e60cc4b835e7903004544b7f.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-743ec8cce50cf81cb766b1d7a0aeb79eb539653d.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/libs/svg-android-1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9f7c80e87e9925b691875dc9388869d87515f7d2">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/svg-android-1.1-7870f66c443ace6a6d2fcb9db3a96d7562a4acd0.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e5bf453b070c1e39297986144960e45afa0fdfad">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-d7cf841b54c57f8af9bb7091c32ba9fdfac55e55.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-996189674f2a7514d1f00b307873898cdb9ce56a.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-633f41e441bb8e5d4a9649e82b7e66fe284cf094.jar" />
+    </item>
+    <item
+        jar="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.3.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="565a01f90f1529f73362707c4c185d0623a68782">
+        <dex dex="/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/pre-dexed/debug/classes-fe67a40d5ca8e70ac3f2b1e9ceb9772f5be21d3d.jar" />
     </item>
 
 </items>

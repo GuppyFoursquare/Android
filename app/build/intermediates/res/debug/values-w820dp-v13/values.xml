@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/values-w820dp/dimens.xml -->
+    <!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/values-w820dp/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">64dp</dimen>
 </resources>

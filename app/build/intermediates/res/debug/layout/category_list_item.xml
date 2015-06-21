@@ -26,4 +26,4 @@
         android:textSize="16dp"
         android:id="@+id/text_category_list_item"
         android:layout_marginLeft="10dp"/>
-</LinearLayout><!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/layout/category_list_item.xml -->
+</LinearLayout><!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/layout/category_list_item.xml -->

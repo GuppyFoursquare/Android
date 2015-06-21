@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-th/values.xml -->
+    <!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-th/values.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"นำทางไปหน้าแรก"</string>
     <string msgid="1594238315039666878" name="abc_action_bar_up_description">"นำทางขึ้น"</string>
@@ -15,7 +15,7 @@
     <string msgid="893419373245838918" name="abc_searchview_description_voice">"ค้นหาด้วยเสียง"</string>
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"แชร์กับ"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"แชร์กับ %s"</string>
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/values-th/strings.xml -->
+    <!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/values-th/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Settings</string>
     <string name="addbuttonlabel">Add</string>
@@ -30,7 +30,7 @@
     <string name="app_name">Places Near</string>
     <string name="categorydistanceradius">in %1$s, %2$s places</string>
     <string name="closedbuttonlabel">CLOSED</string>
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/res/values-th/common_strings.xml -->
+    <!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/res/values-th/common_strings.xml -->
     <eat-comment/>
     <string msgid="473679118463211576" name="common_android_wear_notification_needs_update_text">"แอปพลิเคชันรายการหนึ่งต้องการให้อัปเดตแอป Android Wear"</string>
     <string msgid="3046420540094071256" name="common_android_wear_update_text">"แอปนี้จะไม่ทำงานจนกว่าคุณจะอัปเดตแอป Android Wear"</string>
@@ -63,7 +63,7 @@
     <string msgid="9071884888741449141" name="common_signin_button_text">"ลงชื่อใช้"</string>
     <string msgid="2429381841831957106" name="common_signin_button_text_long">"ลงชื่อเข้าใช้ด้วย Google"</string>
     <string msgid="5000919058582214855" name="commono_google_play_services_api_unavailable_text">"แอปนี้ต้องใช้บริการ Google Play อย่างน้อย 1 บริการ ซึ่งไม่พร้อมใช้งานในปัจจุบัน โปรดติดต่อนักพัฒนาซอฟต์แวร์เพื่อขอความช่วยเหลือ"</string>
-    <!-- From: file:/home/orxan/AndroidStudioProjects/Android/app/src/main/res/values-th/strings.xml -->
+    <!-- From: file:/Users/kemal/AndroidstudioProjects/YouBakuApp/app/src/main/res/values-th/strings.xml -->
     <eat-comment/>
     <string name="dealssectionlabel">DEALS</string>
     <string name="descriptionfieldplaceholder">Type place description</string>
