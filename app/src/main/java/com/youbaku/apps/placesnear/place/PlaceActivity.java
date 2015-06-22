@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -36,14 +35,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.parse.ParseGeoPoint;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.SpinKitDrawable1;
@@ -54,7 +51,6 @@ import com.youbaku.apps.placesnear.place.comment.AllCommentsDownloaded;
 import com.youbaku.apps.placesnear.place.deal.AllDealsDownloaded;
 import com.youbaku.apps.placesnear.place.filter.FilterFragment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.youbaku.apps.placesnear.utils.FavoriteCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,7 +85,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
     private String color="";
     private String title="";
-    private ArrayList<Place> list=new ArrayList();
+    private ArrayList<Place> list=new ArrayList<>();
     private boolean onScreen=true;//if this activity still on screen
     private boolean firstFilter=false;
     private boolean placesDownload=false;
@@ -111,7 +107,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         PlaceFilter filter=PlaceFilter.getInstance();
 
         Intent in=getIntent();
-        color=in.getStringExtra(COLOR);
+        //color=in.getStringExtra(COLOR);
         title=in.getStringExtra(TITLE);
         filter.category=in.getStringExtra(Place.ID);
 
@@ -138,7 +134,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             return;
         }
 
-        ((RelativeLayout)findViewById(R.id.main_activity_place)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
+        ((RelativeLayout)findViewById(R.id.main_activity_place)).setBackgroundColor(Color.parseColor(App.DefaultBackgroundColor));
 
        if(Build.VERSION.SDK_INT>10){
             bar=(ProgressBar)findViewById(R.id.progressBar);
@@ -149,8 +145,140 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             bar.setIndeterminateDrawable(spin);
         }
 
+
+        MyLocation my=MyLocation.getMyLocation(getApplicationContext());
+
+        //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude;
+
+        //For testing Places
+        String url2 = App.SitePath+"api/places.php?op=nearme&lat=40.372877&lon=49.842825";
+        JSONObject apiResponse = null;
+        final Activity tt=this;
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            firstFilter=false;
+                            placesDownload = true;
+                            JSONArray jArray = response.getJSONArray("content");
+                            list=new ArrayList<Place>();
+
+
+                            System.out.println("places downloaded " + jArray.length());
+
+                            if(jArray.length()>0) {
+                                //Read JsonArray
+                                for (int i = 0; i < jArray.length(); i++) {
+                                    JSONObject o = jArray.getJSONObject(i);
+                                    final Place p = new Place();
+
+                                    p.setName(o.getString("plc_name"));
+
+                                    Toast.makeText(getApplicationContext(), o.getString("plc_name") + " " + o.getString("plc_latitude"), Toast.LENGTH_LONG).show();
+
+/*
+                                    double latitude = Double.parseDouble(o.getString("plc_latitude"));
+                                    double longitude = Double.parseDouble(o.getString("plc_longitude"));
+
+                                    p.setLocation(latitude, longitude);
+                                    MyLocation my = MyLocation.getMyLocation(getApplicationContext());
+                                    Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);*/
+                                    //Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);
+
+
+                                    Log.i("Guppy---------", p.getName());
+                                    System.out.println("places are " + p.getName());
+
+
+
+                                    list.add(p);
+
+
+                                }
+                                Log.i("Guppy---------",list.get(0).getName());
+                                checkDownloads();
+                            }
+                            else{
+                                setSupportProgressBarIndeterminateVisibility(false);
+                                AlertDialog.Builder bu=new AlertDialog.Builder(tt);
+                                bu.setMessage(getResources().getString(R.string.novenuemessage));
+                                bu.setNegativeButton(getResources().getString(R.string.alertcancelbuttonlabel),new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                });
+                                bu.setPositiveButton(getResources().getString(R.string.newfilterbuttonlabel),new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(fi==null)
+                                            fi=new FilterFragment();
+                                        firstFilter=true;
+                                        fi.setColor(Color.parseColor(color));
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place,fi).commit();
+                                        setScreen(Screen.filter);
+                                    }
+                                });
+                                bu.show();
+                            }
+
+
+                        } catch (JSONException e) {
+
+                            AlertDialog.Builder bu=new AlertDialog.Builder(tt);
+                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
+                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
+                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    refreshList();
+                                }
+                            });
+                            bu.show();
+                            e.printStackTrace();
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
         refreshList();
 }
+
+
+    private void refreshList(){
+        if(!App.checkInternetConnection(this) && onScreen) {
+            App.showInternetError(this);
+            return;
+        }
+        MyLocation my=MyLocation.getMyLocation(getApplicationContext());
+        if(!my.isSet()){
+            my.subscriber=this;
+            my.callLocation();
+            return;
+        }
+
+        final PlaceFilter filter=PlaceFilter.getInstance();
+        placesDownload=false;
+        commentsDownload=false;
+        dealsDownload=false;
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -266,357 +394,9 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         }
     };
 
-    private void refreshList(){
-       if(!App.checkInternetConnection(this) && onScreen) {
-            App.showInternetError(this);
-            return;
-        }
-        MyLocation my=MyLocation.getMyLocation(getApplicationContext());
-        if(!my.isSet()){
-            my.subscriber=this;
-            my.callLocation();
-            return;
-        }
-        final PlaceFilter filter=PlaceFilter.getInstance();
-        placesDownload=false;
-        commentsDownload=false;
-        dealsDownload=false;
-
-        /**
-         * Here, We will call API for taking related places from server.
-         * Places will be listed by "near me" function.
-         */
-
-
-        // 1- We will take latitude and long
 
 
 
-       if(my!=null) {
-            ParseGeoPoint geo = new ParseGeoPoint(my.latitude, my.longitude);
-            if (filter.metrics == PlaceFilter.DistanceSystem.km) {
-                //query.whereWithinKilometers(Place.POSITION, geo, filter.getDistance(PlaceFilter.DistanceSystem.km));
-                Toast.makeText(getApplicationContext(),"My longitude :"+my.longitude+" My latitude : "+my.latitude,Toast.LENGTH_LONG).show();
-            } else {
-                //query.whereWithinMiles(Place.POSITION, geo, filter.getDistance(PlaceFilter.DistanceSystem.ml));
-            }
-        }
-        if(!onScreen)
-        {
-            return;
-        }
-
-
-
-
-        // 2- We will call api
-
-
-        String url2 = App.SitePath+"api/places.php?op=search";
-        JSONObject apiResponse = null;
-        final Activity tt=this;
-        // Request a json response
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-
-                            JSONArray jArray = response.getJSONArray("content");
-                            FavoriteCategory f = new FavoriteCategory();
-                            list=new ArrayList<Place>();
-
-                            firstFilter=false;
-                            placesDownload = true;
-
-
-                            System.out.println("places downloaded " + jArray.length());
-                            if(jArray.length()>0) {
-                                //Read JsonArray
-                                for (int i = 0; i < jArray.length(); i++) {
-                                    JSONObject o = jArray.getJSONObject(i);
-                                    final Place p = new Place();
-
-                                    p.setName(o.getString("plc_name"));
-
-
-                                    Toast.makeText(getApplicationContext(),o.getString("plc_name")+" " +o.getString("plc_latitude"), Toast.LENGTH_LONG).show();
-
-
-                                    double latitude = Double.parseDouble(o.getString("plc_latitude"));
-                                    double longitude = Double.parseDouble(o.getString("plc_longitude"));
-
-                                    p.setLocation(latitude, longitude);
-                                    MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-                                    Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
-                                    //Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);
-
-
-                                    Log.i("Guppy---------", p.getName());
-                                    System.out.println("places are " + p.getName());
-
-
-                                    TextView t = (TextView)findViewById(R.id.testText);
-
-
-
-                                    list.add(p);
-                                    t.setText(list.get(i).getName());
-
-                                }
-                                Log.i("Guppy---------",list.get(0).getName());
-                                checkDownloads();
-                            }
-                            else{
-                                setSupportProgressBarIndeterminateVisibility(false);
-                                AlertDialog.Builder bu=new AlertDialog.Builder(tt);
-                                bu.setMessage(getResources().getString(R.string.novenuemessage));
-                                bu.setNegativeButton(getResources().getString(R.string.alertcancelbuttonlabel),new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                });
-                                bu.setPositiveButton(getResources().getString(R.string.newfilterbuttonlabel),new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if(fi==null)
-                                            fi=new FilterFragment();
-                                        firstFilter=true;
-                                        fi.setColor(Color.parseColor(color));
-                                        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place,fi).commit();
-                                        setScreen(Screen.filter);
-                                    }
-                                });
-                                bu.show();
-                            }
-
-
-                        } catch (JSONException e) {
-
-                            AlertDialog.Builder bu=new AlertDialog.Builder(tt);
-                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    refreshList();
-                                }
-                            });
-                            bu.show();
-                            e.printStackTrace();
-                            return;
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-
-        // Add the request to the queue
-        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-
-
-
-
-
-
-
-
-       /* ParseQuery<ParseObject> query=ParseQuery.getQuery(App.PARSE_PLACES);
-        query.whereEqualTo(Place.ISACTIVE,true);
-        query.whereContains(Place.NAME, filter.keyword);
-        query.whereEqualTo(Place.CATEGORY, filter.category);
-
-        if(my!=null) {
-            ParseGeoPoint geo = new ParseGeoPoint(my.latitude, my.longitude);
-            if (filter.metrics == PlaceFilter.DistanceSystem.km) {
-                query.whereWithinKilometers(Place.POSITION, geo, filter.getDistance(PlaceFilter.DistanceSystem.km));
-            } else {
-                query.whereWithinMiles(Place.POSITION, geo, filter.getDistance(PlaceFilter.DistanceSystem.ml));
-            }
-        }
-
-        list=new ArrayList<Place>();
-        query.setLimit(filter.limit);
-        final Activity tt=this;
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if(!onScreen)
-                    return;
-                if(e!=null){
-                    AlertDialog.Builder bu=new AlertDialog.Builder(tt);
-                    bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                    bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel),null);
-                    bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel),new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            refreshList();
-                        }
-                    });
-                    bu.show();
-                    e.printStackTrace();
-                    return;
-                }
-                if(parseObjects.size()>0) {
-                    System.out.println("places downloaded " + parseObjects.size());
-                    firstFilter=false;
-                    placesDownload = true;
-                    Comment.setLIMIT(parseObjects.size());
-                    Deal.setLIMIT(parseObjects.size());
-                    Photo.setLIMIT(parseObjects.size());
-                    for (int i = 0; i < parseObjects.size(); i++) {
-                        ParseObject o = parseObjects.get(i);
-                        final Place p = new Place();
-                        p.name = o.getString(Place.NAME);
-                        p.description = o.getString(Place.DESCRIPTION);
-                        p.category = CategoryList.getCategory(o.getString(Place.CATEGORY)).title;
-                        p.color = color;
-                        p.id = o.getObjectId();
-                        p.likes = Integer.parseInt(o.getString(Place.LIKES));
-                        p.isActive = o.getBoolean(Place.ISACTIVE);
-                        p.rating = Double.parseDouble(o.getString(Place.RATING));
-                        p.open = o.getString(Place.OPENHOUR);
-                        p.close = o.getString(Place.CLOSEHOUR);
-                        p.web = o.getString(Place.WEBPAGE);
-                        p.facebook = o.getString(Place.FACEBOOK);
-                        p.twitter = o.getString(Place.TWITTER);
-                        p.phone = o.getString(Place.PHONE);
-                        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        p.liked=pref.getBoolean(p.id,false);
-                        p.isFavourite=FavoritesManager.isFavorite(tt,p.id);
-                        p.address=o.getString(Place.ADDRESS);
-
-                        ParseGeoPoint geo = o.getParseGeoPoint(Place.POSITION);
-                        p.setLocation(geo.getLatitude(), geo.getLongitude());
-                        MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-                        Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
-
-                        *//*
-                        try {
-                            List<Address> go = new Geocoder(getApplicationContext()).getFromLocation(p.getLatitude(), p.getLongitude(), 1);
-                            if (!go.isEmpty()) {
-                                p.address = go.get(0).getAddressLine(0) + " " + go.get(0).getAddressLine(1);
-                            }
-                        } catch (Exception ee) {
-                            ee.printStackTrace();
-                        }*//*
-
-                        ParseQuery<ParseObject> q = ParseQuery.getQuery(App.PARSE_COMMENTS);
-                        q.whereEqualTo(Comment.PLACE, o.getObjectId());
-                        q.whereEqualTo(Comment.ISACTIVE, true);
-                        q.findInBackground(new FindCallback<ParseObject>() {
-                            @Override
-                            public void done(List<ParseObject> parseObjects, ParseException e) {
-                                for (int i = 0; i < parseObjects.size(); i++) {
-                                    Comment c = new Comment();
-                                    ParseObject o = parseObjects.get(i);
-                                    c.created = o.getCreatedAt();
-                                    c.name = o.getString(Comment.NAME);
-                                    c.text = o.getString(Comment.TEXT);
-                                    c.email = o.getString(Comment.EMAIL);
-                                    c.rating = o.getDouble(Comment.RATING);
-                                    c.isActive = true;
-                                    c.place = o.getString(Comment.PLACE);
-                                    p.comments.add(c);
-                                }
-                                Comment.increaseDownloaded();
-                            }
-                        });
-
-
-                        ParseQuery<ParseObject> qq = ParseQuery.getQuery(App.PARSE_DEALS);
-                        qq.whereEqualTo(Deal.PLACE, o.getObjectId());
-                        qq.findInBackground(new FindCallback<ParseObject>() {
-                            @Override
-                            public void done(List<ParseObject> parseObjects, ParseException e) {
-                                if (e != null)
-                                    e.printStackTrace();
-                                for (int i = 0; i < parseObjects.size(); i++) {
-                                    Deal d = new Deal();
-                                    ParseObject o = parseObjects.get(i);
-                                    d.title = o.getString(Deal.TITLE);
-                                    d.description = o.getString(Deal.DESCRIPTION);
-                                    d.url = o.getString(Deal.URL);
-                                    d.place = o.getString(Deal.PLACE);
-                                    ParseFile file = o.getParseFile(Deal.PHOTO);
-                                    d.photo = file.getUrl();
-                                    d.startDate = o.getDate(Deal.START_DATE);
-                                    d.endDate = o.getDate(Deal.END_DATE);
-                                    p.deals.add(d);
-                                }
-                                Deal.increaseDownloaded();
-                            }
-                        });
-
-                        ParseQuery<ParseObject> qp = ParseQuery.getQuery(App.PARSE_PHOTOS);
-                        qp.whereEqualTo(Photo.PLACE, o.getObjectId());
-                        qp.whereEqualTo(Photo.ISACTIVE, true);
-                        qp.findInBackground(new FindCallback<ParseObject>() {
-                            @Override
-                            public void done(List<ParseObject> parseObjects, ParseException e) {
-                                if (e != null)
-                                    e.printStackTrace();
-                                for (int i = 0; i < parseObjects.size(); i++) {
-                                    Photo pp = new Photo();
-                                    ParseObject o = parseObjects.get(i);
-                                    pp.isActive = true;
-                                    pp.place = o.getString(Photo.PLACE);
-                                    ParseFile f = o.getParseFile(Photo.PHOTO);
-                                    pp.url = f.getUrl();
-                                    p.photos.add(pp);
-                                }
-                                Photo.increaseDownloaded();
-                            }
-                        });
-                        boolean pop = true;
-                        if (filter.popular && p.rating < 6.0) {
-                            pop = false;
-                        }
-                        boolean open = true;
-                        if (filter.open) {
-                            open = p.isOpen();
-                        }
-                        if (pop && open)
-                            list.add(p);
-                    }
-                    checkDownloads();
-                }else{
-                    setSupportProgressBarIndeterminateVisibility(false);
-                    AlertDialog.Builder bu=new AlertDialog.Builder(tt);
-                    bu.setMessage(getResources().getString(R.string.novenuemessage));
-                    bu.setNegativeButton(getResources().getString(R.string.alertcancelbuttonlabel),new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-                    bu.setPositiveButton(getResources().getString(R.string.newfilterbuttonlabel),new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(fi==null)
-                                fi=new FilterFragment();
-                            firstFilter=true;
-                            fi.setColor(Color.parseColor(color));
-                            getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place,fi).commit();
-                            setScreen(Screen.filter);
-                        }
-                    });
-                    bu.show();
-                }
-            }
-        });*/
-    }
 
    /* private void  refreshFavourite(){
         if(!App.checkInternetConnection(this) && onScreen) {

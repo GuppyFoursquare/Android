@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
@@ -56,7 +57,7 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
                 Intent in = new Intent(getContext(), PlaceActivity.class);
 
 
-                in.putExtra("CatId", list.get(position).getId());
+                in.putExtra(Place.ID, list.get(position).getId());
                 in.putExtra("title", list.get(position).getTitle());
 
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
