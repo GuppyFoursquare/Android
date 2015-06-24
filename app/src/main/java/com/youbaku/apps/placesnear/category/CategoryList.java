@@ -1,10 +1,10 @@
-//
-//  CategoryList
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
+/*****************************************************************************************
+ * Copyright (c) 2015 Guppy org.
+ * YouBaku Android App. - CategoryList.java
+ * This file is downloading category from server.
+ * Volley is used for downlaoding main category
+ *
+ ****************************************************************************************/
 
 package com.youbaku.apps.placesnear.category;
 

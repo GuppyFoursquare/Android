@@ -18,11 +18,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,20 +32,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.youbaku.apps.placesnear.App;
-import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.utils.Category;
-import com.youbaku.apps.placesnear.category.CategoryList;
-import com.youbaku.apps.placesnear.place.comment.CommentListFragment;
-import com.youbaku.apps.placesnear.place.comment.CreateComment;
-import com.youbaku.apps.placesnear.place.deal.DealListFragment;
-import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.place.comment.CommentListFragment;
+import com.youbaku.apps.placesnear.place.comment.CreateComment;
+import com.youbaku.apps.placesnear.place.deal.DealListFragment;
+import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,11 +71,11 @@ public class PlaceDetailActivity extends ActionBarActivity {
         p=Place.FOR_DETAIL;
 
         ActionBar act=((ActionBar)getSupportActionBar());
-        act.setBackgroundDrawable(new ColorDrawable(Color.parseColor(p.color)));
+        act.setBackgroundDrawable(new ColorDrawable(Color.parseColor(App.GreenColor)));
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setTitle(p.name);
         act.setDisplayShowCustomEnabled(true);
-        act.setSubtitle(CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).getName());
+        act.setSubtitle(SubCategory.SELECTED_SUB_CATEGORY_NAME);
 
         ActionBar.LayoutParams params=new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity=0x05;
@@ -87,7 +86,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
         ((RelativeLayout)findViewById(R.id.main_activity_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
 
-        PlaceDetailFragment det=new PlaceDetailFragment(Color.parseColor(p.color));
+        PlaceDetailFragment det=new PlaceDetailFragment(Color.GREEN);
         det.setOnCommentClick(toCommentList);
         det.setOnDealClick(toDealList);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place_detail,det).commit();

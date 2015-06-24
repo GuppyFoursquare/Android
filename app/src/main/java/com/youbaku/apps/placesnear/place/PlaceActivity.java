@@ -177,7 +177,40 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     JSONObject o = jArray.getJSONObject(i);
                                     final Place p = new Place();
 
+
+
+                                    double rating;
+                                    if(o.getString("plc_avg_rating")=="null"){
+                                        rating=0.0;
+                                    }
+                                    else{
+                                        rating=Double.parseDouble(o.getString("plc_avg_rating"));
+                                    }
+
+                                   /* ArrayList<Comment>listdata =new ArrayList<>();
+                                    JSONArray jcom_array = new JSONArray(jArray.getJSONObject(i).getString("rating"));
+
+                                    if (jcom_array != null) {
+                                        for (int j=0;j<jcom_array.length();j++){
+
+                                            JSONObject c = jcom_array.getJSONObject(j);
+                                            String cmnt_text = jArray.getJSONObject(j).getString("place_rating_comment");
+                                            String cmnt_id = jArray.getJSONObject(j).getString("place_rating_id");
+
+                                            final Comment cmnt = new Comment();
+                                            cmnt.setText(cmnt_text);
+                                            cmnt.setComment_id(cmnt_id);
+                                            Toast.makeText(getApplicationContext(), cmnt.getText(), Toast.LENGTH_LONG).show();
+                                            listdata.add(cmnt);
+                                        }
+                                       p.comments=listdata;
+                                                                           }*/
+
                                     p.setName(o.getString("plc_name"));
+                                    p.setImgUrl(o.getString("plc_header_image"));
+                                    p.setRating(rating);
+
+
 
                                     Toast.makeText(getApplicationContext(), o.getString("plc_name") + " " + o.getString("plc_latitude"), Toast.LENGTH_LONG).show();
 
@@ -301,11 +334,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         switch (id){
             case R.id.go_filter_menu:
-                if(!dealsDownload || !commentsDownload || !placesDownload)
+                if(!placesDownload)//!dealsDownload || !commentsDownload ||
                     return true;
                 if(fi==null)
                     fi=new FilterFragment();
-                fi.setColor(Color.parseColor(color));
+                fi.setColor(Color.parseColor(App.DefaultBackgroundColor));
                 getSupportFragmentManager().beginTransaction().addToBackStack("filter").replace(R.id.main_activity_place,fi).commit();
                 setScreen(Screen.filter);
                 return true;
@@ -390,6 +423,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Place.FOR_DETAIL=list.get(position);
             Intent in=new Intent(getApplicationContext(), PlaceDetailActivity.class);
+            in.putExtra("title", list.get(position).getName());
             startActivity(in);
         }
     };

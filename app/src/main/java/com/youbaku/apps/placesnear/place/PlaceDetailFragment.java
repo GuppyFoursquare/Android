@@ -74,7 +74,7 @@ public class PlaceDetailFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((App)getActivity().getApplication()).track(App.ANALYSIS_PLACE_DETAILS);
+       // ((App)getActivity().getApplication()).track(App.ANALYSIS_PLACE_DETAILS);
         ((RelativeLayout)getView().findViewById(R.id.main_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
         p=Place.FOR_DETAIL;
 

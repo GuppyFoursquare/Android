@@ -52,18 +52,25 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "List Positon is " + position, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "List Position is " + position, Toast.LENGTH_LONG).show();
 
                 Intent in = new Intent(getContext(), PlaceActivity.class);
 
-
+                //Take some useful data from current activity
                 in.putExtra(Place.ID, list.get(position).getId());
                 in.putExtra("title", list.get(position).getTitle());
 
+                SubCategory.SELECTED_SUB_CATEGORY_ID=list.get(position).getId();
+                SubCategory.SELECTED_SUB_CATEGORY_NAME=list.get(position).getTitle();
+
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(in);
+
+
             }
         });
+
+
 
         return convertView;
     }

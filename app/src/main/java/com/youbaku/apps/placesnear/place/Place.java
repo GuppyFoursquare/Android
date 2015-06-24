@@ -21,6 +21,9 @@ import java.util.Date;
 
 public class Place {
     public static final String ID="plc_id";
+
+
+
     public static final String NAME="plc_name";
     public static final String PHOTO="plc_header_image";
     public static final String WEBPAGE="plc_website";
@@ -41,6 +44,10 @@ public class Place {
     public static final String PLACE="place";
     public static final String DISTANCE="distance";
     public static Place FOR_DETAIL;
+
+    public String imgUrl;
+
+
 
     public String id="";
     public String name="";
@@ -128,6 +135,20 @@ public class Place {
         this.name = name;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
 
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
 }

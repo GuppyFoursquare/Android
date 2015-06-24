@@ -68,7 +68,8 @@ public class SubCategoryListActivty extends ActionBarActivity {
         Intent in=getIntent();
         //color=in.getStringExtra(COLOR);
         title=in.getStringExtra("title");
-        final String cat_id=in.getStringExtra("CatId");
+        //final String cat_id=in.getStringExtra("CatId");
+        final String cat_id=Category.SELECTED_CATEGORY_ID;
 
 
         ActionBar act=((ActionBar)getSupportActionBar());
@@ -115,6 +116,8 @@ public class SubCategoryListActivty extends ActionBarActivity {
 
 
                                 s.setTitle(obj.getString("cat_name"));
+                                s.setId(obj.getString("cat_id"));
+
                                 sublist.add(s);
 
 

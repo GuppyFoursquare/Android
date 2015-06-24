@@ -4,6 +4,9 @@ package com.youbaku.apps.placesnear.utils;
  * Created by orxan on 17.06.2015.
  */
 public class SubCategory {
+    public static String SELECTED_SUB_CATEGORY_ID="";
+    public static String SELECTED_SUB_CATEGORY_NAME="";
+
     String title;
     String id;
     String img;
