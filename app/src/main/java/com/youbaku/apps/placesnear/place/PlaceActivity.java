@@ -180,15 +180,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
 
                                     double rating=0.0;
-                                    /*try{
+                                    if(o.has("plc_avg_rating")){
                                         rating=Double.parseDouble(o.getString("plc_avg_rating"));
-                                    }catch (android.net.ParseException e){
+                                    }else{
                                         rating=0.0;
-                                        Log.i("Error---Guppy----", "Parse exception");
-                                    }catch (NullPointerException en){
-                                        rating=0.0;
-                                        Log.i("Error---Guppy----", "Null pointer exception");
-                                    }*/
+                                    }
 
 
                                    /* ArrayList<Comment>listdata =new ArrayList<>();
