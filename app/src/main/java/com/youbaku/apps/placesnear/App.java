@@ -43,7 +43,7 @@ public class App extends Application {
 
 
     //----------------------------------------- HTTP LINKS -----------------------------------------/
-    public static final String SitePath         = "http://192.168.2.220/youbaku/";
+    public static final String SitePath         = "http://192.168.2.50/youbaku/";
 
     //----------------------------------------- HTTP LINKS-----------------------------------------/
 
@@ -77,6 +77,7 @@ public class App extends Application {
     public static final String LoaderColor                = "#FFDE3B";
     public static final String ButtonColor                = "#c5273f";
     public static final String GreenColor                 = "#04a968";
+    public static final String YellowColor                = "#debe41";
     //------------------------------------- DEFAULT COLORS ---------------------------------------/
 
 

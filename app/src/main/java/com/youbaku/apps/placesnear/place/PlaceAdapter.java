@@ -9,6 +9,7 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
@@ -83,7 +84,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
 
         ((TextView)convertView.findViewById(R.id.name_place_list_item)).setText(list.get(position).getName());
-        //((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).getName());
+        ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(list.get(position).address);
         //((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
         //((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics,list.get(position).distance[0]));
        ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).comments.size()+"");
@@ -129,9 +130,20 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);
         }
-*/
+*/     TextView rateTxt=(TextView)convertView.findViewById(R.id.rating_place_list_item);
 
-        ((TextView)convertView.findViewById(R.id.rating_place_list_item)).setText(list.get(position).rating + "/5.0");
+        if(list.get(position).rating > 3.5 && list.get(position).rating <=5.0 ){
+            rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));
+        }
+        else if(list.get(position).rating >= 3.0 && list.get(position).rating <=3.5 ){
+            rateTxt.setBackgroundColor(Color.parseColor(App.YellowColor));
+        }
+        else{
+            rateTxt.setBackgroundColor(Color.parseColor(App.ButtonColor));
+        }
+
+        rateTxt.setText(list.get(position).rating + "/5.0");
+
         return convertView;
     }
 }

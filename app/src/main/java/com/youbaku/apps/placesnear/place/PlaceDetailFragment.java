@@ -24,18 +24,30 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
+import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.Gravatar;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MapsActivity;
-import com.youbaku.apps.placesnear.place.deal.Deal;
 import com.youbaku.apps.placesnear.photo.MyViewPager;
 import com.youbaku.apps.placesnear.photo.PhotoActivity;
 import com.youbaku.apps.placesnear.photo.PhotoAdapter;
+import com.youbaku.apps.placesnear.place.deal.Deal;
+import com.youbaku.apps.placesnear.utils.FavoriteCategory;
 import com.youbaku.apps.placesnear.web.WebActivity;
-import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class PlaceDetailFragment extends Fragment{
     private TextView topInfo;
@@ -56,8 +68,11 @@ public class PlaceDetailFragment extends Fragment{
     private ImageView iconWeb;
     private int color=0;
     private Place p;
+    private PlaceInfo pi;
     private View.OnClickListener OnCommentClick;
     private View.OnClickListener OnDealClick;
+
+    ArrayList<Place> listData = new ArrayList<Place>();
 
     public PlaceDetailFragment() {}
 
@@ -77,6 +92,8 @@ public class PlaceDetailFragment extends Fragment{
        // ((App)getActivity().getApplication()).track(App.ANALYSIS_PLACE_DETAILS);
         ((RelativeLayout)getView().findViewById(R.id.main_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
         p=Place.FOR_DETAIL;
+        pi=new PlaceInfo();
+
 
         topInfo=(TextView)getView().findViewById(R.id.top_info_place_detail);
         description=(TextView)getView().findViewById(R.id.description_place_detail);
@@ -88,6 +105,66 @@ public class PlaceDetailFragment extends Fragment{
         dealTitle=(TextView)getView().findViewById(R.id.deal_title_place_detail);
         dealDate=(TextView)getView().findViewById(R.id.deal_date_place_detail);
         dealText=(TextView)getView().findViewById(R.id.deal_text_place_detail);
+
+
+        // 2- We will call api
+        String url2 = App.SitePath+"api/places.php?op=info&plc_id=1";
+        JSONObject apiResponse = null;
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+
+                            JSONArray jArray = response.getJSONArray("content");
+                            FavoriteCategory f = new FavoriteCategory();
+
+
+                            //Read JsonArray
+                            for (int i = 0; i < jArray.length(); i++) {
+                                JSONObject obj = jArray.getJSONObject(i);
+                                final PlaceInfo pi = new PlaceInfo();
+
+                                pi.setDescription(obj.getString("plc_meta_description"));
+                                pi.setPlc_website(obj.getString("plc_website"));
+
+
+                                if(pi.getDescription().length()>0) {
+                                    description.setVisibility(View.VISIBLE);
+                                    description.setText(pi.getDescription() + "");
+                                }else {
+                                    description.setVisibility(View.GONE);
+                                }
+
+
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+
+
+
+
 
         if(p.photos.size()>0){
             ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
@@ -107,17 +184,12 @@ public class PlaceDetailFragment extends Fragment{
         }
 
         if(p.isOpen()) {
-            topInfo.setText(p.name + " : " +getResources().getString(R.string.openbuttonlabel));
+            topInfo.setText(p.name + " : " + getResources().getString(R.string.openbuttonlabel));
         }else{
-            topInfo.setText(p.name + " : " +getResources().getString(R.string.closedbuttonlabel));
+            topInfo.setText(p.name + " : " + getResources().getString(R.string.closedbuttonlabel));
         }
 
-        if(p.description.length()>0) {
-            description.setVisibility(View.VISIBLE);
-            description.setText(p.description + "");
-        }else {
-            description.setVisibility(View.GONE);
-        }
+
 
         if(p.address!=null && p.address.length()>0){
             ((TextView)getView().findViewById(R.id.address_title_text_place_detail)).setVisibility(View.VISIBLE);

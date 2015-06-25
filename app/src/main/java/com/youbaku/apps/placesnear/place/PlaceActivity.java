@@ -179,13 +179,17 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
 
 
-                                    double rating;
-                                    if(o.getString("plc_avg_rating")=="null"){
-                                        rating=0.0;
-                                    }
-                                    else{
+                                    double rating=0.0;
+                                    /*try{
                                         rating=Double.parseDouble(o.getString("plc_avg_rating"));
-                                    }
+                                    }catch (android.net.ParseException e){
+                                        rating=0.0;
+                                        Log.i("Error---Guppy----", "Parse exception");
+                                    }catch (NullPointerException en){
+                                        rating=0.0;
+                                        Log.i("Error---Guppy----", "Null pointer exception");
+                                    }*/
+
 
                                    /* ArrayList<Comment>listdata =new ArrayList<>();
                                     JSONArray jcom_array = new JSONArray(jArray.getJSONObject(i).getString("rating"));
@@ -205,9 +209,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                         }
                                        p.comments=listdata;
                                                                            }*/
+                                    p.setId(o.getString("plc_id"));
 
                                     p.setName(o.getString("plc_name"));
                                     p.setImgUrl(o.getString("plc_header_image"));
+                                    p.address=o.getString("plc_address");
                                     p.setRating(rating);
 
 
@@ -290,6 +296,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
         refreshList();
+
 }
 
 
@@ -422,6 +429,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Place.FOR_DETAIL=list.get(position);
+            Place.ID=list.get(position).getId();
             Intent in=new Intent(getApplicationContext(), PlaceDetailActivity.class);
             in.putExtra("title", list.get(position).getName());
             startActivity(in);

@@ -51,6 +51,7 @@
             android:text="9.0/10.0"
             android:background="#04a968"
             android:padding="3dp"
+            android:textStyle="bold"
             android:layout_marginRight="3dp"
             android:textColor="@android:color/white"
             android:id="@+id/rating_place_list_item"

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Place {
-    public static final String ID="plc_id";
+    public static  String ID="plc_id";
 
 
 
@@ -54,6 +54,7 @@ public class Place {
     public String phone="";
     public String category="";
     public String address="";
+
     public String description="";
     public boolean isActive=true;
     public boolean isFavourite=false;
@@ -75,6 +76,9 @@ public class Place {
     public String open="";
     public String close="";
     public boolean liked=false;
+
+
+
 
     public Place() {
     }
@@ -150,5 +154,15 @@ public class Place {
     public void setRating(double rating) {
         this.rating = rating;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
 
 }

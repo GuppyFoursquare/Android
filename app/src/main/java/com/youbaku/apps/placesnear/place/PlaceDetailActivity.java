@@ -13,8 +13,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -30,11 +28,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -46,7 +42,6 @@ import com.youbaku.apps.placesnear.place.deal.DealListFragment;
 import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class PlaceDetailActivity extends ActionBarActivity {
@@ -61,6 +56,9 @@ public class PlaceDetailActivity extends ActionBarActivity {
     private MenuItem favoriteButton;
     private boolean directDetail=false;
     private File photoFile;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
         ((RelativeLayout)findViewById(R.id.main_activity_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
 
-        PlaceDetailFragment det=new PlaceDetailFragment(Color.GREEN);
+        PlaceDetailFragment det=new PlaceDetailFragment(Color.parseColor(App.GreenColor));
         det.setOnCommentClick(toCommentList);
         det.setOnDealClick(toDealList);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place_detail,det).commit();
@@ -97,11 +95,12 @@ public class PlaceDetailActivity extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction().addToBackStack("deals").replace(R.id.main_activity_place_detail,deals).commit();
         }
 
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==RESULT_OK && requestCode==IMAGE_CHOOSED_FROM_GALLERY){
+        /*if(resultCode==RESULT_OK && requestCode==IMAGE_CHOOSED_FROM_GALLERY){
             if(!App.checkInternetConnection(this)){
                 App.showInternetError(this);
                 return;
@@ -177,7 +176,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(),R.string.uploadsuccesslabel,Toast.LENGTH_SHORT).show();
                 }
             });
-        }
+        }*/
     }
 
     @Override
