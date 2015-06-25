@@ -24,6 +24,36 @@ public class Comment {
     private static int DOWNLOADED=0;
     private static AllCommentsDownloaded subscriber;
 
+    public String comment_id="";
+
+    public static String getNAME() {
+        return NAME;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(String comment_id) {
+        this.comment_id = comment_id;
+    }
+
     public String name="";
     public String text="";
     public String email="";

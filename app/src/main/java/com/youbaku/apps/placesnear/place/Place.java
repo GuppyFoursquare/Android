@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Place {
-    public static final String ID="plc_id";
+    public static  String ID="plc_id";
+
+
+
     public static final String NAME="plc_name";
     public static final String PHOTO="plc_header_image";
     public static final String WEBPAGE="plc_website";
@@ -42,11 +45,16 @@ public class Place {
     public static final String DISTANCE="distance";
     public static Place FOR_DETAIL;
 
+    public String imgUrl;
+
+
+
     public String id="";
     public String name="";
     public String phone="";
     public String category="";
     public String address="";
+
     public String description="";
     public boolean isActive=true;
     public boolean isFavourite=false;
@@ -68,6 +76,9 @@ public class Place {
     public String open="";
     public String close="";
     public boolean liked=false;
+
+
+
 
     public Place() {
     }
@@ -126,6 +137,30 @@ public class Place {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 

@@ -13,16 +13,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,24 +28,20 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.utils.Category;
-import com.youbaku.apps.placesnear.category.CategoryList;
 import com.youbaku.apps.placesnear.place.comment.CommentListFragment;
 import com.youbaku.apps.placesnear.place.comment.CreateComment;
 import com.youbaku.apps.placesnear.place.deal.DealListFragment;
 import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class PlaceDetailActivity extends ActionBarActivity {
@@ -63,6 +57,9 @@ public class PlaceDetailActivity extends ActionBarActivity {
     private boolean directDetail=false;
     private File photoFile;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +69,11 @@ public class PlaceDetailActivity extends ActionBarActivity {
         p=Place.FOR_DETAIL;
 
         ActionBar act=((ActionBar)getSupportActionBar());
-        act.setBackgroundDrawable(new ColorDrawable(Color.parseColor(p.color)));
+        act.setBackgroundDrawable(new ColorDrawable(Color.parseColor(App.GreenColor)));
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setTitle(p.name);
         act.setDisplayShowCustomEnabled(true);
-        act.setSubtitle(CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).getName());
+        act.setSubtitle(SubCategory.SELECTED_SUB_CATEGORY_NAME);
 
         ActionBar.LayoutParams params=new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity=0x05;
@@ -87,7 +84,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
         ((RelativeLayout)findViewById(R.id.main_activity_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
 
-        PlaceDetailFragment det=new PlaceDetailFragment(Color.parseColor(p.color));
+        PlaceDetailFragment det=new PlaceDetailFragment(Color.parseColor(App.GreenColor));
         det.setOnCommentClick(toCommentList);
         det.setOnDealClick(toDealList);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place_detail,det).commit();
@@ -98,11 +95,12 @@ public class PlaceDetailActivity extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction().addToBackStack("deals").replace(R.id.main_activity_place_detail,deals).commit();
         }
 
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==RESULT_OK && requestCode==IMAGE_CHOOSED_FROM_GALLERY){
+        /*if(resultCode==RESULT_OK && requestCode==IMAGE_CHOOSED_FROM_GALLERY){
             if(!App.checkInternetConnection(this)){
                 App.showInternetError(this);
                 return;
@@ -178,7 +176,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(),R.string.uploadsuccesslabel,Toast.LENGTH_SHORT).show();
                 }
             });
-        }
+        }*/
     }
 
     @Override

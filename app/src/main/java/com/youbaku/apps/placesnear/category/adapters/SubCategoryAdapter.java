@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
@@ -51,18 +52,25 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "List Positon is " + position, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "List Position is " + position, Toast.LENGTH_LONG).show();
 
                 Intent in = new Intent(getContext(), PlaceActivity.class);
 
-
-                in.putExtra("CatId", list.get(position).getId());
+                //Take some useful data from current activity
+                in.putExtra(Place.ID, list.get(position).getId());
                 in.putExtra("title", list.get(position).getTitle());
+
+                SubCategory.SELECTED_SUB_CATEGORY_ID=list.get(position).getId();
+                SubCategory.SELECTED_SUB_CATEGORY_NAME=list.get(position).getTitle();
 
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(in);
+
+
             }
         });
+
+
 
         return convertView;
     }

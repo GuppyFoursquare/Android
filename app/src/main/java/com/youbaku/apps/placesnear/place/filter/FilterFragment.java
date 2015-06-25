@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -82,7 +81,7 @@ public class FilterFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((App)getActivity().getApplication()).track(App.ANALYSIS_FILTERS);
+       // ((App)getActivity().getApplication()).track(App.ANALYSIS_FILTERS);
         ((ScrollView)getView().findViewById(R.id.main_filter_fragment)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
 
         keyword=(EditText)getView().findViewById(R.id.keyword_filter_fragment);
@@ -179,8 +178,8 @@ public class FilterFragment extends Fragment {
             LayerDrawable ld = (LayerDrawable) distance.getProgressDrawable();
             ld.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         }else{
-            StateListDrawable sld=(StateListDrawable) distance.getProgressDrawable();
-            sld.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            //StateListDrawable sld=(StateListDrawable) distance.getProgressDrawable();
+            //sld.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         }
 
         lengthInfo.setText(getResources().getString(R.string.distancelabel) + " : " + App.getDistanceString(x));

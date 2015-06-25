@@ -49,8 +49,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="9.0/10.0"
-            android:background="@drawable/rating_background"
+            android:background="#04a968"
             android:padding="3dp"
+            android:textStyle="bold"
             android:layout_marginRight="3dp"
             android:textColor="@android:color/white"
             android:id="@+id/rating_place_list_item"
@@ -58,7 +59,7 @@
             android:layout_below="@+id/name_place_list_item"/>
     </RelativeLayout>
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/image_place_list_item"

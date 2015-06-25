@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.Place;
+import com.youbaku.apps.placesnear.place.PlaceInfo;
 import com.youbaku.apps.placesnear.utils.FavoriteCategory;
 
 import org.json.JSONArray;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 
 
 public class TestActivty extends ActionBarActivity {
-    private ArrayList<Place> list;
+    private ArrayList<PlaceInfo> list;
     ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class TestActivty extends ActionBarActivity {
         ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.VISIBLE);
 
         // 2- We will call api
-        String url2 = App.SitePath+"api/places.php?op=search";
+        String url2 = App.SitePath+"api/places.php?op=info&plc_id=1";
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -83,17 +84,18 @@ public class TestActivty extends ActionBarActivity {
 
                             JSONArray jArray = response.getJSONArray("content");
                             FavoriteCategory f = new FavoriteCategory();
-                            list=new ArrayList<Place>();
+                            list=new ArrayList<PlaceInfo>();
 
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
-                                final Place s = new Place();
+                                final PlaceInfo s = new PlaceInfo();
+                                final Place p=new Place();
 
-
-                                s.setName(obj.getString("plc_name"));
-                                Log.i("Places are: ", s.getName());
-                                t.setText(s.getName());
+                                p.description=obj.getString("plc_meta_description");
+                                s.setDescription(obj.getString("plc_email"));
+                                Log.i("Places are: ", s.getDescription());
+                                t.setText(s.getDescription());
                                 list.add(s);
                                 ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.INVISIBLE);
 

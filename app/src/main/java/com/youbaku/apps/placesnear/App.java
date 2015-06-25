@@ -76,6 +76,8 @@ public class App extends Application {
     public static final String SVGPassiveColor            = "#777777";
     public static final String LoaderColor                = "#FFDE3B";
     public static final String ButtonColor                = "#c5273f";
+    public static final String GreenColor                 = "#04a968";
+    public static final String YellowColor                = "#debe41";
     //------------------------------------- DEFAULT COLORS ---------------------------------------/
 
 

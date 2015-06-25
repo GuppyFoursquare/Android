@@ -28,11 +28,24 @@ import java.util.ArrayList;
 
 
 public class CategoryListFragment extends Fragment {
+    View view;
+    Fragment newFragment;
     private ArrayList<Category> list;
     private CategoryAdapter adap;
     private test.OnFragmentInteractionListener mListener;
-    View view;
-    Fragment newFragment;
+
+    public CategoryListFragment() {
+        // Required empty public constructor
+    }
+
+    // TODO: Rename and change types and number of parameters
+    public static CategoryListFragment newInstance(String param1, String param2) {
+        CategoryListFragment fragment = new CategoryListFragment();
+        Bundle args = new Bundle();
+
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,10 +83,7 @@ public class CategoryListFragment extends Fragment {
                  */
                 in.putExtra("CatId", list.get(position).objectId);
                 in.putExtra("title", list.get(position).getTitle());
-
-
-                //Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
-
+                Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
 
 
                 startActivity(in);
@@ -90,19 +100,6 @@ public class CategoryListFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static CategoryListFragment newInstance(String param1, String param2) {
-        CategoryListFragment fragment = new CategoryListFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public CategoryListFragment() {
-        // Required empty public constructor
     }
 
     @Override
