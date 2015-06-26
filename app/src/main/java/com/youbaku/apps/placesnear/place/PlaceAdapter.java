@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.larvalabs.svgandroid.SVGParser;
+import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
@@ -121,7 +122,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
         System.out.println(width+" x "+height);
         im.setLayoutParams(params);
 
-       /*
+
 
         im.setImageDrawable(getContext().getResources().getDrawable(R.drawable.placeholder_placelist));
         if(list.get(position).photos!=null && list.get(position).photos.size()>0) {
@@ -130,7 +131,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);
         }
-*/     TextView rateTxt=(TextView)convertView.findViewById(R.id.rating_place_list_item);
+   TextView rateTxt=(TextView)convertView.findViewById(R.id.rating_place_list_item);
 
         if(list.get(position).rating > 3.5 && list.get(position).rating <=5.0 ){
             rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));

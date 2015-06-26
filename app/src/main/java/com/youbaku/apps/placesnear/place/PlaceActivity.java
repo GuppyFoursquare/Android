@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ import com.youbaku.apps.placesnear.place.comment.AllCommentsDownloaded;
 import com.youbaku.apps.placesnear.place.deal.AllDealsDownloaded;
 import com.youbaku.apps.placesnear.place.filter.FilterFragment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -147,11 +149,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
 
         MyLocation my=MyLocation.getMyLocation(getApplicationContext());
+        //Correct Request Url
+        //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
 
-        //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude;
-
-        //For testing Places
-        String url2 = App.SitePath+"api/places.php?op=nearme&lat=40.372877&lon=49.842825";
+        //For testing Places request
+        String url2 = App.SitePath+"api/places.php?op=nearme&lat=40.372877&lon=49.842825"+"&scat_id="+SubCategory.SELECTED_SUB_CATEGORY_ID;
         JSONObject apiResponse = null;
         final Activity tt=this;
         // Request a json response
@@ -176,6 +178,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                 for (int i = 0; i < jArray.length(); i++) {
                                     JSONObject o = jArray.getJSONObject(i);
                                     final Place p = new Place();
+
 
 
 
@@ -205,22 +208,33 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                         }
                                        p.comments=listdata;
                                                                            }*/
-                                    p.setId(o.getString("plc_id"));
 
+                                    //Inflate places
+                                    p.setId(o.getString("plc_id"));
                                     p.setName(o.getString("plc_name"));
                                     p.setImgUrl(o.getString("plc_header_image"));
                                     p.address=o.getString("plc_address");
+
                                     p.setRating(rating);
+                                    p.web=o.getString("plc_website");
+                                    p.phone=o.getString("plc_contact");
+
+                                    String PLACE_INFO_WITHOUT_HTML_TAG =String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
+
+                                    p.description=PLACE_INFO_WITHOUT_HTML_TAG;
+
+
+                                    double latitude = Double.parseDouble(o.getString("plc_latitude"));
+                                    double longitude = Double.parseDouble(o.getString("plc_longitude"));
+
+                                    p.setLocation(latitude, longitude);
 
 
 
                                     Toast.makeText(getApplicationContext(), o.getString("plc_name") + " " + o.getString("plc_latitude"), Toast.LENGTH_LONG).show();
 
 /*
-                                    double latitude = Double.parseDouble(o.getString("plc_latitude"));
-                                    double longitude = Double.parseDouble(o.getString("plc_longitude"));
 
-                                    p.setLocation(latitude, longitude);
                                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
                                     Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);*/
                                     //Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);

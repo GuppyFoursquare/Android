@@ -37,6 +37,7 @@ import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MapsActivity;
 import com.youbaku.apps.placesnear.photo.MyViewPager;
+import com.youbaku.apps.placesnear.photo.Photo;
 import com.youbaku.apps.placesnear.photo.PhotoActivity;
 import com.youbaku.apps.placesnear.photo.PhotoAdapter;
 import com.youbaku.apps.placesnear.place.deal.Deal;
@@ -57,6 +58,7 @@ public class PlaceDetailFragment extends Fragment{
     private TextView commentInfo;
     private ImageView commentView;
     private ImageView[] photos;
+    private ArrayList<Photo> arr;
     private ImageView dealImage;
     private TextView dealTitle;
     private TextView dealDate;
@@ -120,25 +122,17 @@ public class PlaceDetailFragment extends Fragment{
                         try {
 
 
-                            JSONArray jArray = response.getJSONArray("content");
+                            JSONArray jArray = response.getJSONObject("content").getJSONArray("gallery");
                             FavoriteCategory f = new FavoriteCategory();
-
+                            arr=new ArrayList<>();
 
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
-                                final PlaceInfo pi = new PlaceInfo();
+                                final Photo photo = new Photo();
+                                photo.url=obj.getString("plc_gallery_media");
+                                arr.add(photo);
 
-                                pi.setDescription(obj.getString("plc_meta_description"));
-                                pi.setPlc_website(obj.getString("plc_website"));
-
-
-                                if(pi.getDescription().length()>0) {
-                                    description.setVisibility(View.VISIBLE);
-                                    description.setText(pi.getDescription() + "");
-                                }else {
-                                    description.setVisibility(View.GONE);
-                                }
 
 
 
@@ -189,7 +183,12 @@ public class PlaceDetailFragment extends Fragment{
             topInfo.setText(p.name + " : " + getResources().getString(R.string.closedbuttonlabel));
         }
 
-
+        if(p.description.length()>0) {
+            description.setVisibility(View.VISIBLE);
+            description.setText(p.description + "");
+        }else {
+            description.setVisibility(View.GONE);
+        }
 
         if(p.address!=null && p.address.length()>0){
             ((TextView)getView().findViewById(R.id.address_title_text_place_detail)).setVisibility(View.VISIBLE);

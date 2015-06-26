@@ -43,7 +43,7 @@ public class App extends Application {
 
 
     //----------------------------------------- HTTP LINKS -----------------------------------------/
-    public static final String SitePath         = "http://192.168.2.50/youbaku/";
+    public static final String SitePath         = "http://192.168.1.38/youbaku/";
 
     //----------------------------------------- HTTP LINKS-----------------------------------------/
 

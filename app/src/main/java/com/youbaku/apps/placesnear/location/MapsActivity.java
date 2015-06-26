@@ -80,7 +80,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
             ab.setSubtitle(getResources().getString(R.string.selectlocationsubtitlelabel));
             ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0093D4")));
         }else{
-            ((App)getApplication()).track(App.ANALYSIS_MAP);
+           // ((App)getApplication()).track(App.ANALYSIS_MAP);
             ab.setTitle(in.getStringExtra(Place.NAME));
             ab.setBackgroundDrawable(new ColorDrawable(in.getIntExtra(PlaceActivity.COLOR,0x0093d4)));
             String dist= App.getDistanceString(PlaceFilter.getInstance().metrics,Place.FOR_DETAIL.distance[0]);
@@ -158,7 +158,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
             m=mMap.addMarker(new MarkerOptions().position(ll));
             Category cat= CategoryList.getCategory(Category.SELECTED_CATEGORY_ID);
             Picasso.with(this)
-                    .load(cat.markerURL)
+                    .load(cat.iconURL)
                     .placeholder(R.drawable.placeholderpin)
                     .into(markerTarget);
         }
