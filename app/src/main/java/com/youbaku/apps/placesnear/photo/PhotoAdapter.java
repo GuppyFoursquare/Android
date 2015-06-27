@@ -18,17 +18,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.R;
-import com.squareup.picasso.Picasso;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import java.util.ArrayList;
 
 public class PhotoAdapter extends PagerAdapter {
     private ArrayList<Photo> arr;
     private Context context;
+    ImageLoader mImageLoader;
 
     public PhotoAdapter(Context context,ArrayList<Photo> arr) {
         this.arr=arr;
@@ -51,7 +53,7 @@ public class PhotoAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View item=inflater.inflate(R.layout.view_pager_item,container,false);
-        final ImageView im=(ImageView)item.findViewById(R.id.image_view_pager_item);
+        final NetworkImageView im= (NetworkImageView) item.findViewById(R.id.image_view_pager_item);
         WindowManager windowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
         Display display= windowManager.getDefaultDisplay();
         RelativeLayout.LayoutParams params=(RelativeLayout.LayoutParams)im.getLayoutParams();
@@ -68,14 +70,16 @@ public class PhotoAdapter extends PagerAdapter {
         int height=(width/16)*9;
         params.height=height;
         im.setLayoutParams(params);
-        if(arr==null || arr.size()<1){
-            im.setImageResource(R.drawable.place_detail_image_placeholder);
-        }else {
-            Picasso.with(context)
-                    .load(arr.get(position).url)
+
+            /*Picasso.with(context)
+                    .load("http://localhost/youbaku/uploads/places_images/large/"+arr.get(position).url)
                     .placeholder(R.drawable.placeholder_placelist)
-                    .into(im);
-        }
+                    .into(im);*/
+            //Image Location
+            String url = "http://youbaku.com/uploads/places_images/large/"+arr.get(position).url; // URL of the image
+            mImageLoader = VolleySingleton.getInstance().getImageLoader();
+            im.setImageUrl(url,mImageLoader);
+
 
         ((ViewPager)container).addView(item);
         return item;

@@ -16,7 +16,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.place.Place;
 
@@ -55,7 +54,7 @@ public class PhotoActivity extends ActionBarActivity {
         startPosition=getIntent().getIntExtra(START_POSTİON,0);
         pager.setCurrentItem(startPosition);
 
-        ((App)getApplication()).track(App.ANALYSIS_PHOTOS);
+        //((App)getApplication()).track(App.ANALYSIS_PHOTOS);
     }
 
     @Override

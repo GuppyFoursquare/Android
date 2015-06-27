@@ -23,7 +23,7 @@
                 </com.youbaku.apps.placesnear.photo.MyViewPager>
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/no_image_palce_detail"
                 android:scaleType="centerCrop"
                 />
@@ -121,25 +121,25 @@
                 android:layout_gravity="center_horizontal"
                 style="@style/inputFields">
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="5dp"
                     android:id="@+id/photo1_place_detail"/>
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="5dp"
                     android:id="@+id/photo2_place_detail" />
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="5dp"
                     android:id="@+id/photo3_place_detail" />
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="5dp"

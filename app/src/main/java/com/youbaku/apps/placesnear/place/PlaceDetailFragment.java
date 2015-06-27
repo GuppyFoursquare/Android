@@ -23,11 +23,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 import com.squareup.picasso.Picasso;
@@ -57,7 +60,7 @@ public class PlaceDetailFragment extends Fragment{
     private TextView comment;
     private TextView commentInfo;
     private ImageView commentView;
-    private ImageView[] photos;
+    private NetworkImageView[] photos;
     private ArrayList<Photo> arr;
     private ImageView dealImage;
     private TextView dealTitle;
@@ -73,6 +76,7 @@ public class PlaceDetailFragment extends Fragment{
     private PlaceInfo pi;
     private View.OnClickListener OnCommentClick;
     private View.OnClickListener OnDealClick;
+    ImageLoader mImageLoader;
 
     ArrayList<Place> listData = new ArrayList<Place>();
 
@@ -110,7 +114,7 @@ public class PlaceDetailFragment extends Fragment{
 
 
         // 2- We will call api
-        String url2 = App.SitePath+"api/places.php?op=info&plc_id=1";
+        String url2 = App.SitePath+"api/places.php?op=info&plc_id="+Place.ID;
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -124,19 +128,58 @@ public class PlaceDetailFragment extends Fragment{
 
                             JSONArray jArray = response.getJSONObject("content").getJSONArray("gallery");
                             FavoriteCategory f = new FavoriteCategory();
-                            arr=new ArrayList<>();
+                            p.photos=new ArrayList<>();
 
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
                                 final Photo photo = new Photo();
                                 photo.url=obj.getString("plc_gallery_media");
-                                arr.add(photo);
+                                p.photos.add(photo);
 
-
-
+                                //Toast.makeText(getActivity(),"Gallery are: "+p.photos.get(i).url,Toast.LENGTH_LONG).show();
 
                             }
+
+
+                            if(p.photos.size()>0){
+                                ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
+
+                                MyViewPager pager=(MyViewPager)getView().findViewById(R.id.pager_place_detail);
+                                PhotoAdapter adapter=new PhotoAdapter(getActivity(),p.photos);
+                                pager.setAdapter(adapter);
+                            }else{
+                                ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.GONE);
+                                ((LinearLayout)getView().findViewById(R.id.photos_container_place_detail)).setVisibility(View.GONE);
+                                ((ImageView)getView().findViewById(R.id.no_image_palce_detail)).setImageResource(R.drawable.place_detail_image_placeholder);
+                            }
+                            photos=new NetworkImageView[4];
+                            photos[0]=(NetworkImageView)getView().findViewById(R.id.photo1_place_detail);
+                            photos[1]=(NetworkImageView)getView().findViewById(R.id.photo2_place_detail);
+                            photos[2]=(NetworkImageView)getView().findViewById(R.id.photo3_place_detail);
+                            photos[3]=(NetworkImageView)getView().findViewById(R.id.photo4_place_detail);
+
+                            for(int i=0;i<p.photos.size();i++){
+                                if(i==4)
+                                    break;
+
+                                photos[i].setOnClickListener(openPhotoActivity);
+                                String image_url="http://localhost/youbaku/uploads/places_images/medium/143017047610.jpg";
+                                /*Picasso.with(getActivity())
+                                        .load(image_url)
+                                        .placeholder(getResources().getDrawable(R.drawable.placeholder_photo_thumbnail))
+                                        .fit()
+                                        .into(photos[i]);*/
+                                //Image Location
+
+                                String url = "http://youbaku.com/uploads/places_images/large/"+p.photos.get(i).url; // URL of the image
+                                mImageLoader = VolleySingleton.getInstance().getImageLoader();
+                                photos[i].setImageUrl(url, mImageLoader);
+                            }
+
+
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -157,17 +200,14 @@ public class PlaceDetailFragment extends Fragment{
 
 
 
-
-
-
-        if(p.photos.size()>0){
+        /*if(p.photos.size()>0){
             ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
-            /*SlideShowView slide=(SlideShowView)getView().findViewById(R.id.slide_show_place_detail);
+            *//*SlideShowView slide=(SlideShowView)getView().findViewById(R.id.slide_show_place_detail);
             String[] arr=new String[p.photos.size()];
             for(int i=0;i<p.photos.size();i++){
                 arr[i]=p.photos.get(i).url;
             }
-            slide.start(arr);*/
+            slide.start(arr);*//*
             MyViewPager pager=(MyViewPager)getView().findViewById(R.id.pager_place_detail);
             PhotoAdapter adapter=new PhotoAdapter(getActivity(),p.photos);
             pager.setAdapter(adapter);
@@ -175,7 +215,7 @@ public class PlaceDetailFragment extends Fragment{
             ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.GONE);
             ((LinearLayout)getView().findViewById(R.id.photos_container_place_detail)).setVisibility(View.GONE);
             ((ImageView)getView().findViewById(R.id.no_image_palce_detail)).setImageResource(R.drawable.place_detail_image_placeholder);
-        }
+        }*/
 
         if(p.isOpen()) {
             topInfo.setText(p.name + " : " + getResources().getString(R.string.openbuttonlabel));
@@ -221,7 +261,7 @@ public class PlaceDetailFragment extends Fragment{
             ((RelativeLayout)getView().findViewById(R.id.comment_container_place_detail)).setVisibility(View.GONE);
         }
 
-        photos=new ImageView[4];
+        /*photos=new ImageView[4];
         photos[0]=(ImageView)getView().findViewById(R.id.photo1_place_detail);
         photos[1]=(ImageView)getView().findViewById(R.id.photo2_place_detail);
         photos[2]=(ImageView)getView().findViewById(R.id.photo3_place_detail);
@@ -238,7 +278,7 @@ public class PlaceDetailFragment extends Fragment{
                    .fit()
                    .into(photos[i]);
         }
-
+*/
         if(p.deals.size()>0){
             ((TextView)getView().findViewById(R.id.deal_title_text_place_detail)).setVisibility(View.VISIBLE);
             Deal d=p.deals.get(0);
@@ -317,15 +357,14 @@ public class PlaceDetailFragment extends Fragment{
     }
 
 
-
-
     View.OnClickListener openPhotoActivity=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent in=new Intent(getActivity(), PhotoActivity.class);
             for(int i=0;i<photos.length;i++){
-                if(photos[i].getId()==v.getId()){
+               if(photos[i].getId()==v.getId()){
                     in.putExtra(PhotoActivity.START_POSTİON,i);
+                    Toast.makeText(getActivity(), "View Id :" +photos.length, Toast.LENGTH_LONG).show();
                 }
             }
             startActivity(in);

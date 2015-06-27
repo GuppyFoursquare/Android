@@ -6,11 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.R;
-import com.squareup.picasso.Picasso;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class SlideAdapter extends PagerAdapter {
     private ArrayList<Photo> arr;
     private Context context;
+    ImageLoader mImageLoader;
 
     public SlideAdapter(Context context, ArrayList<Photo> arr) {
         this.arr=arr;
@@ -40,12 +42,18 @@ public class SlideAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View item=inflater.inflate(R.layout.slide_view_pager_item,container,false);
-        final ImageView im=(ImageView)item.findViewById(R.id.image_view_pager_item);
+        final NetworkImageView im=(NetworkImageView)item.findViewById(R.id.image_view_pager_item);
 
-        Picasso.with(context)
+       /* Picasso.with(context)
                 .load(arr.get(position).url)
                 .placeholder(R.drawable.placeholder_placelist)
-                .into(im);
+                .into(im);*/
+
+
+        //Image Location
+        String url = "http://youbaku.com/uploads/places_images/large/"+arr.get(position).url; // URL of the image
+        mImageLoader = VolleySingleton.getInstance().getImageLoader();
+        im.setImageUrl(url, mImageLoader);
 
         ((ViewPager)container).addView(item);
         return item;
