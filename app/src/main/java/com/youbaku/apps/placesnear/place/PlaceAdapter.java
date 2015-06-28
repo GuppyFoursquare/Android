@@ -124,7 +124,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
 
 
-        im.setImageDrawable(getContext().getResources().getDrawable(R.drawable.placeholder_placelist));
+        //im.setImageDrawable(getContext().getResources().getDrawable(R.drawable.placeholder_placelist));
         if(list.get(position).photos!=null && list.get(position).photos.size()>0) {
             Picasso.with(getContext())
                     .load(list.get(position).photos.get(0).url)

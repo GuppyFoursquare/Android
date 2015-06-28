@@ -246,7 +246,7 @@ public class PlaceDetailFragment extends Fragment{
                 comment.setText(t.substring(0, 197) + "...");
             else
                 comment.setText(t);
-            commentInfo.setText(p.comments.get(0).getCreatedDate() + " , " + p.comments.get(0).name);
+            commentInfo.setText(p.comments.get(0).getCreatedDate() + " , by user " + p.comments.get(0).name);
             Picasso.with(getActivity())
                     .load(Gravatar.getURL(p.comments.get(0).email))
                     .placeholder(R.drawable.placeholder_user)

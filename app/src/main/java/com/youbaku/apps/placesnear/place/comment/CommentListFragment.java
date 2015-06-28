@@ -30,7 +30,7 @@ public class CommentListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((App)getActivity().getApplication()).track(App.ANALYSIS_REVIEWS);
+        //((App)getActivity().getApplication()).track(App.ANALYSIS_REVIEWS);
 
         if (comments == null){
             System.err.println("commentlist have to be declerad for CommentListFragment");

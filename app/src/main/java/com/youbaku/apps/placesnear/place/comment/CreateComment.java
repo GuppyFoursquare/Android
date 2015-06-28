@@ -59,7 +59,7 @@ public class CreateComment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((App)getActivity().getApplication()).track(App.ANALYSIS_WRITE_REVIEW);
+        //((App)getActivity().getApplication()).track(App.ANALYSIS_WRITE_REVIEW);
 
         ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setOnRatingBarChangeListener(barChanged);
         ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setRating(3);

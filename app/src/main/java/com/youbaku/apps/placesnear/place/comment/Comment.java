@@ -82,7 +82,7 @@ public class Comment {
     }
 
     public String getCreatedDate(){
-        SimpleDateFormat ft=new SimpleDateFormat("dd, MMM ,yyyy");
+        SimpleDateFormat ft=new SimpleDateFormat("dd MMM ,yyyy");
         return ft.format(created);
     }
 
