@@ -6,23 +6,19 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity"
-    android:background="@android:color/white">
+    android:layout_centerInParent="true"
+    tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/content_frame2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </FrameLayout>
 
     <GridView
         android:id="@+id/gridView1"
         android:layout_width="fill_parent"
+        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:columnWidth="80dp"
         android:gravity="center"
-        android:numColumns="2"
+        android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"
         android:scrollbarStyle="outsideOverlay"

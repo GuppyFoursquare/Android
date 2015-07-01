@@ -71,6 +71,8 @@ public class SubCategoryListActivty extends ActionBarActivity {
         //final String cat_id=in.getStringExtra("CatId");
         final String cat_id=Category.SELECTED_CATEGORY_ID;
 
+        final String cat_image=in.getStringExtra("image");
+
 
         ActionBar act=((ActionBar)getSupportActionBar());
         ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor(App.DefaultActionBarColor));
@@ -94,6 +96,8 @@ public class SubCategoryListActivty extends ActionBarActivity {
 
 
         String url2 = App.SitePath+"api/category.php?cat_id="+cat_id;
+
+
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -118,6 +122,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
                                 s.setTitle(obj.getString("cat_name"));
                                 s.setId(obj.getString("cat_id"));
 
+
                                 sublist.add(s);
 
 
@@ -125,8 +130,6 @@ public class SubCategoryListActivty extends ActionBarActivity {
                             adap = new SubCategoryAdapter(getApplicationContext(),sublist);
                             grLv = (GridView) findViewById(R.id.subGridView);
                             grLv.setAdapter(adap);
-
-
 
 
 

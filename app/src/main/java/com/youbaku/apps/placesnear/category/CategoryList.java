@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class CategoryList{
-    private ArrayList<Category> list;
+    public static ArrayList<Category> list;
     private static CategoryList instance;
     private static FavoriteCategory fav;
     private CategoryDownloaded downloader;

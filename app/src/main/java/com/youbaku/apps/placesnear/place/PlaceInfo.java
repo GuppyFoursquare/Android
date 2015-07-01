@@ -8,9 +8,31 @@ import java.util.ArrayList;
 public class PlaceInfo {
     public static PlaceInfo FOR_DETAIL;
     String description;
-    String plc_website;
-    private ArrayList<PlaceInfo> list;
 
+    private String mytext;
+    private static String plc_website;
+    private ArrayList<PlaceInfo> list;
+    private static PlaceInfo instance;
+
+    public PlaceInfo() {
+    }
+
+    public static PlaceInfo getInstance() {
+
+        if (instance == null) {
+            instance = new PlaceInfo();
+        }
+        return instance;
+    }
+
+
+    public String getMytext() {
+        return mytext;
+    }
+
+    public void setMytext(String mytext) {
+        this.mytext = mytext;
+    }
 
     public String getDescription() {
         return description;

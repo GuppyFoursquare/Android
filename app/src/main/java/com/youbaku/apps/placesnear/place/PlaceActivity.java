@@ -132,6 +132,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             return;
         }
 
+
         ((RelativeLayout) findViewById(R.id.main_activity_place)).setBackgroundColor(Color.parseColor(App.DefaultBackgroundColor));
 
         if (Build.VERSION.SDK_INT > 10) {
@@ -161,6 +162,9 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                         try {
 
+                            placesDownload = false;
+                            commentsDownload = false;
+                            dealsDownload = false;
                             firstFilter = false;
                             placesDownload = true;
                             JSONArray jArray = response.getJSONArray("content");
@@ -175,7 +179,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                 //Read JsonArray
                                 for (int i = 0; i < jArray.length(); i++) {
                                     JSONObject o = jArray.getJSONObject(i);
-
+                                    final PlaceFilter filter = PlaceFilter.getInstance();
                                     final Place p = new Place();
 
                                     if(o.has("rating")){
@@ -249,13 +253,23 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
                                     Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);*/
                                     //Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);
+                                    boolean pop = true;
+                                    if (filter.popular && p.rating < 3.0) {
+                                        pop = false;
+                                    }
+                                    boolean open = true;
+                                    if (filter.open) {
+                                        open = p.isOpen();
+                                    }
+                                    if (pop && open)
+                                        list.add(p);
 
 
 
-                                    list.add(p);
 
 
                                 }
+
 
                                 Log.i("Guppy---------", list.get(0).getName());
                                 checkDownloads();
@@ -331,10 +345,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             return;
         }
 
-        final PlaceFilter filter = PlaceFilter.getInstance();
-        placesDownload = false;
-        commentsDownload = false;
-        dealsDownload = false;
+
 
 
     }

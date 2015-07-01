@@ -9,20 +9,29 @@
 package com.youbaku.apps.placesnear.category;
 
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.category.adapters.CategoryAdapter;
 import com.youbaku.apps.placesnear.utils.Category;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -65,34 +74,78 @@ public class CategoryListFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.category_layout, container, false);
 
-        adap = new CategoryAdapter(getActivity(), list);
-        final GridView grLv = (GridView) view.findViewById(R.id.gridView1);
-        grLv.setAdapter(adap);
 
-        grLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(getActivity(), "başarılı" + position + "-" + list.get(position).objectId,
-                        Toast.LENGTH_SHORT).show();
-                Intent in = new Intent(getActivity(), SubCategoryListActivty.class);
+        pullList();
 
-
-                /* *************************************************
-                *********************IMPORTANT *********************
-                *******************************************************
-                 */
-                in.putExtra("CatId", list.get(position).objectId);
-                in.putExtra("title", list.get(position).getTitle());
-                Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
-
-
-                startActivity(in);
-
-            }
-        });
 
 
         return view;
+    }
+
+    //Pulling list from category web service
+    private void pullList(){
+
+      //Calling Api
+        String url = App.SitePath+"api/category.php";
+
+        JSONObject apiResponse = null;
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            list=new ArrayList<Category>();
+                            JSONArray jArray = response.getJSONArray("content");
+
+
+                            //Read JsonArray
+                            for (int i = 0; i < jArray.length(); i++) {
+                                JSONObject obj = jArray.getJSONObject(i);
+
+                                final Category c=new Category();
+                                c.title=obj.getString("cat_name")+"";
+                                c.setObjectId(obj.getString("cat_id"));
+                                c.iconURL=obj.getString("cat_image");
+                                list.add(c);
+
+
+                                Log.i("GUPPY", c.title);
+                            }
+                            adap = new CategoryAdapter(getActivity(), list);
+                            final GridView grLv = (GridView) view.findViewById(R.id.gridView1);
+                            grLv.setAdapter(adap);
+
+                            grLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View v,
+                                                        int position, long id) {
+
+
+                                }
+                            });
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

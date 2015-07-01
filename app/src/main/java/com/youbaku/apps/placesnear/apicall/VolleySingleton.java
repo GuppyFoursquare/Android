@@ -20,7 +20,7 @@ import com.youbaku.apps.placesnear.MyApplication;
 public class VolleySingleton {
 
     private static VolleySingleton instance;
-    private RequestQueue requestQueue;
+    private static RequestQueue requestQueue;
     private ImageLoader imageLoader;
 
     private VolleySingleton() {
@@ -52,8 +52,12 @@ public class VolleySingleton {
         return instance;
     }
 
-    public RequestQueue getRequestQueue() {
-        return requestQueue;
+    public static RequestQueue getRequestQueue() {
+        if (requestQueue != null) {
+            return requestQueue;
+        } else {
+            throw new IllegalStateException("RequestQueue not initialized");
+        }
     }
 
     public ImageLoader getImageLoader() {

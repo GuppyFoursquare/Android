@@ -17,11 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceInfo;
 import com.youbaku.apps.placesnear.utils.FavoriteCategory;
 
@@ -30,16 +30,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TestActivty extends ActionBarActivity {
     private ArrayList<PlaceInfo> list;
     ProgressDialog progress;
+    RequestQueue queue;
+    JsonObjectRequest request;
+    TextView t;
+    Map<String, String> map = new HashMap<String, String>();
+    private PlaceInfo pi;
+    private PlaceInfo pii;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_activty);
-        ActionBar act=((ActionBar)getSupportActionBar());
+        ActionBar act = ((ActionBar) getSupportActionBar());
         act.setBackgroundDrawable(new ColorDrawable(Color.parseColor(App.DefaultActionBarColor)));
         act.setDisplayShowHomeEnabled(true);
         act.setLogo(R.drawable.app_logo);
@@ -47,29 +56,83 @@ public class TestActivty extends ActionBarActivity {
         act.setDisplayUseLogoEnabled(true);
         act.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_USE_LOGO);
 
-        ActionBar.LayoutParams params=new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity=0x05;
-        ProgressBar pro=new ProgressBar(this);
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = 0x05;
+        ProgressBar pro = new ProgressBar(this);
         pro.setVisibility(View.GONE);
         pro.setIndeterminate(true);
         act.setCustomView(pro, params);
-        final TextView t=(TextView)findViewById(R.id.hello_txt);
 
 
 
-
-
-        if(Build.VERSION.SDK_INT>10){
-            ProgressBar bar=(ProgressBar)findViewById(R.id.progressBar2);
-            SpinKitDrawable1 spin=new SpinKitDrawable1(this);
+        if (Build.VERSION.SDK_INT > 10) {
+            ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar2);
+            SpinKitDrawable1 spin = new SpinKitDrawable1(this);
             spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
             bar.setIndeterminateDrawable(spin);
         }
+        ArrayList<PlaceInfo>list=new ArrayList<>();
+
+        t=(TextView)findViewById(R.id.hello_txt);
+
+        map.put("keyword","cook");
+        queue = VolleySingleton.getRequestQueue();
+        String url =App.SitePath+"api/places.php?op=search";// the URL
+        request = new JsonObjectRequest(
+                Request.Method.POST, // the request method
+                url,
+                new JSONObject(map), // the parameters for the php
+                new Response.Listener<JSONObject>() { // the response listener
+                    @Override
+                    public void onResponse(JSONObject response){
+                        // here you parse the json response
+
+                        try {
 
 
-        ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.VISIBLE);
+                            JSONArray jArray = response.getJSONArray("content");
+                            FavoriteCategory f = new FavoriteCategory();
+                            t=(TextView)findViewById(R.id.hello_txt);
 
-        // 2- We will call api
+
+                            //Read JsonArray
+                            for (int i = 0; i < jArray.length(); i++) {
+                                JSONObject obj = jArray.getJSONObject(i);
+                                final PlaceInfo s = new PlaceInfo();
+
+                                s.setDescription(obj.getString("plc_name"));
+                                Log.i("Places are: ", s.getDescription());
+                                t.setText(s.getDescription());
+
+                                ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.INVISIBLE);
+
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            t.setText(e.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() { // the error listener
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                      /* here you can warn the user that there
+                      was an error while trying to get the json
+                      information from the php  */
+                    }
+                });
+
+        // executing the quere to get the json information
+        queue.add(request);
+
+
+
+
+       /*// 2- We will call api
         String url2 = App.SitePath+"api/places.php?op=info&plc_id=1";
         JSONObject apiResponse = null;
         // Request a json response
@@ -119,10 +182,11 @@ public class TestActivty extends ActionBarActivity {
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
+*/
 
 
+}
 
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
