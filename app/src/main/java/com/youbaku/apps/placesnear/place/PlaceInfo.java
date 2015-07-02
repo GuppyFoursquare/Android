@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class PlaceInfo {
     public static PlaceInfo FOR_DETAIL;
     String description;
+    public static String str="";
 
     private String mytext;
     private static String plc_website;

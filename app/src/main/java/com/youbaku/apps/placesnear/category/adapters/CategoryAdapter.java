@@ -78,6 +78,8 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                 in.putExtra("title", list.get(position).getTitle());
                 in.putExtra("imageUrl", list.get(position).iconURL);
                 Category.SELECTED_CATEGORY_ID = list.get(position).objectId;
+                Category.SELECTED_IMAGE_URL=list.get(position).iconURL;
+
 
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(in);

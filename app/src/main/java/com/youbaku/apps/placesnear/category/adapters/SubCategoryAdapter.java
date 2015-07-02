@@ -2,7 +2,6 @@ package com.youbaku.apps.placesnear.category.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
@@ -46,7 +44,6 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
 
         final SubCategory c = list.get(position);
         Button t=((Button)convertView.findViewById(R.id.subCatTitle));
-        t.setBackgroundColor(Color.parseColor(App.ButtonColor));
         t.setText(c.getTitle());
 
         t.setOnClickListener(new View.OnClickListener() {

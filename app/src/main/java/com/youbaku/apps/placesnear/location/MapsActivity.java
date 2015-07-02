@@ -58,6 +58,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
     private LocationManager loma;
     private Marker m;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +76,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         if(!havePlace) {
-            ((App)getApplication()).track(App.ANALYSIS_SELECT_LOCATION);
+            //((App)getApplication()).track(App.ANALYSIS_SELECT_LOCATION);
             ab.setTitle(getResources().getString(R.string.selectlocationtitlelabel));
             ab.setSubtitle(getResources().getString(R.string.selectlocationsubtitlelabel));
             ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0093D4")));
@@ -120,6 +121,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
                 public void onClick(DialogInterface dialog, int which) {
                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
                     String uri = "http://maps.google.com/maps?f=d&hl=en&saddr=" + my.latitude + "," + my.longitude + "&daddr=" + latitude + "," + longtitude;
+                    //String uri = "http://maps.google.com/maps?f=d&hl=en&saddr=" + 40.372877 + "," + 49.842825 + "&daddr=" + latitude + "," + longtitude;
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
                     startActivity(Intent.createChooser(intent, "Select an application"));
                 }
@@ -158,7 +160,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
             m=mMap.addMarker(new MarkerOptions().position(ll));
             Category cat= CategoryList.getCategory(Category.SELECTED_CATEGORY_ID);
             Picasso.with(this)
-                    .load(cat.iconURL)
+                    //.load(cat.iconURL) --eski hali
+                    .load("youbaku.com/uploads/category_images/"+Category.SELECTED_IMAGE_URL)
                     .placeholder(R.drawable.placeholderpin)
                     .into(markerTarget);
         }
@@ -217,6 +220,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             Bitmap b=Bitmap.createScaledBitmap(bitmap,54,64,false);
             m.setIcon(BitmapDescriptorFactory.fromBitmap(b));
+
         }
 
         @Override

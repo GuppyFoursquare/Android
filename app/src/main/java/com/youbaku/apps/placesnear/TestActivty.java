@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +36,7 @@ import java.util.Map;
 
 
 public class TestActivty extends ActionBarActivity {
-    private ArrayList<PlaceInfo> list;
+    public static ArrayList<PlaceInfo> list;
     ProgressDialog progress;
     RequestQueue queue;
     JsonObjectRequest request;
@@ -43,6 +44,8 @@ public class TestActivty extends ActionBarActivity {
     Map<String, String> map = new HashMap<String, String>();
     private PlaceInfo pi;
     private PlaceInfo pii;
+
+    public static String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,6 @@ public class TestActivty extends ActionBarActivity {
             spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
             bar.setIndeterminateDrawable(spin);
         }
-        ArrayList<PlaceInfo>list=new ArrayList<>();
 
         t=(TextView)findViewById(R.id.hello_txt);
 
@@ -93,21 +95,26 @@ public class TestActivty extends ActionBarActivity {
                             JSONArray jArray = response.getJSONArray("content");
                             FavoriteCategory f = new FavoriteCategory();
                             t=(TextView)findViewById(R.id.hello_txt);
+                            list=new ArrayList<>();
 
 
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
                                 final PlaceInfo s = new PlaceInfo();
+                                str=obj.getString("plc_name");
 
-                                s.setDescription(obj.getString("plc_name"));
+                                PlaceInfo.str=obj.getString("plc_name");
                                 Log.i("Places are: ", s.getDescription());
                                 t.setText(s.getDescription());
 
                                 ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.INVISIBLE);
 
 
+
                             }
+                            Toast.makeText(getApplication(), "List data are: " + str, Toast.LENGTH_LONG).show();
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -126,8 +133,13 @@ public class TestActivty extends ActionBarActivity {
                     }
                 });
 
+
+
         // executing the quere to get the json information
         queue.add(request);
+
+
+
 
 
 

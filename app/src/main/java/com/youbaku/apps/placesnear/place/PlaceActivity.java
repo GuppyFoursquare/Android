@@ -21,12 +21,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +36,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -162,20 +161,16 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                         try {
 
-                            placesDownload = false;
-                            commentsDownload = false;
-                            dealsDownload = false;
-                            firstFilter = false;
-                            placesDownload = true;
                             JSONArray jArray = response.getJSONArray("content");
 
-
                             list = new ArrayList<Place>();
-
 
                             System.out.println("places downloaded " + jArray.length());
 
                             if (jArray.length() > 0) {
+
+                                firstFilter=false;
+                                placesDownload = true;
                                 //Read JsonArray
                                 for (int i = 0; i < jArray.length(); i++) {
                                     JSONObject o = jArray.getJSONObject(i);
@@ -206,15 +201,12 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                             }
 
 
-                                            Toast.makeText(getApplicationContext(),"Yes! There is rating array which is "+c.text,Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getApplicationContext(),"Yes! There is rating array which is "+c.text,Toast.LENGTH_LONG).show();
 
                                         }
 
                                     }
-                                    else{
-                                        Toast.makeText(getApplicationContext(),"No! There is no rating array",Toast.LENGTH_LONG).show();
 
-                                    }
 
 
                                     double rating = 0.0;
@@ -247,12 +239,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                                     p.setLocation(latitude, longitude);
 
-
-/*
-
+                                    p.setLocation(latitude, longitude);
                                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-                                    Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);*/
-                                    //Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);
+                                    //Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
+                                    Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);//For testing
+
                                     boolean pop = true;
                                     if (filter.popular && p.rating < 3.0) {
                                         pop = false;
@@ -265,13 +256,8 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                         list.add(p);
 
 
-
-
-
                                 }
 
-
-                                Log.i("Guppy---------", list.get(0).getName());
                                 checkDownloads();
                             } else {
                                 setSupportProgressBarIndeterminateVisibility(false);
@@ -391,12 +377,15 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                 }
                 return false;
             case R.id.do_filter:
-                InputMethodManager man = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager man=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 man.hideSoftInputFromWindow(fi.getWindowToken(), 0);
                 getSupportFragmentManager().popBackStack();
-                if (listFragment != null)
+                listFragment.setList(list);
+                if(listFragment!=null){
                     getSupportFragmentManager().beginTransaction().remove(listFragment).commit();
-                if (bar != null)
+                }
+
+                if(bar!=null)
                     bar.setVisibility(View.VISIBLE);
                 refreshList();
                 doFilter.setVisible(false);

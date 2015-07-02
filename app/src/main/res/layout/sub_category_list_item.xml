@@ -11,6 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
+        android:background="@drawable/custombuttongenoa"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"

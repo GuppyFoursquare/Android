@@ -17,6 +17,8 @@ import java.util.Locale;
 
 public class Category {
     public static String SELECTED_CATEGORY_ID="";
+    public static String SELECTED_IMAGE_URL="";
+    public static String SELECTED_MARKER_URL="";
 
     public String title="";
     public String subtitle="";
