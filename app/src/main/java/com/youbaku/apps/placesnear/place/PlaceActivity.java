@@ -72,7 +72,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
     @Override
     public void locationSet() {
-
+        refreshList();
     }
 
 
@@ -143,11 +143,24 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             bar.setIndeterminateDrawable(spin);
         }
 
+        refreshList();
 
-        MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-        //Correct Request Url
+    }
+
+
+    private void refreshList() {
+        if (!App.checkInternetConnection(this) && onScreen) {
+            App.showInternetError(this);
+            return;
+        }
+        /*MyLocation my = MyLocation.getMyLocation(getApplicationContext());
+        if (!my.isSet()) {
+            my.subscriber = this;
+            my.callLocation();
+            return;
+        }*/
+
         //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
-
         //For testing Places request
         String url2 = App.SitePath + "api/places.php?op=nearme&lat=40.372877&lon=49.842825" + "&scat_id=" + SubCategory.SELECTED_SUB_CATEGORY_ID;
         JSONObject apiResponse = null;
@@ -179,7 +192,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                                     if(o.has("rating")){
 
-                                       JSONArray arr =o.getJSONArray("rating");
+                                        JSONArray arr =o.getJSONArray("rating");
 
 
                                         for(int j=0;j<arr.length();j++){
@@ -313,23 +326,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-        refreshList();
-
-    }
-
-
-    private void refreshList() {
-        if (!App.checkInternetConnection(this) && onScreen) {
-            App.showInternetError(this);
-            return;
-        }
-        MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-        if (!my.isSet()) {
-            my.subscriber = this;
-            my.callLocation();
-            return;
-        }
 
 
 
