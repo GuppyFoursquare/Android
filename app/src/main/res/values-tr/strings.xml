@@ -164,6 +164,9 @@
     <string name="title_activity_photo">PhotoActivity</string>
     <string name="title_activity_web">WebActivity</string>
     <string name="title_activity_place_detail">PlaceDetailActivity</string>
+    <string name="userNameHint">Enter your username</string>
+    <string name="loginStr">Login</string>
+    <string name="userPassHint">Enter your password</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="userNameHint">Enter your username</string>
+    <string name="loginStr">Login</string>
+    <string name="userPassHint">Enter your password</string>
+</resources>

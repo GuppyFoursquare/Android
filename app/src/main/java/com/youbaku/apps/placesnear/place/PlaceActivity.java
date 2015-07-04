@@ -175,14 +175,12 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                         try {
 
                             JSONArray jArray = response.getJSONArray("content");
-
                             list = new ArrayList<Place>();
-
                             System.out.println("places downloaded " + jArray.length());
 
                             if (jArray.length() > 0) {
 
-                                firstFilter=false;
+                                firstFilter = false;
                                 placesDownload = true;
                                 //Read JsonArray
                                 for (int i = 0; i < jArray.length(); i++) {
@@ -190,23 +188,23 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     final PlaceFilter filter = PlaceFilter.getInstance();
                                     final Place p = new Place();
 
-                                    if(o.has("rating")){
+                                    if (o.has("rating")) {
 
-                                        JSONArray arr =o.getJSONArray("rating");
+                                        JSONArray arr = o.getJSONArray("rating");
 
 
-                                        for(int j=0;j<arr.length();j++){
-                                            final Comment c =new Comment();
+                                        for (int j = 0; j < arr.length(); j++) {
+                                            final Comment c = new Comment();
                                             JSONObject obj = arr.getJSONObject(j);
                                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                                             try {
                                                 Date d = format.parse(obj.getString("places_rating_created_date"));
-                                                c.created =d;
-                                                c.text=obj.getString("place_rating_comment");
-                                                c.comment_id=obj.getString("place_rating_id");
-                                                c.rating=Double.parseDouble(obj.getString("place_rating_rating"));
-                                                c.name=obj.getString("places_rating_by");
+                                                c.created = d;
+                                                c.text = obj.getString("place_rating_comment");
+                                                c.comment_id = obj.getString("place_rating_id");
+                                                c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
+                                                c.name = obj.getString("places_rating_by");
                                                 p.comments.add(c);
 
                                             } catch (ParseException e) {
@@ -219,7 +217,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                         }
 
                                     }
-
 
 
                                     double rating = 0.0;
@@ -235,21 +232,27 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     p.setName(o.getString("plc_name"));
                                     p.setImgUrl(o.getString("plc_header_image"));
                                     p.address = o.getString("plc_address");
-
                                     p.setRating(rating);
                                     p.web = o.getString("plc_website");
                                     p.phone = o.getString("plc_contact");
                                     p.open = o.getString("plc_intime");
                                     p.close = o.getString("plc_outtime");
 
-                                    String PLACE_INFO_WITHOUT_HTML_TAG = String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
 
+                                    String isActive=o.getString("plc_is_active");
+                                    if(isActive=="1"){
+                                        p.isActive=true;
+                                    }
+                                    else{
+                                        p.isActive=false;
+                                    }
+
+                                    String PLACE_INFO_WITHOUT_HTML_TAG = String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
                                     p.description = PLACE_INFO_WITHOUT_HTML_TAG;
 
 
                                     double latitude = Double.parseDouble(o.getString("plc_latitude"));
                                     double longitude = Double.parseDouble(o.getString("plc_longitude"));
-
                                     p.setLocation(latitude, longitude);
 
                                     p.setLocation(latitude, longitude);
@@ -265,8 +268,17 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     if (filter.open) {
                                         open = p.isOpen();
                                     }
-                                    if (pop && open)
+
+                                    /*if(p.getName().contains(filter.keyword)){
+                                        p.setName(new String(p.getName()));
+                                        //Toast.makeText(getApplicationContext(),String.valueOf(list.get(i).getName().contains("cook")),Toast.LENGTH_LONG).show();
+                                    }*/
+
+                                    if (pop && open ){
                                         list.add(p);
+
+                                    }
+
 
 
                                 }
@@ -297,8 +309,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                             }
 
 
-
-
                         } catch (JSONException e) {
 
                             AlertDialog.Builder bu = new AlertDialog.Builder(tt);
@@ -326,8 +336,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-
 
 
     }
@@ -373,15 +381,15 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                 }
                 return false;
             case R.id.do_filter:
-                InputMethodManager man=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager man = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 man.hideSoftInputFromWindow(fi.getWindowToken(), 0);
                 getSupportFragmentManager().popBackStack();
                 listFragment.setList(list);
-                if(listFragment!=null){
+                if (listFragment != null) {
                     getSupportFragmentManager().beginTransaction().remove(listFragment).commit();
                 }
 
-                if(bar!=null)
+                if (bar != null)
                     bar.setVisibility(View.VISIBLE);
                 refreshList();
                 doFilter.setVisible(false);
@@ -452,72 +460,69 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     };
 
 
+    /* private void  refreshFavourite(){
+         if(!App.checkInternetConnection(this) && onScreen) {
+             App.showInternetError(this);
+             return;
+         }
+         MyLocation my=MyLocation.getMyLocation(getApplicationContext());
+         if(!my.isSet()){
+             my.subscriber=this;
+             my.callLocation();
+             return;
+         }
+
+         FavoritesManager.refresh(this,new FavoritesCallback() {
+             @Override
+             public void favoritesReady(ArrayList<Place> places) {
+                 setSupportProgressBarIndeterminateVisibility(false);
+                 listFragment = new PlaceListFragment();
+
+                 if(places!=null) {
+                     list = places;
+                     listFragment.setList(list);
+                     listFragment.setOnItemClickListener(listSelected);
+                 }
+                 listFragment.setEmptyText(getResources().getString(R.string.nofavoritedvenuemessage));
+                 listFragment.setColor(color);
+                 getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
+                 setScreen(Screen.favorite);
+                 if(bar!=null)
+                     bar.setVisibility(View.GONE);
+             }
+         });
+     }
 
 
 
-   /* private void  refreshFavourite(){
-        if(!App.checkInternetConnection(this) && onScreen) {
-            App.showInternetError(this);
-            return;
-        }
-        MyLocation my=MyLocation.getMyLocation(getApplicationContext());
-        if(!my.isSet()){
-            my.subscriber=this;
-            my.callLocation();
-            return;
-        }
+     @Override
+     public void CommentsDownloaded() {
+         commentsDownload=true;
+         checkDownloads();
+     }
 
-        FavoritesManager.refresh(this,new FavoritesCallback() {
-            @Override
-            public void favoritesReady(ArrayList<Place> places) {
-                setSupportProgressBarIndeterminateVisibility(false);
-                listFragment = new PlaceListFragment();
+     @Override
+     public void dealsDownloaded() {
+         dealsDownload=true;
+         checkDownloads();
+     }
 
-                if(places!=null) {
-                    list = places;
-                    listFragment.setList(list);
-                    listFragment.setOnItemClickListener(listSelected);
-                }
-                listFragment.setEmptyText(getResources().getString(R.string.nofavoritedvenuemessage));
-                listFragment.setColor(color);
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
-                setScreen(Screen.favorite);
-                if(bar!=null)
-                    bar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-
-
+     @Override
+     public void locationSet(){
+         if(!CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).favourite)
+             refreshList();
+         else
+             refreshFavourite();
+     }*/
     @Override
     public void CommentsDownloaded() {
-        commentsDownload=true;
+        commentsDownload = true;
         checkDownloads();
     }
 
     @Override
     public void dealsDownloaded() {
-        dealsDownload=true;
-        checkDownloads();
-    }
-
-    @Override
-    public void locationSet(){
-        if(!CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).favourite)
-            refreshList();
-        else
-            refreshFavourite();
-    }*/
-   @Override
-   public void CommentsDownloaded() {
-       commentsDownload=true;
-       checkDownloads();
-   }
-
-    @Override
-    public void dealsDownloaded() {
-        dealsDownload=true;
+        dealsDownload = true;
         checkDownloads();
     }
 

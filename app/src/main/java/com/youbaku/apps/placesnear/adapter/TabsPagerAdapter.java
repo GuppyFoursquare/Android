@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.youbaku.apps.placesnear.LoginFragment;
 import com.youbaku.apps.placesnear.UnderConstruction;
 import com.youbaku.apps.placesnear.category.CategoryListFragment;
 
@@ -43,7 +44,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return new UnderConstruction();
             case 3:
                 // Login fragment
-                return new UnderConstruction();
+                return new LoginFragment();
         }
 
         return null;

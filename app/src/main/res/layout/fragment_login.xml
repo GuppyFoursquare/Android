@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="100dp"
+
+    tools:context="com.youbaku.apps.placesnear.LoginFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/etUserName"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:layout_height="wrap_content"
+        android:hint="@string/userNameHint" />
+    <EditText
+        android:id="@+id/etUserPass"
+        android:layout_below="@+id/etUserName"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:layout_height="wrap_content"
+        android:hint="@string/userPassHint" />
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_below="@id/etUserPass"
+        android:text="@string/loginStr"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:background="@drawable/custombuttongenoa"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,7 +76,8 @@ public class TestActivty extends ActionBarActivity {
 
         t=(TextView)findViewById(R.id.hello_txt);
 
-        map.put("keyword","cook");
+        map.put("keyword", "a");
+        map.put("subcat_list","[81]");
         queue = VolleySingleton.getRequestQueue();
         String url =App.SitePath+"api/places.php?op=search";// the URL
         request = new JsonObjectRequest(
@@ -105,8 +105,8 @@ public class TestActivty extends ActionBarActivity {
                                 str=obj.getString("plc_name");
 
                                 PlaceInfo.str=obj.getString("plc_name");
-                                Log.i("Places are: ", s.getDescription());
-                                t.setText(s.getDescription());
+                               // Log.i("Places are: ", s.getDescription());
+                                t.setText(str);
 
                                 ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.INVISIBLE);
 
