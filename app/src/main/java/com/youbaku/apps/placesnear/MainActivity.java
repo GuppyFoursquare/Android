@@ -9,6 +9,8 @@
 package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -18,12 +20,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
@@ -38,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     public static Activity tt;
-
+    MenuItem doLogin;
     public static boolean internetConnection=true;
 
     // Tab titles
@@ -177,7 +181,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
+        doLogin = menu.getItem(0);
         return true;
     }
 
@@ -185,9 +189,24 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.login_main_menu:
+
+                if(doLogin.getIcon()==null){
+                    login();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Go To Profile",Toast.LENGTH_LONG).show();
+
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -196,4 +215,32 @@ public class MainActivity extends ActionBarActivity implements
         super.onBackPressed();
     }
 
-}
+    private void login(){
+
+        //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        alertDialog.setView(inflater.inflate(R.layout.dialog_login_layout, null));
+
+        /* When positive  is clicked */
+        alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel(); // Your custom code
+                doLogin.setIcon(R.drawable.placeholder_user);
+            }
+        });
+
+        /* When negative  button is clicked*/
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Your custom code
+            }
+        });
+
+        alertDialog.show();
+
+    }
+
+    }
+
+

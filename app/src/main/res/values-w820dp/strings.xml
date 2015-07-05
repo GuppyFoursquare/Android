@@ -3,4 +3,5 @@
     <string name="userNameHint">Enter your username</string>
     <string name="loginStr">Login</string>
     <string name="userPassHint">Enter your password</string>
+    <string name="loginlabel">Sign in</string>
 </resources>
