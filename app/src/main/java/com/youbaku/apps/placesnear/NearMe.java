@@ -1,19 +1,28 @@
 package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +31,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.location.MyLocation;
+import com.youbaku.apps.placesnear.place.Place;
+import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
+import com.youbaku.apps.placesnear.place.comment.Comment;
+import com.youbaku.apps.placesnear.place.filter.FilterFragment;
+import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+import com.youbaku.apps.placesnear.utils.SubCategory;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -49,6 +77,8 @@ public class NearMe extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private Marker nearMeMarker;
 
+    private ArrayList<Place> list;
+    private Map<String,Place> placeMap = new HashMap<>();
     private View view;
 
     private OnFragmentInteractionListener mListener;
@@ -97,19 +127,26 @@ public class NearMe extends Fragment implements LocationListener {
     @Override
     public void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
+        getNearMePlaces();
     }
 
 
-    private void setUpMapIfNeeded() {
+    private void setUpMapIfNeeded(ArrayList<Place> place) {
         if (nearMeMap == null) {
 
             nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
             nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
 
-            LatLng istanbulKoordinat = new LatLng(41.021161, 29.004065);
-            nearMeMap.addMarker(new MarkerOptions().position(istanbulKoordinat).title("Kız Kulesi"));
-            nearMeMap.moveCamera(CameraUpdateFactory.newLatLngZoom(istanbulKoordinat, 13));
+            nearMeMap.setOnMarkerClickListener(markerClickListener);
+
+            for(Place p : place){
+                LatLng istanbulKoordinat = new LatLng(p.getLatitude(), p.getLongitude());
+                nearMeMap.addMarker(new MarkerOptions().position(istanbulKoordinat).title(p.getId()));
+                nearMeMap.moveCamera(CameraUpdateFactory.newLatLngZoom(istanbulKoordinat, 13));
+            }
+
+
 
             if (false && nearMeMap != null) {
                 setUpMap();
@@ -139,6 +176,152 @@ public class NearMe extends Fragment implements LocationListener {
         }
     }
 
+
+    private void getNearMePlaces(){
+
+        final double userLatitude = 40.372877;
+        final double userLongitude = 49.842825;
+
+        String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat="+userLatitude+"&lon="+userLongitude;
+        JSONObject apiResponse = null;
+
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, nearMeURL, apiResponse, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    try {
+
+                        if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
+
+                            JSONArray places = response.getJSONArray("content");
+                            list = new ArrayList<Place>();
+
+                            System.out.println("places downloaded " + places.length());
+
+                            if (places.length() > 0) {
+
+                                //firstFilter = false;
+                                //placesDownload = true;
+
+                                //Read JsonArray
+                                for (int i = 0; i < places.length(); i++) {
+                                    JSONObject o = places.getJSONObject(i);
+                                    final PlaceFilter filter = PlaceFilter.getInstance();
+                                    final Place p = new Place();
+
+                                    if (o.has("rating")) {
+
+                                        JSONArray arr = o.getJSONArray("rating");
+
+                                        for (int j = 0; j < arr.length(); j++) {
+                                            final Comment c = new Comment();
+                                            JSONObject obj = arr.getJSONObject(j);
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                                            try {
+                                                Date d = format.parse(obj.getString("places_rating_created_date"));
+                                                c.created = d;
+                                                c.text = obj.getString("place_rating_comment");
+                                                c.comment_id = obj.getString("place_rating_id");
+                                                c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
+                                                c.name = obj.getString("places_rating_by");
+                                                p.comments.add(c);
+
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+
+
+                                    double rating = 0.0;
+                                    if (o.has("plc_avg_rating")) {
+                                        rating = Double.parseDouble(o.getString("plc_avg_rating"));
+                                    } else {
+                                        rating = 0.0;
+                                    }
+
+                                    //Inflate places
+                                    p.setId(o.getString("plc_id"));
+                                    p.setName(o.getString("plc_name"));
+                                    p.setImgUrl(o.getString("plc_header_image"));
+                                    p.setRating(rating);
+                                    p.address = o.getString("plc_address");
+                                    p.web = o.getString("plc_website");
+                                    p.phone = o.getString("plc_contact");
+                                    p.open = o.getString("plc_intime");
+                                    p.close = o.getString("plc_outtime");
+                                    p.isActive = o.getString("plc_is_active").equalsIgnoreCase("1") ? true : false;
+                                    p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString())));
+                                    p.setLocation(Double.parseDouble(o.getString("plc_latitude")), Double.parseDouble(o.getString("plc_longitude")));
+
+                                    list.add(p);
+                                    placeMap.put(p.getId() , p);
+                                }
+
+                                setUpMapIfNeeded(list);
+
+                                // --GUPPY COMMENT IMPORTANT--
+                                    /*
+                                     * try-catch kaldırılması durumunda server geciktirilme durumunda(sleep)
+                                     * Volley sonucunun fragment'i değiştirme isteğinden ve ilgili fragment'in
+                                     * olmamasından hata ile karşılaşılıyor.
+                                     */
+
+//                                    try{
+//                                        checkDownloads();
+//                                    }catch (IllegalStateException e){
+//                                        Log.e("--- GUPPY ---" , "Error occur on replace fragment");
+//                                    }
+
+                            } else {
+                                Toast.makeText(getActivity() , "Response place # is 0" , Toast.LENGTH_LONG).show();
+                            }
+
+                        // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
+                        // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
+                        }else{
+
+                        }
+
+                    } catch (JSONException e) {
+
+                        AlertDialog.Builder bu = new AlertDialog.Builder(getActivity());
+                        bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
+                        bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
+                        bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+//                                    refreshList();
+                            }
+                        });
+                        bu.show();
+
+                        e.printStackTrace();
+                        Log.e("--- GUPPY --- " , "Response JSON error");
+
+                        return;
+                    }
+                }
+
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+    }
+
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -153,6 +336,18 @@ public class NearMe extends Fragment implements LocationListener {
                 nearMeMarker=nearMeMap.addMarker(new MarkerOptions().position(latLng));
             else
                 nearMeMarker.setPosition(latLng);
+        }
+    };
+
+    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            Place.FOR_DETAIL = placeMap.get(marker.getTitle());
+            Place.ID = placeMap.get(marker.getTitle()).getId();
+            Intent in = new Intent(getActivity().getApplicationContext(), PlaceDetailActivity.class);
+            in.putExtra("title", placeMap.get(marker.getTitle()).getName());
+            startActivity(in);
+            return true;
         }
     };
 
