@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -137,20 +138,18 @@ public class NearMe extends Fragment implements LocationListener {
 
             nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
             nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
-
             nearMeMap.setOnMarkerClickListener(markerClickListener);
+            nearMeMap.setOnCameraChangeListener(cameraChangeListener);
+
+            LatLng userLocation=new LatLng(40.3859933,49.8232647);
+            CameraUpdate ca= CameraUpdateFactory.newLatLngZoom(userLocation, 15);
+            nearMeMap.animateCamera(ca);
 
             for(Place p : place){
                 LatLng istanbulKoordinat = new LatLng(p.getLatitude(), p.getLongitude());
                 nearMeMap.addMarker(new MarkerOptions().position(istanbulKoordinat).title(p.getId()));
-                nearMeMap.moveCamera(CameraUpdateFactory.newLatLngZoom(istanbulKoordinat, 13));
             }
 
-
-
-            if (false && nearMeMap != null) {
-                setUpMap();
-            }
         }
     }
 
@@ -348,6 +347,13 @@ public class NearMe extends Fragment implements LocationListener {
             in.putExtra("title", placeMap.get(marker.getTitle()).getName());
             startActivity(in);
             return true;
+        }
+    };
+
+    GoogleMap.OnCameraChangeListener cameraChangeListener = new GoogleMap.OnCameraChangeListener() {
+        @Override
+        public void onCameraChange(CameraPosition cameraPosition) {
+            nearMeMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.3859933,49.8232647), cameraPosition.zoom));
         }
     };
 
