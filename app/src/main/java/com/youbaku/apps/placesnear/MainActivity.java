@@ -16,12 +16,10 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,11 +54,10 @@ public class MainActivity extends ActionBarActivity implements
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     public static Activity tt;
-    MenuItem doLogin;
+    public static MenuItem doLogin;
     public static boolean internetConnection=true;
 
-    public static String username;
-    public static String userapikey;
+
 
     // Tab titles
     private String[] tabs = { "Home", "Nearme", "Popular","Login"};
@@ -210,11 +207,12 @@ public class MainActivity extends ActionBarActivity implements
         switch (item.getItemId()) {
             case R.id.login_main_menu:
 
-                if(doLogin.getIcon()==null){
+                if(App.userapikey==null){
                     login();
                 }
                 else
                 {
+
                     Toast.makeText(getApplicationContext(),"Go To Profile",Toast.LENGTH_LONG).show();
 
                 }
@@ -265,11 +263,11 @@ public class MainActivity extends ActionBarActivity implements
                             if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
                                 JSONObject responseContent = response.getJSONObject("content");
-                                username = responseContent.getString("usr_username");
-                                userapikey = responseContent.getString("usr_apikey");
+                                App.username = responseContent.getString("usr_username");
+                                App.userapikey = responseContent.getString("usr_apikey");
 
                                 doLogin.setIcon(R.drawable.placeholder_user);
-                                Toast.makeText( MainActivity.this ,username + " - " + userapikey , Toast.LENGTH_LONG).show();
+                                Toast.makeText( MainActivity.this ,App.username + " - " + App.userapikey , Toast.LENGTH_LONG).show();
 
                             }else{
                                 Toast.makeText(MainActivity.this, response.getString("status") , Toast.LENGTH_SHORT).show();
@@ -299,7 +297,6 @@ public class MainActivity extends ActionBarActivity implements
 
                     }
                 });
-
 
                 // Add the request to the queue
                 VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);

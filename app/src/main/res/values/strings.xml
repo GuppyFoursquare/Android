@@ -137,7 +137,7 @@
     <string name="reviewsectionlabel">YOUR REVIEW</string>
     <string name="reviewplaceholderlabel">Type your review</string>
 
-    <string name="reviewsentsuccessmessage">Thank you! Your review has been sent.</string>
+    <string name="reviewsentsuccessmessage">Thank you! Your review has been sent and waiting for approvement.</string>
     <string name="reviewsentunsuccessmessage">We are unable to send your review at this time. Please try again in a moment!</string>
 
     //------------------------------------- WRITE REVIEW STRINGS --------------------------------------/
@@ -185,6 +185,7 @@
     <string name="loginStr">Login</string>
     <string name="userPassHint">Enter your password</string>
     <string name="loginlabel">Sign in</string>
+    <string name="loginrequirement">You should login first to add comment!</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

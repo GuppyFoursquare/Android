@@ -91,6 +91,13 @@ public class App extends Application {
 
 
 
+    //------------------------------------ USER PARAMS -------------------------------------/
+    public static String username;
+    public static String userapikey;
+    //------------------------------------ USER PARAMS -------------------------------------/
+
+
+
 
     //------------------------------- DO NOT CHANGE THESE VALUES ---------------------------------/
     //PARSE CLASSES
