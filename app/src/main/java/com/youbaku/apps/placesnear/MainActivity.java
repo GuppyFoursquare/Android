@@ -21,19 +21,32 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -45,6 +58,9 @@ public class MainActivity extends ActionBarActivity implements
     public static Activity tt;
     MenuItem doLogin;
     public static boolean internetConnection=true;
+
+    public static String username;
+    public static String userapikey;
 
     // Tab titles
     private String[] tabs = { "Home", "Nearme", "Popular","Login"};
@@ -217,18 +233,77 @@ public class MainActivity extends ActionBarActivity implements
         super.onBackPressed();
     }
 
+
     private void login(){
 
         //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         LayoutInflater inflater = this.getLayoutInflater();
-        alertDialog.setView(inflater.inflate(R.layout.dialog_login_layout, null));
+        final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
+        alertDialog.setView(alertView);
 
         /* When positive  is clicked */
         alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+
                 dialog.cancel(); // Your custom code
-                doLogin.setIcon(R.drawable.placeholder_user);
+
+                String loginUrl = App.SitePath + "api/auth.php?op=login";
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("name", ((EditText)alertView.findViewById(R.id.username)).getText().toString());
+                map.put("pass", ((EditText)alertView.findViewById(R.id.password)).getText().toString());
+
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+
+                                JSONObject responseContent = response.getJSONObject("content");
+                                username = responseContent.getString("usr_username");
+                                userapikey = responseContent.getString("usr_apikey");
+
+                                doLogin.setIcon(R.drawable.placeholder_user);
+                                Toast.makeText( MainActivity.this ,username + " - " + userapikey , Toast.LENGTH_LONG).show();
+
+                            }else{
+                                Toast.makeText(MainActivity.this, response.getString("status") , Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+
+                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
+                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
+                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
+                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            bu.show();
+                            e.printStackTrace();
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+
+                // Add the request to the queue
+                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
             }
         });
 
@@ -240,7 +315,6 @@ public class MainActivity extends ActionBarActivity implements
         });
 
         alertDialog.show();
-
     }
 
     }

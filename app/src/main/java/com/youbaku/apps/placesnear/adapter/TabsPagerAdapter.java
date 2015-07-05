@@ -33,8 +33,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int index) {
 
-        Log.e("---GUPPY ---", "index :: " + index);
-
         switch (index) {
             case 0:
                 // ListCategory fragment

@@ -140,7 +140,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
                     .getMap();
             if (mMap != null) {
                 
-                setUpMap("aa");
+                setUpMap();
             }
         }
     }

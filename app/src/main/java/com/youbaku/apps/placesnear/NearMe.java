@@ -105,6 +105,7 @@ public class NearMe extends Fragment implements LocationListener {
         if (nearMeMap == null) {
 
             nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+            nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
 
             LatLng istanbulKoordinat = new LatLng(41.021161, 29.004065);
             nearMeMap.addMarker(new MarkerOptions().position(istanbulKoordinat).title("Kız Kulesi"));
