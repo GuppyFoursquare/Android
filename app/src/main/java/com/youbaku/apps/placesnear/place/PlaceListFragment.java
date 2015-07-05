@@ -13,10 +13,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.R;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,6 @@ public class PlaceListFragment extends ListFragment {
     private AdapterView.OnItemClickListener listen;
     private boolean empty=false;
     private String emptyText="";
-
 
     public PlaceListFragment() {}
 
@@ -63,6 +65,7 @@ public class PlaceListFragment extends ListFragment {
             getListView().setOnItemClickListener(listen);
         if(empty)
             super.setEmptyText(emptyText);
+
     }
 
     @Override

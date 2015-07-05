@@ -81,6 +81,7 @@ public class PlaceDetailFragment extends Fragment{
     ArrayList<Place> listData = new ArrayList<Place>();
 
     public PlaceDetailFragment() {}
+    private View view;
 
     @SuppressLint("ValidFragment")
     public PlaceDetailFragment(int color){
@@ -89,28 +90,29 @@ public class PlaceDetailFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.place_detail,container,false);
+        view = inflater.inflate(R.layout.place_detail,container,false);
+        return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
        // ((App)getActivity().getApplication()).track(App.ANALYSIS_PLACE_DETAILS);
-        ((RelativeLayout)getView().findViewById(R.id.main_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
+        ((RelativeLayout)view.findViewById(R.id.main_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
         p=Place.FOR_DETAIL;
         pi=new PlaceInfo();
 
 
-        topInfo=(TextView)getView().findViewById(R.id.top_info_place_detail);
-        description=(TextView)getView().findViewById(R.id.description_place_detail);
-        address=(TextView)getView().findViewById(R.id.address_place_detail);
-        comment=(TextView)getView().findViewById(R.id.comment_comment_place_detail);
-        commentInfo=(TextView)getView().findViewById(R.id.comment_info_place_detail);
-        commentView=(ImageView)getView().findViewById(R.id.comment_image_place_detail);
-        dealImage=(ImageView)getView().findViewById(R.id.deal_image_place_detail);
-        dealTitle=(TextView)getView().findViewById(R.id.deal_title_place_detail);
-        dealDate=(TextView)getView().findViewById(R.id.deal_date_place_detail);
-        dealText=(TextView)getView().findViewById(R.id.deal_text_place_detail);
+        topInfo=(TextView)view.findViewById(R.id.top_info_place_detail);
+        description=(TextView)view.findViewById(R.id.description_place_detail);
+        address=(TextView)view.findViewById(R.id.address_place_detail);
+        comment=(TextView)view.findViewById(R.id.comment_comment_place_detail);
+        commentInfo=(TextView)view.findViewById(R.id.comment_info_place_detail);
+        commentView=(ImageView)view.findViewById(R.id.comment_image_place_detail);
+        dealImage=(ImageView)view.findViewById(R.id.deal_image_place_detail);
+        dealTitle=(TextView)view.findViewById(R.id.deal_title_place_detail);
+        dealDate=(TextView)view.findViewById(R.id.deal_date_place_detail);
+        dealText=(TextView)view.findViewById(R.id.deal_text_place_detail);
 
 
         // 2- We will call api
@@ -143,21 +145,21 @@ public class PlaceDetailFragment extends Fragment{
 
 
                             if(p.photos.size()>0){
-                                ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
+                                ((TextView)view.findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
 
-                                MyViewPager pager=(MyViewPager)getView().findViewById(R.id.pager_place_detail);
+                                MyViewPager pager=(MyViewPager)view.findViewById(R.id.pager_place_detail);
                                 PhotoAdapter adapter=new PhotoAdapter(getActivity(),p.photos);
                                 pager.setAdapter(adapter);
                             }else{
-                                ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.GONE);
-                                ((LinearLayout)getView().findViewById(R.id.photos_container_place_detail)).setVisibility(View.GONE);
-                                ((ImageView)getView().findViewById(R.id.no_image_palce_detail)).setImageResource(R.drawable.place_detail_image_placeholder);
+                                ((TextView)view.findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.GONE);
+                                ((LinearLayout)view.findViewById(R.id.photos_container_place_detail)).setVisibility(View.GONE);
+                                ((ImageView)view.findViewById(R.id.no_image_palce_detail)).setImageResource(R.drawable.place_detail_image_placeholder);
                             }
                             photos=new NetworkImageView[4];
-                            photos[0]=(NetworkImageView)getView().findViewById(R.id.photo1_place_detail);
-                            photos[1]=(NetworkImageView)getView().findViewById(R.id.photo2_place_detail);
-                            photos[2]=(NetworkImageView)getView().findViewById(R.id.photo3_place_detail);
-                            photos[3]=(NetworkImageView)getView().findViewById(R.id.photo4_place_detail);
+                            photos[0]=(NetworkImageView)view.findViewById(R.id.photo1_place_detail);
+                            photos[1]=(NetworkImageView)view.findViewById(R.id.photo2_place_detail);
+                            photos[2]=(NetworkImageView)view.findViewById(R.id.photo3_place_detail);
+                            photos[3]=(NetworkImageView)view.findViewById(R.id.photo4_place_detail);
 
                             for(int i=0;i<p.photos.size();i++){
                                 if(i==4)
@@ -201,20 +203,20 @@ public class PlaceDetailFragment extends Fragment{
 
 
         /*if(p.photos.size()>0){
-            ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
-            *//*SlideShowView slide=(SlideShowView)getView().findViewById(R.id.slide_show_place_detail);
+            ((TextView)view.findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.VISIBLE);
+            *//*SlideShowView slide=(SlideShowView)view.findViewById(R.id.slide_show_place_detail);
             String[] arr=new String[p.photos.size()];
             for(int i=0;i<p.photos.size();i++){
                 arr[i]=p.photos.get(i).url;
             }
             slide.start(arr);*//*
-            MyViewPager pager=(MyViewPager)getView().findViewById(R.id.pager_place_detail);
+            MyViewPager pager=(MyViewPager)view.findViewById(R.id.pager_place_detail);
             PhotoAdapter adapter=new PhotoAdapter(getActivity(),p.photos);
             pager.setAdapter(adapter);
         }else{
-            ((TextView)getView().findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.GONE);
-            ((LinearLayout)getView().findViewById(R.id.photos_container_place_detail)).setVisibility(View.GONE);
-            ((ImageView)getView().findViewById(R.id.no_image_palce_detail)).setImageResource(R.drawable.place_detail_image_placeholder);
+            ((TextView)view.findViewById(R.id.photo_title_text_place_detail)).setVisibility(View.GONE);
+            ((LinearLayout)view.findViewById(R.id.photos_container_place_detail)).setVisibility(View.GONE);
+            ((ImageView)view.findViewById(R.id.no_image_palce_detail)).setImageResource(R.drawable.place_detail_image_placeholder);
         }*/
 
         if(p.isOpen()) {
@@ -231,16 +233,16 @@ public class PlaceDetailFragment extends Fragment{
         }
 
         if(p.address!=null && p.address.length()>0){
-            ((TextView)getView().findViewById(R.id.address_title_text_place_detail)).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.address_title_text_place_detail)).setVisibility(View.VISIBLE);
             address.setVisibility(View.VISIBLE);
             address.setText(p.address);
         }else {
-            ((TextView)getView().findViewById(R.id.address_title_text_place_detail)).setVisibility(View.GONE);
+            ((TextView)view.findViewById(R.id.address_title_text_place_detail)).setVisibility(View.GONE);
             address.setVisibility(View.GONE);
         }
 
         if(p.comments.size()>0) {
-            ((TextView)getView().findViewById(R.id.comment_title_text_place_detail)).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.comment_title_text_place_detail)).setVisibility(View.VISIBLE);
             String t = p.comments.get(0).text;
             if (t.length() > 100)
                 comment.setText(t.substring(0, 197) + "...");
@@ -253,19 +255,19 @@ public class PlaceDetailFragment extends Fragment{
                     .fit()
                     .into(commentView);
             if(OnCommentClick!=null){
-                ((RelativeLayout)getView().findViewById(R.id.comment_container_place_detail))
+                ((RelativeLayout)view.findViewById(R.id.comment_container_place_detail))
                         .setOnClickListener(OnCommentClick);
             }
         }else{
-            ((TextView)getView().findViewById(R.id.comment_title_text_place_detail)).setVisibility(View.GONE);
-            ((RelativeLayout)getView().findViewById(R.id.comment_container_place_detail)).setVisibility(View.GONE);
+            ((TextView)view.findViewById(R.id.comment_title_text_place_detail)).setVisibility(View.GONE);
+            ((RelativeLayout)view.findViewById(R.id.comment_container_place_detail)).setVisibility(View.GONE);
         }
 
         /*photos=new ImageView[4];
-        photos[0]=(ImageView)getView().findViewById(R.id.photo1_place_detail);
-        photos[1]=(ImageView)getView().findViewById(R.id.photo2_place_detail);
-        photos[2]=(ImageView)getView().findViewById(R.id.photo3_place_detail);
-        photos[3]=(ImageView)getView().findViewById(R.id.photo4_place_detail);
+        photos[0]=(ImageView)view.findViewById(R.id.photo1_place_detail);
+        photos[1]=(ImageView)view.findViewById(R.id.photo2_place_detail);
+        photos[2]=(ImageView)view.findViewById(R.id.photo3_place_detail);
+        photos[3]=(ImageView)view.findViewById(R.id.photo4_place_detail);
 
         for(int i=0;i<p.photos.size();i++){
             if(i==4)
@@ -280,7 +282,7 @@ public class PlaceDetailFragment extends Fragment{
         }
 */
         if(p.deals.size()>0){
-            ((TextView)getView().findViewById(R.id.deal_title_text_place_detail)).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.deal_title_text_place_detail)).setVisibility(View.VISIBLE);
             Deal d=p.deals.get(0);
             dealTitle.setText(d.title);
             dealDate.setText(d.getDates());
@@ -291,12 +293,12 @@ public class PlaceDetailFragment extends Fragment{
                     .fit()
                     .into(dealImage);
             if(OnDealClick!=null){
-                ((RelativeLayout)getView().findViewById(R.id.deal_container_place_detail))
+                ((RelativeLayout)view.findViewById(R.id.deal_container_place_detail))
                         .setOnClickListener(OnDealClick);
             }
         }else{
-            ((TextView)getView().findViewById(R.id.deal_title_text_place_detail)).setVisibility(View.GONE);
-            ((RelativeLayout)getView().findViewById(R.id.deal_container_place_detail)).setVisibility(View.GONE);
+            ((TextView)view.findViewById(R.id.deal_title_text_place_detail)).setVisibility(View.GONE);
+            ((RelativeLayout)view.findViewById(R.id.deal_container_place_detail)).setVisibility(View.GONE);
         }
 
         int faceColor=p.facebook.length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
@@ -311,11 +313,11 @@ public class PlaceDetailFragment extends Fragment{
         SVG twit= SVGParser.getSVGFromResource(getActivity().getResources(),R.raw.icon_twitter,App.SVGOldColor,twitColor);
         SVG web= SVGParser.getSVGFromResource(getActivity().getResources(),R.raw.icon_webpage,App.SVGOldColor,webColor);
 
-        iconFace=(ImageView)getView().findViewById(R.id.footer2_place_filter);
-        iconWeb=(ImageView)getView().findViewById(R.id.footer1_place_filter);
-        iconPhone=(ImageView)getView().findViewById(R.id.footer4_place_filter);
-        iconTwit=(ImageView)getView().findViewById(R.id.footer3_place_filter);
-        iconMap=(ImageView)getView().findViewById(R.id.footer5_place_filter);
+        iconFace=(ImageView)view.findViewById(R.id.footer2_place_filter);
+        iconWeb=(ImageView)view.findViewById(R.id.footer1_place_filter);
+        iconPhone=(ImageView)view.findViewById(R.id.footer4_place_filter);
+        iconTwit=(ImageView)view.findViewById(R.id.footer3_place_filter);
+        iconMap=(ImageView)view.findViewById(R.id.footer5_place_filter);
 
         ViewCompat.setLayerType(iconFace, ViewCompat.LAYER_TYPE_SOFTWARE, null);
         ViewCompat.setLayerType(iconWeb, ViewCompat.LAYER_TYPE_SOFTWARE, null);
@@ -342,16 +344,16 @@ public class PlaceDetailFragment extends Fragment{
 
     public void setOnCommentClick(View.OnClickListener onCommentClick) {
         this.OnCommentClick = onCommentClick;
-        if(getView()!=null){
-            ((RelativeLayout)getView().findViewById(R.id.comment_container_place_detail))
+        if(view!=null){
+            ((RelativeLayout)view.findViewById(R.id.comment_container_place_detail))
                     .setOnClickListener(OnCommentClick);
         }
     }
 
     public void setOnDealClick(View.OnClickListener onDealClick) {
         this.OnDealClick = onDealClick;
-        if(getView()!=null){
-            ((RelativeLayout)getView().findViewById(R.id.deal_container_place_detail))
+        if(view!=null){
+            ((RelativeLayout)view.findViewById(R.id.deal_container_place_detail))
                     .setOnClickListener(onDealClick);
         }
     }

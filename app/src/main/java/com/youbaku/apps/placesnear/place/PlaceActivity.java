@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -269,21 +270,29 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                         open = p.isOpen();
                                     }
 
-                                    /*if(p.getName().contains(filter.keyword)){
-                                        p.setName(new String(p.getName()));
-                                        //Toast.makeText(getApplicationContext(),String.valueOf(list.get(i).getName().contains("cook")),Toast.LENGTH_LONG).show();
-                                    }*/
 
-                                    if (pop && open ){
+                                    boolean filterKeyword = filter.keyword.length()!=0 ? p.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
+                                    boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km)!=0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.distance[0]/1000 : true;
+
+                                    if (pop && open && filterKeyword && filterDistance){
                                         list.add(p);
-
                                     }
-
-
 
                                 }
 
-                                checkDownloads();
+                                // --GUPPY COMMENT IMPORTANT--
+                                /*
+                                 * try-catch kaldırılması durumunda server geciktirilme durumunda(sleep)
+                                 * Volley sonucunun fragment'i değiştirme isteğinden ve ilgili fragment'in
+                                 * olmamasından hata ile karşılaşılıyor.
+                                 */
+
+                                try{
+                                    checkDownloads();
+                                }catch (IllegalStateException e){
+                                    Log.e("--- GUPPY ---" , "Error occur on replace fragment");
+                                }
+
                             } else {
                                 setSupportProgressBarIndeterminateVisibility(false);
                                 AlertDialog.Builder bu = new AlertDialog.Builder(tt);

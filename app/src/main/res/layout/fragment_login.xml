@@ -33,4 +33,13 @@
         android:background="@drawable/custombuttongenoa"
         android:layout_height="wrap_content" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send comment"
+        android:id="@+id/btnSendComment"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
