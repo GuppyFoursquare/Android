@@ -8,7 +8,10 @@
 
 package com.youbaku.apps.placesnear.place.comment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -19,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +31,21 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateComment extends Fragment {
     private Comment c;
@@ -65,20 +75,82 @@ public class CreateComment extends Fragment {
         ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setRating(3);
         c.rating=3;
 
-        name=((EditText)getView().findViewById(R.id.name_new_comment));
-        email=((EditText)getView().findViewById(R.id.email_new_comment));
+
         comment=((EditText)getView().findViewById(R.id.comment_new_comment));
-        name.addTextChangedListener(nameWatcher);
-        email.addTextChangedListener(emailWatcher);
         comment.addTextChangedListener(commentWatcher);
 
     }
 
     public void saveComment(){
-        if(c.place.equals("") || c.name.equals("") || c.email.equals("") || c.text.equals("")){
+
+        if(comment.getText().toString().equals("") || String.valueOf(c.rating).equals("")){
             Toast.makeText(getActivity(),getResources().getString(R.string.formvalidationmessage),Toast.LENGTH_LONG).show();
             return;
         }
+        String loginUrl = App.SitePath + "api/auth.php?op=comment&apikey="+App.userapikey;
+        JSONObject apiResponse = null;
+        final Activity tt = getActivity();
+
+        // Request a json response
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("plc_id", Place.ID);
+        map.put("message", comment.getText().toString());
+        map.put("score", String.valueOf(c.rating));
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            Log.i("--- GUPPY ---", response.getString("status"));
+                            String responseContent = response.getString("content");
+                            //Toast.makeText( tt ,responseContent , Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(),getResources().getString(R.string.reviewsentsuccessmessage),Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
+                            bu.setMessage(getResources().getString(R.string.reviewsentsuccessmessage));
+                            bu.setPositiveButton(getResources().getString(R.string.alertokbuttonlabel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            bu.show();
+
+                        } catch (JSONException e) {
+
+                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
+                            bu.setMessage(getResources().getString(R.string.reviewsentunsuccessmessage));
+                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
+                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            bu.show();
+                            e.printStackTrace();
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+
+
+     /*
         ((PlaceDetailActivity)getActivity()).setSupportProgressBarIndeterminateVisibility(true);
         setEditable(false);
         final double rat=(Place.FOR_DETAIL.rating+c.rating*2)/2;
@@ -130,13 +202,13 @@ public class CreateComment extends Fragment {
                 });
             }
         });
+    */
 
     }
 
     private void setEditable(boolean editable){
         ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setFocusable(editable);
-        ((EditText)getView().findViewById(R.id.name_new_comment)).setFocusable(editable);
-        ((EditText)getView().findViewById(R.id.email_new_comment)).setFocusable(editable);
+
         ((EditText)getView().findViewById(R.id.comment_new_comment)).setFocusable(editable);
         isSaving=!editable;
     }
@@ -169,7 +241,7 @@ public class CreateComment extends Fragment {
         @Override
         public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
             LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-            stars.getDrawable(2).setColorFilter(Color.parseColor(Place.FOR_DETAIL.color), PorterDuff.Mode.SRC_ATOP);
+            stars.getDrawable(2).setColorFilter(Color.parseColor(App.YellowColor), PorterDuff.Mode.SRC_ATOP);
             c.rating=rating;
         }
     };

@@ -29,39 +29,9 @@
             />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/fullnamesectionlabel"
-        android:padding="5dp"
-        android:id="@+id/textView13" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        style="@style/inputFields"
-        android:hint="@string/namefieldplaceholderlabel"
-        android:ems="10"
-        android:id="@+id/name_new_comment" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/emailsectionlabel"
-        android:padding="5dp"
-        android:id="@+id/textView14" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        style="@style/inputFields"
-        android:hint="@string/emailfieldplaceholderlabel"
-        android:ems="10"
-        android:id="@+id/email_new_comment" />
 
     <TextView
         android:layout_width="wrap_content"
