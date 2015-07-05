@@ -14,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
@@ -129,6 +130,7 @@ public class MainActivity extends ActionBarActivity implements
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+
     }
 
 
