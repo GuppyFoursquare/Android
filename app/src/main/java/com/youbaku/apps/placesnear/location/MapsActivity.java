@@ -169,27 +169,6 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
         }
     }
 
-
-    private void setUpMap(String asd) {
-        mMap.setMyLocationEnabled(true);
-        if(!havePlace) {
-            mMap.setOnMapClickListener(mapClickListener);
-            loma = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            loma.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-            loma.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-            loma.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-        }else{
-            LatLng ll=new LatLng(40.3859933,49.8232647);
-            CameraUpdate ca=CameraUpdateFactory.newLatLngZoom(ll,15);
-            mMap.animateCamera(ca);
-            //m=mMap.addMarker(new MarkerOptions().position(ll));
-
-            mMap.addMarker(new MarkerOptions().position(new LatLng(40.3859933,49.8232647)));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(40.4081835,49.8740803)));
-
-        }
-    }
-
     GoogleMap.OnMapClickListener mapClickListener=new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
