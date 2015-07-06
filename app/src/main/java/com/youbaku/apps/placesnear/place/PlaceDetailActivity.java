@@ -356,7 +356,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
                                                 App.username = responseContent.getString("usr_username");
                                                 App.userapikey = responseContent.getString("usr_apikey");
 
-                                                MainActivity.doLogin.setIcon(R.drawable.placeholder_user);
+                                                MainActivity.doLogin.setIcon(R.drawable.ic_profilelogo);
                                                 Toast.makeText(getApplication(), App.username + " - " + App.userapikey, Toast.LENGTH_LONG).show();
 
                                             } else {

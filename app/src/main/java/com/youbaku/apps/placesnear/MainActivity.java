@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
     // Tab titles
-    private String[] tabs = { "Home", "Nearme", "Popular","Login"};
+    private String[] tabs = { "Home", "Nearme", "Popular"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,7 +266,7 @@ public class MainActivity extends ActionBarActivity implements
                                 App.username = responseContent.getString("usr_username");
                                 App.userapikey = responseContent.getString("usr_apikey");
 
-                                doLogin.setIcon(R.drawable.placeholder_user);
+                                doLogin.setIcon(R.drawable.ic_profilelogo);
                                 Toast.makeText( MainActivity.this ,App.username + " - " + App.userapikey , Toast.LENGTH_LONG).show();
 
                             }else{

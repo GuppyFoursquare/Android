@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -238,9 +239,15 @@ public class CreateComment extends Fragment {
     RatingBar.OnRatingBarChangeListener barChanged = new RatingBar.OnRatingBarChangeListener() {
         @Override
         public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-            LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-            stars.getDrawable(2).setColorFilter(Color.parseColor(App.YellowColor), PorterDuff.Mode.SRC_ATOP);
-            c.rating = rating;
+            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.LOLLIPOP){
+                LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+                stars.getDrawable(2).setColorFilter(Color.parseColor(App.YellowColor), PorterDuff.Mode.SRC_ATOP);
+                c.rating = rating;
+            }
+            else{
+
+            }
+
         }
     };
 
