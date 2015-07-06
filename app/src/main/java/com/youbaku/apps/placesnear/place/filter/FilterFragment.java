@@ -100,7 +100,7 @@ public class FilterFragment extends Fragment {
         distanceMax=(TextView)getView().findViewById(R.id.seek_bar_end_text_filter_fragment);
         sortDistance=(TextView)getView().findViewById(R.id.sort_distance_filter_fragment);
         sortRating=(TextView)getView().findViewById(R.id.sort_rating_filter_fragment);
-        sortLikes=(TextView)getView().findViewById(R.id.sort_likes_filter_fragment);
+        //sortLikes=(TextView)getView().findViewById(R.id.sort_likes_filter_fragment);
         sortTick=(ImageView)getView().findViewById(R.id.sort_image_filter_fragment);
         limitInfo=(TextView)getView().findViewById(R.id.limit_info_text_filter_fragment);
         distanceInfo=(TextView)getView().findViewById(R.id.distance_info_text_filter_fragment);
@@ -186,11 +186,12 @@ public class FilterFragment extends Fragment {
         distance.setProgress(value);
         distance.setThumb(dr);
 
-        if(filter.sorting== PlaceFilter.SortBy.like){
+        /*if(filter.sorting== PlaceFilter.SortBy.like){
             sortInfo.setText(getResources().getString(R.string.sortsectionlabel)+" : "+getResources().getString(R.string.distancelabel));
             sortTickParams.addRule(RelativeLayout.ALIGN_BOTTOM,R.id.sort_likes_filter_fragment);
             sortTick.setLayoutParams(sortTickParams);
-        }else if(filter.sorting== PlaceFilter.SortBy.rating){
+        }else */
+            if(filter.sorting== PlaceFilter.SortBy.rating){
             sortInfo.setText(getResources().getString(R.string.sortsectionlabel)+" : "+getResources().getString(R.string.ratingslabel));
             sortTickParams.addRule(RelativeLayout.ALIGN_BOTTOM,R.id.sort_rating_filter_fragment);
             sortTick.setLayoutParams(sortTickParams);
@@ -220,7 +221,7 @@ public class FilterFragment extends Fragment {
         distanceMin.setText(App.getDistanceString(App.System,App.minimumDistance));
         sortDistance.setOnClickListener(sortDistanceClick);
         sortRating.setOnClickListener(sortRatingClick);
-        sortLikes.setOnClickListener(sortLikesClick);
+        //sortLikes.setOnClickListener(sortLikesClick);
     }
 
     public IBinder getWindowToken(){
@@ -399,7 +400,7 @@ public class FilterFragment extends Fragment {
         }
     };
 
-    View.OnClickListener sortLikesClick=new View.OnClickListener() {
+   /* View.OnClickListener sortLikesClick=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             sortInfo.setText(getResources().getString(R.string.sortsectionlabel)+" : "+getResources().getString(R.string.likeslabel));
@@ -407,5 +408,5 @@ public class FilterFragment extends Fragment {
             sortTickParams.addRule(RelativeLayout.ALIGN_BOTTOM,R.id.sort_likes_filter_fragment);
             sortTick.setLayoutParams(sortTickParams);
         }
-    };
+    };*/
 }

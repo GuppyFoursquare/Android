@@ -49,21 +49,21 @@ import java.util.Map;
 
 public class CreateComment extends Fragment {
     private Comment c;
-    private boolean isSaving=false;
+    private boolean isSaving = false;
     private EditText lastFocus;
     private EditText name;
     private EditText email;
     private EditText comment;
 
     public CreateComment() {
-        c=new Comment();
-        c.isActive=!App.moderateReviews;
-        c.place=Place.FOR_DETAIL.id;
+        c = new Comment();
+        c.isActive = !App.moderateReviews;
+        c.place = Place.FOR_DETAIL.id;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.new_comment,container,false);
+        return inflater.inflate(R.layout.new_comment, container, false);
     }
 
     @Override
@@ -71,23 +71,23 @@ public class CreateComment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //((App)getActivity().getApplication()).track(App.ANALYSIS_WRITE_REVIEW);
 
-        ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setOnRatingBarChangeListener(barChanged);
-        ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setRating(3);
-        c.rating=3;
+        ((RatingBar) getView().findViewById(R.id.rating_new_comment)).setOnRatingBarChangeListener(barChanged);
+        ((RatingBar) getView().findViewById(R.id.rating_new_comment)).setRating(3);
+        c.rating = 3;
 
 
-        comment=((EditText)getView().findViewById(R.id.comment_new_comment));
+        comment = ((EditText) getView().findViewById(R.id.comment_new_comment));
         comment.addTextChangedListener(commentWatcher);
 
     }
 
-    public void saveComment(){
+    public void saveComment() {
 
-        if(comment.getText().toString().equals("") || String.valueOf(c.rating).equals("")){
-            Toast.makeText(getActivity(),getResources().getString(R.string.formvalidationmessage),Toast.LENGTH_LONG).show();
+        if (comment.getText().toString().equals("") || String.valueOf(c.rating).equals("")) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.formvalidationmessage), Toast.LENGTH_LONG).show();
             return;
         }
-        String loginUrl = App.SitePath + "api/auth.php?op=comment&apikey="+App.userapikey;
+        String loginUrl = App.SitePath + "api/auth.php?op=comment&apikey=" + App.userapikey;
         JSONObject apiResponse = null;
         final Activity tt = getActivity();
 
@@ -206,47 +206,45 @@ public class CreateComment extends Fragment {
 
     }
 
-    private void setEditable(boolean editable){
-        ((RatingBar)getView().findViewById(R.id.rating_new_comment)).setFocusable(editable);
+    private void setEditable(boolean editable) {
+        ((RatingBar) getView().findViewById(R.id.rating_new_comment)).setFocusable(editable);
 
-        ((EditText)getView().findViewById(R.id.comment_new_comment)).setFocusable(editable);
-        isSaving=!editable;
+        ((EditText) getView().findViewById(R.id.comment_new_comment)).setFocusable(editable);
+        isSaving = !editable;
     }
 
-    public boolean isSaving(){
+    public boolean isSaving() {
         return isSaving;
     }
 
-    private void saveDone(){
+    private void saveDone() {
         Toast.makeText(getActivity(), getResources().getString(R.string.donebuttonlabel), Toast.LENGTH_SHORT).show();
-        InputMethodManager man=(InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(getWindowToken()!=null)
-            man.hideSoftInputFromWindow(getWindowToken(),0);
-        ((ActionBarActivity)getActivity()).setSupportProgressBarIndeterminateVisibility(false);
+        InputMethodManager man = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (getWindowToken() != null)
+            man.hideSoftInputFromWindow(getWindowToken(), 0);
+        ((ActionBarActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(false);
         getActivity().getSupportFragmentManager().popBackStack();
-        ((PlaceDetailActivity)getActivity()).goBack();
+        ((PlaceDetailActivity) getActivity()).goBack();
     }
 
-    public IBinder getWindowToken(){
-        if(lastFocus!=null)
+    public IBinder getWindowToken() {
+        if (lastFocus != null)
             return lastFocus.getWindowToken();
         else
             return null;
     }
 
 
-
-
-    RatingBar.OnRatingBarChangeListener barChanged=new RatingBar.OnRatingBarChangeListener() {
+    RatingBar.OnRatingBarChangeListener barChanged = new RatingBar.OnRatingBarChangeListener() {
         @Override
         public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
             LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(Color.parseColor(App.YellowColor), PorterDuff.Mode.SRC_ATOP);
-            c.rating=rating;
+            c.rating = rating;
         }
     };
 
-    TextWatcher nameWatcher=new TextWatcher() {
+    TextWatcher nameWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -259,12 +257,12 @@ public class CreateComment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            c.name=s.toString();
-            lastFocus=name;
+            c.name = s.toString();
+            lastFocus = name;
         }
     };
 
-    TextWatcher emailWatcher=new TextWatcher() {
+    TextWatcher emailWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -277,12 +275,12 @@ public class CreateComment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            c.email=s.toString();
-            lastFocus=email;
+            c.email = s.toString();
+            lastFocus = email;
         }
     };
 
-    TextWatcher commentWatcher=new TextWatcher() {
+    TextWatcher commentWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -295,8 +293,8 @@ public class CreateComment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            c.text=s.toString();
-            lastFocus=comment;
+            c.text = s.toString();
+            lastFocus = comment;
         }
     };
 }

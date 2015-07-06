@@ -343,15 +343,15 @@
             android:layout_below="@+id/divider_three_filter_fragment"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-        <ImageView
+        <!--<ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/sort_rating_filter_fragment"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/divider"
-            android:id="@+id/divider_four_filter_fragment"/>
-        <TextView
+            android:id="@+id/divider_four_filter_fragment"/>-->
+       <!-- <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -361,7 +361,7 @@
             android:layout_toLeftOf="@id/sort_image_filter_fragment"
             android:layout_below="@+id/divider_four_filter_fragment"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true" />-->
         </RelativeLayout>
 
 </LinearLayout>

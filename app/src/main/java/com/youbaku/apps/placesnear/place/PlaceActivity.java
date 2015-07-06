@@ -240,12 +240,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     p.close = o.getString("plc_outtime");
 
 
-                                    String isActive=o.getString("plc_is_active");
-                                    if(isActive=="1"){
-                                        p.isActive=true;
-                                    }
-                                    else{
-                                        p.isActive=false;
+                                    String isActive = o.getString("plc_is_active");
+                                    if (isActive == "1") {
+                                        p.isActive = true;
+                                    } else {
+                                        p.isActive = false;
                                     }
 
                                     String PLACE_INFO_WITHOUT_HTML_TAG = String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
@@ -271,10 +270,12 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     }
 
 
-                                    boolean filterKeyword = filter.keyword.length()!=0 ? p.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
-                                    boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km)!=0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.distance[0]/1000 : true;
+                                    boolean filterKeyword = filter.keyword.length() != 0 ? p.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
+                                    boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.distance[0] / 1000 : true;
+                                    boolean filterDistanceMl = filter.getDistance(PlaceFilter.DistanceSystem.ml) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.ml) > p.distance[0] / 1000 * 0.6214 : true;
 
-                                    if (pop && open && filterKeyword && filterDistance){
+
+                                    if (pop && open && filterKeyword && filterDistance && filterDistanceMl) {
                                         list.add(p);
                                     }
 
@@ -287,10 +288,10 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                  * olmamasından hata ile karşılaşılıyor.
                                  */
 
-                                try{
+                                try {
                                     checkDownloads();
-                                }catch (IllegalStateException e){
-                                    Log.e("--- GUPPY ---" , "Error occur on replace fragment");
+                                } catch (IllegalStateException e) {
+                                    Log.e("--- GUPPY ---", "Error occur on replace fragment");
                                 }
 
                             } else {
