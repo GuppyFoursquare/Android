@@ -21,6 +21,7 @@ import java.util.Date;
 
 public class Place {
     public static  String ID="plc_id";
+    public static  String EMAIL="plc_email";
 
 
 
@@ -36,6 +37,7 @@ public class Place {
     public static final String TWITTER="twitter";
     public static final String CATEGORY="category";
     public static final String ISACTIVE="isactive";
+
 
 
     public static final String DESCRIPTION="description";
@@ -62,6 +64,7 @@ public class Place {
     public int likes=0;
     public double rating=10.0;
     public String web="";
+    public String email;
     public String facebook="";
     public String twitter="";
     public Bitmap photo;
@@ -163,6 +166,11 @@ public class Place {
         this.description = description;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
-
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

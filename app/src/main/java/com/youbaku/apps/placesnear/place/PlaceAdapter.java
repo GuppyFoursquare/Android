@@ -68,18 +68,21 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
             ViewCompat.setLayerType(iLike,ViewCompat.LAYER_TYPE_SOFTWARE,null);
             iLike.setImageDrawable(like.createPictureDrawable());
             iLike.setLayoutParams(params);
+            //We don't need like because we dont have like function at this time.(maybe later)
+            iLike.setVisibility(View.INVISIBLE);
+            ((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setVisibility(View.INVISIBLE);
 
             ImageView iCom=((ImageView)convertView.findViewById(R.id.comment_view_place_list_item));
-            ViewCompat.setLayerType(iCom,ViewCompat.LAYER_TYPE_SOFTWARE,null);
+            ViewCompat.setLayerType(iCom, ViewCompat.LAYER_TYPE_SOFTWARE, null);
             iCom.setImageDrawable(com.createPictureDrawable());
             iCom.setLayoutParams(params);
 
             ImageView iDist=((ImageView)convertView.findViewById(R.id.location_view_place_list_item));
-            ViewCompat.setLayerType(iDist,ViewCompat.LAYER_TYPE_SOFTWARE,null);
+            ViewCompat.setLayerType(iDist, ViewCompat.LAYER_TYPE_SOFTWARE, null);
             iDist.setImageDrawable(dist.createPictureDrawable());
             iDist.setLayoutParams(params);
 
-            ((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setTextColor(color);
+
             ((TextView)convertView.findViewById(R.id.           location_text_place_list_item)).setTextColor(color);
             ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setTextColor(color);
         }

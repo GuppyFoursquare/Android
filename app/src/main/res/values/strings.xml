@@ -186,6 +186,7 @@
     <string name="userPassHint">Enter your password</string>
     <string name="loginlabel">Sign in</string>
     <string name="loginrequirement">You should login first to add comment!</string>
+    <string name="reservationbuttonlabel">Booking a place</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

@@ -12,13 +12,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -36,11 +32,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.R;
@@ -59,7 +50,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlaceDetailActivity extends ActionBarActivity {
-    private enum Screen {comments, newComment, deals, detail}
+    private enum Screen {comments, newComment, deals, detail, senEmail}
 
     ;
     private static final int IMAGE_CHOOSED_FROM_GALLERY = 5009;
@@ -68,8 +59,10 @@ public class PlaceDetailActivity extends ActionBarActivity {
     private static Screen screen = Screen.detail;
     private Place p;
     private CreateComment createComment;
+    private BookPlaceFragment bookPlaceFrg;
     private MenuItem sendButton;
     private MenuItem favoriteButton;
+    private MenuItem bookingPlace;
     private boolean directDetail = false;
     private File photoFile;
 
@@ -203,15 +196,12 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (p.liked)
-            getMenuInflater().inflate(R.menu.menu_place_detail_liked, menu);
-        else
-            getMenuInflater().inflate(R.menu.menu_place_detail, menu);
-        favoriteButton = menu.findItem(R.id.favourites_detail_menu);
-        if (p.isFavourite)
-            favoriteButton.setTitle(getResources().getString(R.string.removefromfavoriteslabel));
-        else
-            favoriteButton.setTitle(getResources().getString(R.string.addtofavoriteslabel));
+        getMenuInflater().inflate(R.menu.menu_place_detail, menu);
+        bookingPlace = menu.getItem(0);
+
+
+
+
         return true;
     }
 
@@ -239,6 +229,9 @@ public class PlaceDetailActivity extends ActionBarActivity {
                 getMenuInflater().inflate(R.menu.menu_place_detail, menu);
 
             favoriteButton = menu.findItem(R.id.favourites_detail_menu);
+
+            //we don't need add favourites menu item visible at this time.
+            favoriteButton.setVisible(false);
             if (p.isFavourite)
                 favoriteButton.setTitle(getResources().getString(R.string.removefromfavoriteslabel));
             else
@@ -285,42 +278,16 @@ public class PlaceDetailActivity extends ActionBarActivity {
                 }
                 break;
 
-            case R.id.like_place_detail_menu:
+            case R.id.book_place_detail_menu:
                 if (!App.checkInternetConnection(this)) {
                     App.showInternetError(this);
                     break;
                 }
-                tt.closeOptionsMenu();
-                setSupportProgressBarIndeterminateVisibility(true);
-                ParseQuery obj = new ParseQuery(App.PARSE_PLACES);
-                obj.whereEqualTo(Place.ID, p.id);
-                obj.getFirstInBackground(new GetCallback() {
-                    @Override
-                    public void done(ParseObject parseObject, ParseException e) {
-                        if (e != null) {
-                            e.printStackTrace();
-                            return;
-                        }
-                        int l = Integer.parseInt(parseObject.getString(Place.LIKES)) + 1;
-                        parseObject.put(Place.LIKES, l + "");
-                        parseObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e != null) {
-                                    e.printStackTrace();
-                                    return;
-                                }
-                                SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(tt).edit();
-                                edit.putBoolean(p.id, true);
-                                edit.commit();
-                                p.liked = true;
-                                supportInvalidateOptionsMenu();
-                                setSupportProgressBarIndeterminateVisibility(false);
+                bookPlaceFrg=new BookPlaceFragment();
+                getSupportFragmentManager().beginTransaction().addToBackStack("bookplace").replace(R.id.main_activity_place_detail, bookPlaceFrg).commit();
+                setScreen(Screen.senEmail);
 
-                            }
-                        });
-                    }
-                });
+
                 break;
 
             case R.id.write_review_detail_menu:
@@ -330,38 +297,6 @@ public class PlaceDetailActivity extends ActionBarActivity {
                 directDetail = true;
                 break;
 
-            case R.id.upload_photo_detail_menu:
-                if (!App.checkInternetConnection(this)) {
-                    App.showInternetError(this);
-                    break;
-                }
-                final String[] items = new String[3];
-                items[0] = getResources().getString(R.string.from_gallery);
-                items[1] = getResources().getString(R.string.from_camera);
-                items[2] = getResources().getString(R.string.alertcancelbuttonlabel);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(tt);
-                builder.setTitle(getResources().getString(R.string.selectphotobuttonlabel));
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (items[which].equals(getResources().getString(R.string.from_gallery))) {
-                            Intent in = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(in, IMAGE_CHOOSED_FROM_GALLERY);
-                        } else if (items[which].equals(getResources().getString(R.string.from_camera))) {
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            if (intent.resolveActivity(tt.getPackageManager()) != null) {
-                                photoFile = new File(tt.getExternalFilesDir(null), "temp.jpg");
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                                startActivityForResult(intent, IMAGE_CHOOSED_FROM_CAMERA);
-                            }
-                        } else {
-
-                        }
-                    }
-                });
-                builder.show();
-                break;
 
             case R.id.favourites_detail_menu:
                 if (p.isFavourite) {
@@ -500,6 +435,9 @@ public class PlaceDetailActivity extends ActionBarActivity {
                 }
                 break;
             case deals:
+                setScreen(Screen.detail);
+                break;
+            case senEmail:
                 setScreen(Screen.detail);
                 break;
         }

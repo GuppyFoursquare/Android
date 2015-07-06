@@ -235,6 +235,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     p.address = o.getString("plc_address");
                                     p.setRating(rating);
                                     p.web = o.getString("plc_website");
+                                    p.email=o.getString("plc_email");
                                     p.phone = o.getString("plc_contact");
                                     p.open = o.getString("plc_intime");
                                     p.close = o.getString("plc_outtime");
@@ -463,6 +464,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Place.FOR_DETAIL = list.get(position);
             Place.ID = list.get(position).getId();
+            Place.EMAIL = list.get(position).getEmail();
             Intent in = new Intent(getApplicationContext(), PlaceDetailActivity.class);
             in.putExtra("title", list.get(position).getName());
             startActivity(in);

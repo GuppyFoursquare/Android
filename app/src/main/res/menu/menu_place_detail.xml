@@ -3,18 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.youbaku.apps.placesnear.place.PlaceDetailActivity">
 
-    <item android:id="@+id/like_place_detail_menu"
-        android:title="@string/likebuttonlabel"
+    <item android:id="@+id/book_place_detail_menu"
+        android:title="@string/reservationbuttonlabel"
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item android:id="@+id/write_review_detail_menu"
         android:title="@string/writereviewbuttonlabel"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/upload_photo_detail_menu"
-        android:title="@string/uploadphotolabel"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+
     <item android:id="@+id/favourites_detail_menu"
         android:title="@string/addtofavoriteslabel"
         android:orderInCategory="100"

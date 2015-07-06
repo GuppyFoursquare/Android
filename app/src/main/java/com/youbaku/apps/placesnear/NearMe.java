@@ -1,11 +1,9 @@
 package com.youbaku.apps.placesnear;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,15 +29,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
 import com.youbaku.apps.placesnear.place.comment.Comment;
-import com.youbaku.apps.placesnear.place.filter.FilterFragment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -250,6 +244,7 @@ public class NearMe extends Fragment implements LocationListener {
                                     p.setRating(rating);
                                     p.address = o.getString("plc_address");
                                     p.web = o.getString("plc_website");
+                                    p.email=o.getString("plc_email");
                                     p.phone = o.getString("plc_contact");
                                     p.open = o.getString("plc_intime");
                                     p.close = o.getString("plc_outtime");
@@ -343,6 +338,7 @@ public class NearMe extends Fragment implements LocationListener {
         public boolean onMarkerClick(Marker marker) {
             Place.FOR_DETAIL = placeMap.get(marker.getTitle());
             Place.ID = placeMap.get(marker.getTitle()).getId();
+            Place.EMAIL = placeMap.get(marker.getTitle()).getEmail();
             Intent in = new Intent(getActivity().getApplicationContext(), PlaceDetailActivity.class);
             in.putExtra("title", placeMap.get(marker.getTitle()).getName());
             startActivity(in);
