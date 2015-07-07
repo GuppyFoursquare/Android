@@ -15,15 +15,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -68,13 +76,20 @@ public class NearMe extends Fragment implements LocationListener {
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 1000;
     private boolean havePlace=true;
-    private GoogleMap nearMeMap;
+
+    private View view;
     private LocationManager locationManager;
     private Marker nearMeMarker;
+    private GoogleMap nearMeMap;
+    private MapView mapView;
+    private LatLng userLocation = new LatLng(40.3859933,49.8232647);
+
 
     private ArrayList<Place> list;
     private Map<String,Place> placeMap = new HashMap<>();
-    private View view;
+    private NearMeTouchableWrapper nearMeTouchView;
+
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -112,40 +127,130 @@ public class NearMe extends Fragment implements LocationListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        view = inflater.inflate(R.layout.activity_maps, container, false);
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.nearme_maps, container, false);
+
+        MapsInitializer.initialize(getActivity());
+
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
+        {
+            case ConnectionResult.SUCCESS:
+
+                mapView = (MapView) view.findViewById(R.id.nearmemap);
+                mapView.onCreate(savedInstanceState);
+                if(mapView!=null) {
+                    mapView.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            nearMeMap = googleMap;
+                            nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
+                            nearMeMap.setOnMarkerClickListener(markerClickListener);
+                            Toast.makeText(getActivity(), "Map Succefully Loaded", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                break;
+            case ConnectionResult.SERVICE_MISSING:
+                Toast.makeText(getActivity(), "SERVICE MISSING", Toast.LENGTH_SHORT).show();
+                break;
+            case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+                Toast.makeText(getActivity(), "UPDATE REQUIRED", Toast.LENGTH_SHORT).show();
+                break;
+            default: Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
+        }
 
         return view;
     }
 
+
     @Override
     public void onResume() {
+        mapView.onResume();
         super.onResume();
-        //setUpMapIfNeeded();
         getNearMePlaces();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
 
     private void setUpMapIfNeeded(ArrayList<Place> place) {
-        if (nearMeMap == null) {
 
-            nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-            nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
-            nearMeMap.setOnMarkerClickListener(markerClickListener);
-            nearMeMap.setOnCameraChangeListener(cameraChangeListener);
+            //nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.nearmefragmap)).getMap();
 
-            LatLng userLocation=new LatLng(40.3859933,49.8232647);
             CameraUpdate ca= CameraUpdateFactory.newLatLngZoom(userLocation, 15);
             nearMeMap.animateCamera(ca);
 
             for(Place p : place){
-                LatLng istanbulKoordinat = new LatLng(p.getLatitude(), p.getLongitude());
-                nearMeMap.addMarker(new MarkerOptions().position(istanbulKoordinat).title(p.getId()));
+                LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
+                nearMeMap.addMarker(new MarkerOptions().position(placeLocation).title(p.getId()));
+            }
+
+    }
+
+
+
+    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            Place.FOR_DETAIL = placeMap.get(marker.getTitle());
+            Place.ID = placeMap.get(marker.getTitle()).getId();
+            Place.EMAIL = placeMap.get(marker.getTitle()).getEmail();
+            Intent in = new Intent(getActivity().getApplicationContext(), PlaceDetailActivity.class);
+            in.putExtra("title", placeMap.get(marker.getTitle()).getName());
+            startActivity(in);
+            return true;
+        }
+    };
+
+    GoogleMap.OnMapClickListener mapClickListener=new GoogleMap.OnMapClickListener() {
+        @Override
+        public void onMapClick(LatLng latLng) {
+            if(nearMeMarker==null)
+                nearMeMarker=nearMeMap.addMarker(new MarkerOptions().position(latLng));
+            else
+                nearMeMarker.setPosition(latLng);
+        }
+    };
+
+    GoogleMap.OnCameraChangeListener cameraChangeListener = new GoogleMap.OnCameraChangeListener() {
+        @Override
+        public void onCameraChange(CameraPosition cameraPosition) {
+
+            if (!NearMeTouchableWrapper.mMapIsTouched) {
+
+                Log.e("---GUPPY---" , "on Camera Change " + cameraPosition.zoom);
+
+//                nearMeMap.setOnMarkerClickListener(null);
+//                nearMeMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.3859933,49.8232647), cameraPosition.zoom),
+//                        new GoogleMap.CancelableCallback() {
+//
+//                            @Override
+//                            public void onFinish() {
+//                                nearMeMap.setOnCameraChangeListener(cameraChangeListener);
+//                                Toast.makeText(getActivity(), "Finish camera change listener yyy", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            @Override
+//                            public void onCancel() {
+//
+//                            }
+//                        });
+
+                //nearMeMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.3859933,49.8232647), cameraPosition.zoom));
+                //NearMeTouchableWrapper.mMapIsTouched = true;
             }
 
         }
-    }
+    };
 
     private void setUpMap() {
 
@@ -172,8 +277,8 @@ public class NearMe extends Fragment implements LocationListener {
 
     private void getNearMePlaces(){
 
-        final double userLatitude = 40.372877;
-        final double userLongitude = 49.842825;
+        final double userLatitude = userLocation.latitude;
+        final double userLongitude = userLocation.longitude;
 
         String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat="+userLatitude+"&lon="+userLongitude;
         JSONObject apiResponse = null;
@@ -323,35 +428,6 @@ public class NearMe extends Fragment implements LocationListener {
         }
     }
 
-    GoogleMap.OnMapClickListener mapClickListener=new GoogleMap.OnMapClickListener() {
-        @Override
-        public void onMapClick(LatLng latLng) {
-            if(nearMeMarker==null)
-                nearMeMarker=nearMeMap.addMarker(new MarkerOptions().position(latLng));
-            else
-                nearMeMarker.setPosition(latLng);
-        }
-    };
-
-    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
-        @Override
-        public boolean onMarkerClick(Marker marker) {
-            Place.FOR_DETAIL = placeMap.get(marker.getTitle());
-            Place.ID = placeMap.get(marker.getTitle()).getId();
-            Place.EMAIL = placeMap.get(marker.getTitle()).getEmail();
-            Intent in = new Intent(getActivity().getApplicationContext(), PlaceDetailActivity.class);
-            in.putExtra("title", placeMap.get(marker.getTitle()).getName());
-            startActivity(in);
-            return true;
-        }
-    };
-
-    GoogleMap.OnCameraChangeListener cameraChangeListener = new GoogleMap.OnCameraChangeListener() {
-        @Override
-        public void onCameraChange(CameraPosition cameraPosition) {
-            nearMeMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.3859933,49.8232647), cameraPosition.zoom));
-        }
-    };
 
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
