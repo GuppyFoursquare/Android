@@ -99,7 +99,7 @@ public class PopularPlaceFragment extends Fragment {
 
         //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
         //For testing Places request
-        String url2 = App.SitePath + "api/places.php?op=nearme&lat=40.372877&lon=49.842825" + "&scat_id=" + SubCategory.SELECTED_SUB_CATEGORY_ID;
+        String url2 = App.SitePath + "api/places.php?op=search&popular=1";
         JSONObject apiResponse = null;
         final Activity tt = getActivity();
         // Request a json response
@@ -124,7 +124,7 @@ public class PopularPlaceFragment extends Fragment {
 
 
                                     double rating = 0.0;
-                                    if (o.has("plc_avg_rating") && Double.parseDouble(o.getString("plc_avg_rating")) > 3) {
+                                    if (o.has("plc_avg_rating")) {
 
                                         final PlaceFilter filter = PlaceFilter.getInstance();
                                         final Place p = new Place();
@@ -169,8 +169,8 @@ public class PopularPlaceFragment extends Fragment {
                                         p.web = o.getString("plc_website");
                                         p.email = o.getString("plc_email");
                                         p.phone = o.getString("plc_contact");
-                                        p.open = o.getString("plc_intime");
-                                        p.close = o.getString("plc_outtime");
+                                        //p.open = o.getString("plc_intime");
+                                        //p.close = o.getString("plc_outtime");
 
 
                                         String isActive = o.getString("plc_is_active");
