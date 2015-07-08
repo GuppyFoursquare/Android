@@ -15,7 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,25 +24,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.category.adapters.CategoryAdapter;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
 import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+import com.youbaku.apps.placesnear.utils.Category;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,6 +88,11 @@ public class NearMe extends Fragment implements LocationListener {
     private ArrayList<Place> list;
     private Map<String,Place> placeMap = new HashMap<>();
     private NearMeTouchableWrapper nearMeTouchView;
+
+    private ArrayList<Category> catlist;
+    private CategoryAdapter adap;
+
+    private LinearLayout l;
 
 
 
@@ -160,6 +165,25 @@ public class NearMe extends Fragment implements LocationListener {
             default: Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
         }
 
+        catlist=new ArrayList<>();
+        Category c=new Category();
+
+        c.iconURL="2_placeas.jpg";
+        catlist.add(c);
+        catlist.add(c);
+        catlist.add(c);
+        catlist.add(c);
+
+        l=(LinearLayout)view.findViewById(R.id.l1);
+        l.setVisibility(View.INVISIBLE);
+
+
+        adap = new CategoryAdapter(getActivity(), catlist);
+        final GridView grLv = (GridView) view.findViewById(R.id.gridView2);
+        grLv.setAdapter(adap);
+
+
+
         return view;
     }
 
@@ -188,6 +212,8 @@ public class NearMe extends Fragment implements LocationListener {
 
             CameraUpdate ca= CameraUpdateFactory.newLatLngZoom(userLocation, 15);
             nearMeMap.animateCamera(ca);
+            nearMeMap.setOnMapClickListener(mapClickListener);
+
 
             for(Place p : place){
                 LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
@@ -214,10 +240,11 @@ public class NearMe extends Fragment implements LocationListener {
     GoogleMap.OnMapClickListener mapClickListener=new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
-            if(nearMeMarker==null)
+           /* if(nearMeMarker==null)
                 nearMeMarker=nearMeMap.addMarker(new MarkerOptions().position(latLng));
             else
-                nearMeMarker.setPosition(latLng);
+                nearMeMarker.setPosition(latLng);*/
+            l.setVisibility(View.VISIBLE);
         }
     };
 
@@ -421,12 +448,7 @@ public class NearMe extends Fragment implements LocationListener {
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
 
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
@@ -467,5 +489,15 @@ public class NearMe extends Fragment implements LocationListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
 
 }

@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="100dp"
-
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.youbaku.apps.placesnear.LoginFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -22,24 +21,58 @@
         android:textColor="@android:color/darker_gray"
         android:layout_height="wrap_content"
         android:hint="@string/userPassHint" />
-    <Button
+    <ImageButton
         android:id="@+id/btnLogin"
         android:layout_below="@id/etUserPass"
         android:text="@string/loginStr"
-        android:layout_marginTop="20dp"
+        android:src="@drawable/custombuttongenoa"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
-        android:background="@drawable/custombuttongenoa"
+        android:background="@android:color/transparent"
         android:layout_height="wrap_content" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/btnLogin"
+        android:src="@drawable/custombuttongenoa"
+        android:background="@android:color/transparent"
         android:text="send comment"
         android:id="@+id/btnSendComment"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#7000"
+        android:orientation="vertical"
+        android:id="@+id/l1"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sample text"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sample text"/>
+        <GridView
+            android:id="@+id/gridView2"
+            android:layout_width="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:columnWidth="80dp"
+            android:gravity="center"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:verticalScrollbarPosition="right"
+            android:scrollbars="vertical">
+        </GridView>
+
+    </LinearLayout>
 
 </RelativeLayout>
