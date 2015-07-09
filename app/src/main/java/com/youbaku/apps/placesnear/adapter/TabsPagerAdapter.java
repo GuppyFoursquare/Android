@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.youbaku.apps.placesnear.LoginFragment;
 import com.youbaku.apps.placesnear.NearMe;
+import com.youbaku.apps.placesnear.SearchFragment;
 import com.youbaku.apps.placesnear.category.CategoryListFragment;
 import com.youbaku.apps.placesnear.place.PopularPlaceFragment;
 
@@ -38,12 +39,15 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
                 return new CategoryListFragment();
             case 1:
+                // Search fragment
+                return new SearchFragment();
+            case 2:
                 // Nearme fragment
                 return new NearMe();
-            case 2:
+            case 3:
                 // Popular fragment
                 return new PopularPlaceFragment();
-            case 3:
+            case 4:
                 // Login fragment
                 return new LoginFragment();
         }
@@ -54,7 +58,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // get item count - equal to number of tabs
-        return 4;
+        return 5;
     }
 
 

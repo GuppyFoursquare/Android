@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
     // Tab titles
-    private String[] tabs = { "Home", "Nearme", "Popular" , "Login"};
+    private String[] tabs = { "Home","Search", "Nearme", "Popular" , "Login"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
