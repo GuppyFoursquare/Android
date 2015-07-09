@@ -168,7 +168,8 @@ public class NearMe extends Fragment implements LocationListener {
         //getNearMePlaces();
         getNearMeCategoryList();
 
-        categoryGridViewChangeVisibility();
+        l=(LinearLayout)view.findViewById(R.id.nearmecategory);
+        l.setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -196,14 +197,7 @@ public class NearMe extends Fragment implements LocationListener {
      * Bu method ile category view'i haritada görülür ya da gizlenir
      */
     public void categoryGridViewChangeVisibility(){
-
-        if(l==null){
-            l=(LinearLayout)view.findViewById(R.id.nearmecategory);
-            l.setVisibility(View.INVISIBLE);
-
-        }else{
             l.setVisibility(l.getVisibility()==View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
-        }
     }
 
 
