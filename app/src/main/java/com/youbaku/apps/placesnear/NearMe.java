@@ -36,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.category.adapters.CategoryAdapter;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
 import com.youbaku.apps.placesnear.place.comment.Comment;
@@ -78,20 +77,19 @@ public class NearMe extends Fragment implements LocationListener {
     private boolean havePlace=true;
 
     private View view;
+    private static GoogleMap nearMeMap;
     private LocationManager locationManager;
     private Marker nearMeMarker;
-    private GoogleMap nearMeMap;
     private MapView mapView;
     private LatLng userLocation = new LatLng(40.3859933,49.8232647);
 
 
-    private ArrayList<Place> list;
+    public static ArrayList<Place> nearMePlacelist;
     private Map<String,Place> placeMap = new HashMap<>();
     private NearMeTouchableWrapper nearMeTouchView;
 
     private ArrayList<Category> catlist;
-    private CategoryAdapter adap;
-
+    private NearMeCategoryAdapter adap;
     private LinearLayout l;
 
 
@@ -115,6 +113,7 @@ public class NearMe extends Fragment implements LocationListener {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     public NearMe() {
         // Required empty public constructor
@@ -165,24 +164,11 @@ public class NearMe extends Fragment implements LocationListener {
             default: Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
         }
 
-        catlist=new ArrayList<>();
-        Category c=new Category();
 
-        c.iconURL="2_placeas.jpg";
-        catlist.add(c);
-        catlist.add(c);
-        catlist.add(c);
-        catlist.add(c);
+        //getNearMePlaces();
+        getNearMeCategoryList();
 
-        l=(LinearLayout)view.findViewById(R.id.l1);
-        l.setVisibility(View.INVISIBLE);
-
-
-        adap = new CategoryAdapter(getActivity(), catlist);
-        final GridView grLv = (GridView) view.findViewById(R.id.gridView2);
-        grLv.setAdapter(adap);
-
-
+        categoryGridViewChangeVisibility();
 
         return view;
     }
@@ -206,20 +192,44 @@ public class NearMe extends Fragment implements LocationListener {
     }
 
 
-    private void setUpMapIfNeeded(ArrayList<Place> place) {
+    /**
+     * Bu method ile category view'i haritada görülür ya da gizlenir
+     */
+    public void categoryGridViewChangeVisibility(){
 
-            //nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.nearmefragmap)).getMap();
+        if(l==null){
+            l=(LinearLayout)view.findViewById(R.id.nearmecategory);
+            l.setVisibility(View.INVISIBLE);
 
-            CameraUpdate ca= CameraUpdateFactory.newLatLngZoom(userLocation, 15);
-            nearMeMap.animateCamera(ca);
-            nearMeMap.setOnMapClickListener(mapClickListener);
+        }else{
+            l.setVisibility(l.getVisibility()==View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+        }
+    }
 
+
+    public static void reloadPlaceMarkers(ArrayList<Place> place){
+
+            nearMePlacelist = place;
+            nearMeMap.clear();
 
             for(Place p : place){
                 LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
                 nearMeMap.addMarker(new MarkerOptions().position(placeLocation).title(p.getId()));
             }
+    }
 
+
+    private void setUpMapIfNeeded(ArrayList<Place> place) {
+
+            //nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.nearmefragmap)).getMap();
+
+            CameraUpdate ca= CameraUpdateFactory.newLatLngZoom(userLocation, 12);
+            nearMeMap.animateCamera(ca);
+            nearMeMap.setOnMapClickListener(mapClickListener);
+
+            reloadPlaceMarkers(place);
+
+            l.setVisibility(View.INVISIBLE);
     }
 
 
@@ -244,7 +254,8 @@ public class NearMe extends Fragment implements LocationListener {
                 nearMeMarker=nearMeMap.addMarker(new MarkerOptions().position(latLng));
             else
                 nearMeMarker.setPosition(latLng);*/
-            l.setVisibility(View.VISIBLE);
+
+            categoryGridViewChangeVisibility();
         }
     };
 
@@ -302,6 +313,74 @@ public class NearMe extends Fragment implements LocationListener {
     }
 
 
+
+
+
+
+
+
+
+
+    // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
+    // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
+    //Pulling list from category web service
+    private void getNearMeCategoryList(){
+
+        //Calling Api
+        String url = App.SitePath+"api/category.php";
+
+        JSONObject apiResponse = null;
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            ArrayList list=new ArrayList<Category>();
+                            JSONArray jArray = response.getJSONArray("content");
+
+
+                            //Read JsonArray
+                            for (int i = 0; i < jArray.length(); i++) {
+                                JSONObject obj = jArray.getJSONObject(i);
+
+                                final Category c=new Category();
+                                c.title=obj.getString("cat_name")+"";
+                                c.setObjectId(obj.getString("cat_id"));
+                                c.iconURL=obj.getString("cat_image");
+                                list.add(c);
+
+                            }
+
+                            adap = new NearMeCategoryAdapter(getActivity(), list);
+                            GridView grLv = (GridView) view.findViewById(R.id.nearmegrid);
+                            grLv.setAdapter(adap);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+    }
+
+
+
     private void getNearMePlaces(){
 
         final double userLatitude = userLocation.latitude;
@@ -322,7 +401,7 @@ public class NearMe extends Fragment implements LocationListener {
                         if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
                             JSONArray places = response.getJSONArray("content");
-                            list = new ArrayList<Place>();
+                            setList(new ArrayList<Place>());
 
                             System.out.println("places downloaded " + places.length());
 
@@ -384,24 +463,11 @@ public class NearMe extends Fragment implements LocationListener {
                                     p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString())));
                                     p.setLocation(Double.parseDouble(o.getString("plc_latitude")), Double.parseDouble(o.getString("plc_longitude")));
 
-                                    list.add(p);
+                                    getList().add(p);
                                     placeMap.put(p.getId() , p);
                                 }
 
-                                setUpMapIfNeeded(list);
-
-                                // --GUPPY COMMENT IMPORTANT--
-                                    /*
-                                     * try-catch kaldırılması durumunda server geciktirilme durumunda(sleep)
-                                     * Volley sonucunun fragment'i değiştirme isteğinden ve ilgili fragment'in
-                                     * olmamasından hata ile karşılaşılıyor.
-                                     */
-
-//                                    try{
-//                                        checkDownloads();
-//                                    }catch (IllegalStateException e){
-//                                        Log.e("--- GUPPY ---" , "Error occur on replace fragment");
-//                                    }
+                                setUpMapIfNeeded(getList());
 
                             } else {
                                 Toast.makeText(getActivity() , "Response place # is 0" , Toast.LENGTH_LONG).show();
@@ -446,6 +512,13 @@ public class NearMe extends Fragment implements LocationListener {
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
     }
+    // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
+    // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
+
+
+
+
+
 
 
 
@@ -472,8 +545,26 @@ public class NearMe extends Fragment implements LocationListener {
     public void onProviderDisabled(String s) {
 
     }
+
+    public ArrayList<Place> getList() {
+        return nearMePlacelist;
+    }
+
+    public void setList(ArrayList<Place> list) {
+        this.nearMePlacelist = list;
+    }
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
+
+
+
+
+
+
+
+
+
+
 
     /**a
      * This interface must be implemented by activities that contain this

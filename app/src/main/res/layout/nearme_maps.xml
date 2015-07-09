@@ -18,12 +18,12 @@
         android:layout_alignParentBottom="true"
         android:background="#7000"
         android:orientation="vertical"
-        android:id="@+id/l1"
+        android:id="@+id/nearmecategory"
         android:paddingBottom="15dp"
         android:paddingTop="15dp">
 
         <GridView
-            android:id="@+id/gridView2"
+            android:id="@+id/nearmegrid"
             android:layout_width="fill_parent"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"

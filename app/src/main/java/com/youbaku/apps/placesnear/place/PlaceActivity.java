@@ -256,7 +256,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     double longitude = Double.parseDouble(o.getString("plc_longitude"));
                                     p.setLocation(latitude, longitude);
 
-                                    p.setLocation(latitude, longitude);
                                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
                                     //Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
                                     Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);//For testing
