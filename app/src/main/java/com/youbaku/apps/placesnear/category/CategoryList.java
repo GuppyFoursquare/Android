@@ -92,6 +92,7 @@ public class CategoryList{
                                 c.iconURL=obj.getString("cat_image");
                                 list.add(c);
 
+                                Category.categoryList=list;
 
                                 Log.i("GUPPY", c.title);
                             }

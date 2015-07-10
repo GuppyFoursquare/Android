@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.youbaku.apps.placesnear.AnimatedExpandableListView;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.category.adapters.SubCategoryAdapter;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
@@ -32,8 +34,10 @@ import java.util.List;
 public class ExpandableListviewAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
     private LayoutInflater inflater;
     private List<Category> items;//Main Categories
-    public static List<SubCategory> subitems;//Sub Categories
+    public static ArrayList<SubCategory> subitems;//Sub Categories
     private Context context;
+    private SubCategoryAdapter adap;
+    private GridView gv;
 
     public ExpandableListviewAdapter(Context context,List<Category> items) {
         inflater = LayoutInflater.from(context);
@@ -63,17 +67,20 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     }
 
     @Override
-    public View getRealChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getRealChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
         final ChildHolder holder;
+
         //SubCategory item = getChild(groupPosition, childPosition);
         final SubCategory item = getChild(groupPosition,childPosition);
 
         if (convertView == null) {
             holder = new ChildHolder();
             convertView = inflater.inflate(R.layout.search_child_subcategory, parent, false);
-            holder.title = (TextView) convertView.findViewById(R.id.textTitle);
-            holder.hint = (TextView) convertView.findViewById(R.id.textHint);
+            //holder.title = (TextView) convertView.findViewById(R.id.textTitle);
+           // holder.hint = (TextView) convertView.findViewById(R.id.textHint);
             convertView.setTag(holder);
+
+
         } else {
             holder = (ChildHolder) convertView.getTag();
         }
@@ -82,6 +89,8 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
         Toast.makeText(context,url2,Toast.LENGTH_LONG).show();
         JSONObject apiResponse = null;
         // Request a json response
+        final View finalConvertView = convertView;
+        final View finalConvertView1 = convertView;
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
 
@@ -105,11 +114,39 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
 
 
                                 subitems.add(s);
-                                holder.title.setText(subitems.get(i).getTitle());
-                                holder.hint.setText(s.getId());
+                              // holder.title.setText("" + subitems.size());
 
 
                             }
+                            // holder.hint.setText(s.getId());
+                            adap = new SubCategoryAdapter(parent.getContext(),subitems);
+                            gv = (GridView) finalConvertView1.findViewById(R.id.subGV);
+                            gv.setAdapter(adap);
+
+
+
+                            // initialize the following variables (i've done it based on your layout
+                            // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
+                            //    assigned to the items in the grid.
+                            final int spacingDp = 10;
+                            final int colWidthDp = 50;
+                            final int rowHeightDp = 20;
+
+                            // convert the dp values to pixels
+                            final float COL_WIDTH = parent.getContext().getResources().getDisplayMetrics().density * colWidthDp;
+                            final float ROW_HEIGHT = parent.getContext().getResources().getDisplayMetrics().density * rowHeightDp;
+                            final float SPACING = parent.getContext().getResources().getDisplayMetrics().density * spacingDp;
+
+                            // calculate the column and row counts based on your display
+                            final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
+                            final int rowCount = (int)Math.ceil((subitems.size() + 0d) / colCount);
+
+                            // calculate the height for the current grid
+                            final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
+
+                            // set the height of the current grid
+                           // gv.getLayoutParams().height = GRID_HEIGHT;
+                           gv.getLayoutParams().height = 1000;
 
 
 
@@ -140,7 +177,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     @Override
     public int getRealChildrenCount(int groupPosition) {
         //return items.get(groupPosition).items.size();
-        return 1;//subitems.size();
+        return 1;
     }
 
     @Override
@@ -186,10 +223,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
         return true;
     }
 
-    private static class ChildItem {
-        String title;
-        String hint;
-    }
+
 
     private static class ChildHolder {
         TextView title;

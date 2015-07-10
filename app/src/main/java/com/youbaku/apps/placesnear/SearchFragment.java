@@ -160,12 +160,6 @@ public class SearchFragment extends Fragment {
 
                             //Sub-Categories Here
                             ArrayList sublist=new ArrayList<SubCategory>();
-                            //Trst area
-                            SubCategory s=new SubCategory();
-                            s.setTitle("Sub Title here");
-                            sublist.add(s);
-
-
 
                             //Setting Adapter
                             adapter = new ExpandableListviewAdapter(getActivity(),list);

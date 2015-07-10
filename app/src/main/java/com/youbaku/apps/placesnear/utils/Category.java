@@ -41,7 +41,7 @@ public class Category {
     private JSONObject name;
 
     private static List<SubCategory> subCatList;
-    private static List<Category> categoryList;
+    public static List<Category> categoryList;
 
 
     @Override
