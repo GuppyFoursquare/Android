@@ -6,12 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.AnimatedExpandableListView;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
@@ -38,12 +39,13 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     private Context context;
     private SubCategoryAdapter adap;
     private GridView gv;
+    private ImageLoader mImageLoader;
 
-    public ExpandableListviewAdapter(Context context,List<Category> items) {
+    public ExpandableListviewAdapter(Context context, List<Category> items) {
         inflater = LayoutInflater.from(context);
-        this.context=context;
+        this.context = context;
         this.items = items;
-        this.subitems=subitems;
+        this.subitems = subitems;
     }
 
     @Override
@@ -67,17 +69,17 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     }
 
     @Override
-    public View getRealChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
+    public View getRealChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
         final ChildHolder holder;
 
         //SubCategory item = getChild(groupPosition, childPosition);
-        final SubCategory item = getChild(groupPosition,childPosition);
+        final SubCategory item = getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             holder = new ChildHolder();
             convertView = inflater.inflate(R.layout.search_child_subcategory, parent, false);
             //holder.title = (TextView) convertView.findViewById(R.id.textTitle);
-           // holder.hint = (TextView) convertView.findViewById(R.id.textHint);
+            // holder.hint = (TextView) convertView.findViewById(R.id.textHint);
             convertView.setTag(holder);
 
 
@@ -85,8 +87,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
             holder = (ChildHolder) convertView.getTag();
         }
 
-        String url2 = App.SitePath+"api/category.php?cat_id="+items.get(groupPosition).getObjectId();
-        Toast.makeText(context,url2,Toast.LENGTH_LONG).show();
+        String url2 = App.SitePath + "api/category.php?cat_id=" + items.get(groupPosition).getObjectId();
         JSONObject apiResponse = null;
         // Request a json response
         final View finalConvertView = convertView;
@@ -101,7 +102,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
 
 
                             JSONArray jArray = response.getJSONArray("content");
-                            subitems=new ArrayList<SubCategory>();
+                            subitems = new ArrayList<SubCategory>();
 
                             //Read JsonArray
                             for (int i = 0; i < jArray.length(); i++) {
@@ -114,21 +115,20 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
 
 
                                 subitems.add(s);
-                              // holder.title.setText("" + subitems.size());
+                                // holder.title.setText("" + subitems.size());
 
 
                             }
                             // holder.hint.setText(s.getId());
-                            adap = new SubCategoryAdapter(parent.getContext(),subitems);
+                            adap = new SubCategoryAdapter(parent.getContext(), subitems);
                             gv = (GridView) finalConvertView1.findViewById(R.id.subGV);
                             gv.setAdapter(adap);
-
 
 
                             // initialize the following variables (i've done it based on your layout
                             // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
                             //    assigned to the items in the grid.
-                            final int spacingDp = 10;
+                            final int spacingDp = 1;
                             final int colWidthDp = 50;
                             final int rowHeightDp = 20;
 
@@ -138,17 +138,15 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
                             final float SPACING = parent.getContext().getResources().getDisplayMetrics().density * spacingDp;
 
                             // calculate the column and row counts based on your display
-                            final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
-                            final int rowCount = (int)Math.ceil((subitems.size() + 0d) / colCount);
+                            //final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
+                            final int rowCount = (int) Math.ceil((subitems.size()));
 
                             // calculate the height for the current grid
                             final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
 
                             // set the height of the current grid
-                           // gv.getLayoutParams().height = GRID_HEIGHT;
-                           gv.getLayoutParams().height = 1000;
-
-
+                            // gv.getLayoutParams().height = GRID_HEIGHT;
+                            gv.getLayoutParams().height = GRID_HEIGHT;
 
 
                         } catch (JSONException e) {
@@ -167,8 +165,6 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-
 
 
         return convertView;
@@ -208,6 +204,12 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
             holder = (GroupHolder) convertView.getTag();
         }
 
+        //Setting Image
+        final String url = "http://youbaku.com/uploads/category_images/" + item.iconURL; // URL of the image
+        mImageLoader = VolleySingleton.getInstance().getImageLoader();
+        NetworkImageView image = (NetworkImageView) convertView.findViewById(R.id.catImg);
+        image.setImageUrl(url, mImageLoader);
+
         holder.title.setText(item.getName());
 
         return convertView;
@@ -222,7 +224,6 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     public boolean isChildSelectable(int arg0, int arg1) {
         return true;
     }
-
 
 
     private static class ChildHolder {
