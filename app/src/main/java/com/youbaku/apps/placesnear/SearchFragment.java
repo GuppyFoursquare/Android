@@ -15,7 +15,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.utils.Category;
-import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +47,6 @@ public class SearchFragment extends Fragment {
 
     private AnimatedExpandableListView listView;
     private ExpandableListviewAdapter adapter;
-
 
 
     /**
@@ -86,11 +84,9 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_search, container, false);
+        view = inflater.inflate(R.layout.fragment_search, container, false);
 
         getCategoryList();
-
-
 
 
         return view;
@@ -102,8 +98,6 @@ public class SearchFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-
 
 
     /**
@@ -122,13 +116,11 @@ public class SearchFragment extends Fragment {
     }
 
 
-
-
     //Pulling list from category web service
-    private void getCategoryList(){
+    private void getCategoryList() {
 
         //Calling Api
-        String url = App.SitePath+"api/category.php";
+        String url = App.SitePath + "api/category.php";
 
         JSONObject apiResponse = null;
         // Request a json response
@@ -140,7 +132,7 @@ public class SearchFragment extends Fragment {
 
                         try {
 
-                            ArrayList list=new ArrayList<Category>();
+                            ArrayList list = new ArrayList<Category>();
                             JSONArray jArray = response.getJSONArray("content");
 
 
@@ -148,24 +140,22 @@ public class SearchFragment extends Fragment {
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
 
-                                final Category c=new Category();
-                                c.title=obj.getString("cat_name")+"";
+                                final Category c = new Category();
+                                c.title = obj.getString("cat_name") + "";
                                 c.setObjectId(obj.getString("cat_id"));
-                                c.iconURL=obj.getString("cat_image");
+                                c.iconURL = obj.getString("cat_image");
                                 list.add(c);
 
                             }
 
 
-
-                            //Sub-Categories Here
-                            ArrayList sublist=new ArrayList<SubCategory>();
-
                             //Setting Adapter
-                            adapter = new ExpandableListviewAdapter(getActivity(),list);
-                            //adapter.setData(list);
-                            listView = (AnimatedExpandableListView)view.findViewById(R.id.listView);
+                            adapter = new ExpandableListviewAdapter(getActivity(), list);
+                            listView = (AnimatedExpandableListView) view.findViewById(R.id.listView);
                             listView.setAdapter(adapter);
+
+                            //set initial expand status to listview
+                            listView.expandGroup(0);
 
                             // In order to show animations, we need to use a custom click handler
                             // for our ExpandableListView.
@@ -176,11 +166,15 @@ public class SearchFragment extends Fragment {
                                     // We call collapseGroupWithAnimation(int) and
                                     // expandGroupWithAnimation(int) to animate group
                                     // expansion/collapse.
+
+
                                     if (listView.isGroupExpanded(groupPosition)) {
                                         listView.collapseGroupWithAnimation(groupPosition);
                                     } else {
                                         listView.expandGroupWithAnimation(groupPosition);
+
                                     }
+
                                     return true;
                                 }
 

@@ -29,6 +29,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     private ArrayList<Category> list;
 
     private ImageLoader mImageLoader;
+    NetworkImageView image;
 
     public CategoryAdapter(Context context, ArrayList<Category> list) {
         super(context, R.layout.category_list_item);
@@ -56,7 +57,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         final String url = "http://youbaku.com/uploads/category_images/"+c.iconURL; // URL of the image
 
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
-        NetworkImageView image = (NetworkImageView)convertView.findViewById(R.id.image_category_list_item);
+        image = (NetworkImageView)convertView.findViewById(R.id.image_category_list_item);
 
         image.setImageUrl(url,mImageLoader);
 

@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#eee"
+    android:layout_height="wrap_content">
     <GridView
         android:id="@+id/subGV"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:columnWidth="80dp"
         android:clickable="true"
         android:gravity="center"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp"
+        android:verticalSpacing="8dp"
         android:scrollbarStyle="outsideOverlay"
         android:verticalScrollbarPosition="right"
         android:isScrollContainer="false"
         android:scrollbars="vertical">
     </GridView>
 
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 
-</LinearLayout>
+</RelativeLayout>

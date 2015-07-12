@@ -5,9 +5,17 @@
     android:orientation="horizontal"
     android:padding="5dp"
     android:gravity="center_horizontal">
+  <CheckBox
+      android:id="@+id/checkedText"
+      android:layout_gravity="center_vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="2dp"
+      android:layout_marginBottom="2dp"
+      android:clickable="true"
+      android:textSize="14dp"/>
 
-
-    <Button
+    <!--<Button
         android:layout_width="fill_parent"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
@@ -20,5 +28,5 @@
         android:clickable="true"
         android:id="@+id/subCatTitle"
         android:text="asd"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"/>-->
 </LinearLayout>

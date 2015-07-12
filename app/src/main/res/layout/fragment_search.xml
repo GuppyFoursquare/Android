@@ -1,11 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.youbaku.apps.placesnear.SearchFragment">
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFEFF4"
+    tools:context="com.youbaku.apps.placesnear.SearchFragment">
+    <TextView
+        android:id="@+id/subcatId"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_margin="20dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_height="wrap_content"
+        android:text="@string/selectCategoryLabel"/>
+    <Button
+        android:id="@+id/searcBtn"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custombuttongenoa"
+        android:textColor="@android:color/white"
+        android:text="@string/searcBtnLabel"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/subcatId"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/divider"
+        android:id="@+id/divider"/>
 
     <com.youbaku.apps.placesnear.AnimatedExpandableListView
         android:id="@+id/listView"
+        android:layout_below="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
-</FrameLayout>
+</RelativeLayout>
