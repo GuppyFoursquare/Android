@@ -9,7 +9,6 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.graphics.Bitmap;
-
 import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.Deal;
 import com.youbaku.apps.placesnear.photo.Photo;
@@ -173,4 +172,5 @@ public class Place {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

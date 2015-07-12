@@ -39,6 +39,7 @@ import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+import com.youbaku.apps.placesnear.utils.Category;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -232,87 +233,88 @@ public class MainActivity extends ActionBarActivity implements
     }
 
 
-    private void login(){
+        private void login(){
 
-        //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
-        alertDialog.setView(alertView);
+            //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
+            alertDialog.setView(alertView);
 
-        /* When positive  is clicked */
-        alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+            /* When positive  is clicked */
+            alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
 
-                dialog.cancel(); // Your custom code
+                    dialog.cancel(); // Your custom code
 
-                String loginUrl = App.SitePath + "api/auth.php?op=login";
+                    String loginUrl = App.SitePath + "api/auth.php?op=login";
 
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("name", ((EditText)alertView.findViewById(R.id.username)).getText().toString());
-                map.put("pass", ((EditText)alertView.findViewById(R.id.password)).getText().toString());
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("name", ((EditText)alertView.findViewById(R.id.username)).getText().toString());
+                    map.put("pass", ((EditText)alertView.findViewById(R.id.password)).getText().toString());
 
-                JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                    (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+                    JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                        (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
+                        @Override
+                        public void onResponse(JSONObject response) {
 
-                        try {
+                            try {
 
-                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+                                if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
-                                JSONObject responseContent = response.getJSONObject("content");
-                                App.username = responseContent.getString("usr_username");
-                                App.userapikey = responseContent.getString("usr_apikey");
+                                    JSONObject responseContent = response.getJSONObject("content");
+                                    App.username = responseContent.getString("usr_username");
+                                    App.userapikey = responseContent.getString("usr_apikey");
 
-                                doLogin.setIcon(R.drawable.ic_profilelogo);
-                                Toast.makeText( MainActivity.this ,App.username + " - " + App.userapikey , Toast.LENGTH_LONG).show();
+                                    doLogin.setIcon(R.drawable.ic_profilelogo);
+                                    Toast.makeText( MainActivity.this ,App.username + " - " + App.userapikey , Toast.LENGTH_LONG).show();
 
-                            }else{
-                                Toast.makeText(MainActivity.this, response.getString("status") , Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (JSONException e) {
-
-                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
+                                }else{
+                                    Toast.makeText(MainActivity.this, response.getString("status") , Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                            bu.show();
-                            e.printStackTrace();
-                            return;
+
+                            } catch (JSONException e) {
+
+                                AlertDialog.Builder bu = new AlertDialog.Builder(tt);
+                                bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
+                                bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
+                                bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                                bu.show();
+                                e.printStackTrace();
+                                return;
+                            }
                         }
-                    }
-                }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
 
-                    }
-                });
+                        }
+                    });
 
-                // Add the request to the queue
-                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+                    // Add the request to the queue
+                    VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
-            }
-        });
+                }
+            });
 
-        /* When negative  button is clicked*/
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Your custom code
-            }
-        });
+            /* When negative  button is clicked*/
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss(); // Your custom code
+                }
+            });
 
-        alertDialog.show();
-    }
+            alertDialog.show();
+        }
+
 
     }
 

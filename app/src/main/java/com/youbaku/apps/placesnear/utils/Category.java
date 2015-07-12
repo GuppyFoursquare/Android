@@ -26,22 +26,25 @@ import java.util.List;
 import java.util.Locale;
 
 public class Category {
-    public static String SELECTED_CATEGORY_ID="";
-    public static String SELECTED_IMAGE_URL="";
-    public static String SELECTED_MARKER_URL="";
 
-    public String title="";
-    public String subtitle="";
+    public String title         = "";
+    public String subtitle      = "";
     public Bitmap icon;
-    public String iconURL="";
-    public String markerURL="";
-    public String color="";
-    public String objectId="";
-    public boolean favourite=false;
+    public String iconURL       = "";
+    public String markerURL     = "";
+    public String color         = "";
+    public String objectId      = "";
+    public boolean favourite    = false;
     private JSONObject name;
+    private List<SubCategory> subCatList = new ArrayList<>();
 
-    private static List<SubCategory> subCatList;
+
     public static List<Category> categoryList;
+
+    //--- USED TO GET SELECTED CATEGORY ---
+    public static String SELECTED_CATEGORY_ID   = "";
+    public static String SELECTED_IMAGE_URL     = "";
+    public static boolean IS_CATEGORIES_FETCHED   = false;
 
 
     @Override
@@ -52,7 +55,6 @@ public class Category {
     public void setName(JSONObject name) {
         this.name = name;
     }
-
     public String getName(){
         String name="";
         try{
@@ -73,51 +75,43 @@ public class Category {
         }
         return name;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getSubtitle() {
         return subtitle;
     }
-
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
     }
-
     public String getObjectId() {
         return objectId;
     }
-
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }
-
-    public static List<SubCategory> getSubCatList() {
-        return subCatList;
-    }
-
-    public static void setSubCatList(List<SubCategory> subCatList) {
-        Category.subCatList = subCatList;
-    }
-
     public static List<Category> getCategoryList() {
         return categoryList;
     }
-
     public static void setCategoryList(List<Category> categoryList) {
         Category.categoryList = categoryList;
     }
 
 
+    // *********************************************************************************************
+    // ---------- ---------- ---------- INITIAL PROCESS ---------- ---------- ----------
+    // *********************************************************************************************
 
     static {
-        //fetchCategoryList();
+
+        // Önce category'ler fetch edilir.
+        // Daha sonra subCategory'ler fetch edilir
+
+        // Initially gets category list
+        fetchCategoryList();
     }
 
     public static void fetchCategoryList(){
@@ -134,23 +128,35 @@ public class Category {
 
                         try {
 
-                            setCategoryList(new ArrayList<Category>());
-                            JSONArray jArray = response.getJSONArray("content");
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
-                            //Read JsonArray
-                            for (int i = 0; i < jArray.length(); i++) {
-                                JSONObject obj = jArray.getJSONObject(i);
+                                categoryList = new ArrayList<Category>();
+                                JSONArray responseCategoryList = response.getJSONArray("content");
 
-                                final Category c=new Category();
-                                c.title=obj.getString("cat_name")+"";
-                                c.setObjectId(obj.getString("cat_id"));
-                                c.iconURL=obj.getString("cat_image");
-                                getCategoryList().add(c);
+                                //Read JsonArray
+                                for (int i = 0; i < responseCategoryList.length(); i++) {
+                                    JSONObject obj = responseCategoryList.getJSONObject(i);
 
+                                    Category category = new Category();
+
+                                    category.title=obj.getString("cat_name");
+                                    category.objectId = obj.getString("cat_id");
+                                    category.iconURL=obj.getString("cat_image");
+
+                                    categoryList.add(category);
+
+                                    SubCategory.fetchSubcategoryList(category);
+                                }
+
+                                IS_CATEGORIES_FETCHED = true;
+
+                            }else{
+                                IS_CATEGORIES_FETCHED = false;
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            IS_CATEGORIES_FETCHED = false;
                         }
 
                     }
@@ -159,7 +165,7 @@ public class Category {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-
+                        IS_CATEGORIES_FETCHED = false;
                     }
                 });
 
@@ -169,4 +175,11 @@ public class Category {
     }
 
 
+    public List<SubCategory> getSubCatList() {
+        return subCatList;
+    }
+
+    public void setSubCatList(List<SubCategory> subCatList) {
+        this.subCatList = subCatList;
+    }
 }

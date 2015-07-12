@@ -1,26 +1,22 @@
-//
-//  PlaceListFragment
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
+/******************** PAGE DETAILS ********************/
+/* @Programmer  : Kemal Sami KARACA
+ * @Maintainer  : Guppy Org.
+ * @Created     : 10/07/2015
+ * @Modified    :
+ * @Description :
+********************************************************/
 
 package com.youbaku.apps.placesnear.place;
+
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
-
 import com.youbaku.apps.placesnear.App;
-import com.youbaku.apps.placesnear.R;
-
 import java.util.ArrayList;
 
 public class PlaceListFragment extends ListFragment {
@@ -81,5 +77,6 @@ public class PlaceListFragment extends ListFragment {
     public void setOnItemClickListener(AdapterView.OnItemClickListener listen){
         this.listen=listen;
     }
+
 
 }
