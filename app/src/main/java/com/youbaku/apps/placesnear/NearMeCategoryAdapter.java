@@ -184,7 +184,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
                             }
 
-                            NearMe.reloadPlaceMarkers(placeList);
+                            NearMe.reloadPlaceMarkers();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

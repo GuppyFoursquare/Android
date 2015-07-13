@@ -17,6 +17,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Place {
     public static  String ID="plc_id";
@@ -80,9 +82,13 @@ public class Place {
     public boolean liked=false;
 
 
+    public static Map<String,Place> placesListNearMe = new HashMap<>();
 
 
     public Place() {
+
+
+
     }
 
 
@@ -112,63 +118,48 @@ public class Place {
     public double getLongitude(){
         return longitude;
     }
-
     public double getLatitude(){
         return latitude;
     }
-
     public boolean isLocationSet(){
         return locationSet;
     }
-
     public static String getID() {
         return ID;
     }
-
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public String getImgUrl() {
         return imgUrl;
     }
-
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-
     public double getRating() {
         return rating;
     }
-
     public void setRating(double rating) {
         this.rating = rating;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }

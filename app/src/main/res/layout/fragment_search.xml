@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EFEFF4"
+    android:id="@+id/search_relative_layout"
     tools:context="com.youbaku.apps.placesnear.SearchFragment">
     <TextView
         android:id="@+id/subcatId"

@@ -44,7 +44,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     public ExpandableListviewAdapter(Context context, List<Category> items) {
         inflater = LayoutInflater.from(context);
         this.context = context;
-        this.items = items;
+        this.setItems(items);
         this.subitems = subitems;
     }
 
@@ -87,84 +87,38 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
             holder = (ChildHolder) convertView.getTag();
         }
 
-        String url2 = App.SitePath + "api/category.php?cat_id=" + items.get(groupPosition).getObjectId();
-        JSONObject apiResponse = null;
-        // Request a json response
-        final View finalConvertView = convertView;
         final View finalConvertView1 = convertView;
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
+        subitems =  Category.categoryList.get(groupPosition).subCatList;
+//         holder.hint.setText(s.getId());
 
-                        try {
-
-
-                            JSONArray jArray = response.getJSONArray("content");
-                            subitems = new ArrayList<SubCategory>();
-
-                            //Read JsonArray
-                            for (int i = 0; i < jArray.length(); i++) {
-                                JSONObject obj = jArray.getJSONObject(i);
-                                final SubCategory s = new SubCategory();
+        adap = new SubCategoryAdapter(parent.getContext(),subitems);
+        gv = (GridView) finalConvertView1.findViewById(R.id.subGV);
+        gv.setAdapter(adap);
 
 
-                                s.setTitle(obj.getString("cat_name"));
-                                s.setId(obj.getString("cat_id"));
+        // initialize the following variables (i've done it based on your layout
+        // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
+        //    assigned to the items in the grid.
+        final int spacingDp = 1;
+        final int colWidthDp = 50;
+        final int rowHeightDp = 20;
 
+        // convert the dp values to pixels
+        final float COL_WIDTH = parent.getContext().getResources().getDisplayMetrics().density * colWidthDp;
+        final float ROW_HEIGHT = parent.getContext().getResources().getDisplayMetrics().density * rowHeightDp;
+        final float SPACING = parent.getContext().getResources().getDisplayMetrics().density * spacingDp;
 
-                                subitems.add(s);
-                                // holder.title.setText("" + subitems.size());
+        // calculate the column and row counts based on your display
+        //final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
+        final int rowCount = (int) Math.ceil((subitems.size()));
 
+        // calculate the height for the current grid
+        final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
 
-                            }
-                            // holder.hint.setText(s.getId());
-                            adap = new SubCategoryAdapter(parent.getContext(), subitems);
-                            gv = (GridView) finalConvertView1.findViewById(R.id.subGV);
-                            gv.setAdapter(adap);
-
-
-                            // initialize the following variables (i've done it based on your layout
-                            // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
-                            //    assigned to the items in the grid.
-                            final int spacingDp = 1;
-                            final int colWidthDp = 50;
-                            final int rowHeightDp = 20;
-
-                            // convert the dp values to pixels
-                            final float COL_WIDTH = parent.getContext().getResources().getDisplayMetrics().density * colWidthDp;
-                            final float ROW_HEIGHT = parent.getContext().getResources().getDisplayMetrics().density * rowHeightDp;
-                            final float SPACING = parent.getContext().getResources().getDisplayMetrics().density * spacingDp;
-
-                            // calculate the column and row counts based on your display
-                            //final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
-                            final int rowCount = (int) Math.ceil((subitems.size()));
-
-                            // calculate the height for the current grid
-                            final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
-
-                            // set the height of the current grid
-                            // gv.getLayoutParams().height = GRID_HEIGHT;
-                            gv.getLayoutParams().height = GRID_HEIGHT;
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-
-        // Add the request to the queue
-        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+        // set the height of the current grid
+        // gv.getLayoutParams().height = GRID_HEIGHT;
+        gv.getLayoutParams().height = GRID_HEIGHT;
 
 
         return convertView;
@@ -178,12 +132,12 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
 
     @Override
     public Category getGroup(int groupPosition) {
-        return items.get(groupPosition);
+        return getItems().get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return items.size();
+        return getItems()!=null ? getItems().size() : 0;
     }
 
     @Override
@@ -223,6 +177,14 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     @Override
     public boolean isChildSelectable(int arg0, int arg1) {
         return true;
+    }
+
+    public List<Category> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Category> items) {
+        this.items = items;
     }
 
 

@@ -1,8 +1,10 @@
 package com.youbaku.apps.placesnear;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +45,11 @@ public class SearchFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private View view;
+    public AnimatedExpandableListView listView;
+    public Activity activity;
 
-    private AnimatedExpandableListView listView;
-    private ExpandableListviewAdapter adapter;
-
+    public static ExpandableListviewAdapter adapter;
+    public static View view;
 
     /**
      * Use this factory method to create a new instance of
@@ -57,6 +59,7 @@ public class SearchFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SearchFragment.
      */
+
     // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
@@ -64,6 +67,7 @@ public class SearchFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -86,8 +90,17 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        getCategoryList();
+        if(Category.categoryList==null || Category.categoryList.size()==0 ){
+            Category.fetchCategoryList(getActivity(),view);
+        }
 
+
+        try{
+            Category.refreshSearchFragment(getActivity(), view);
+
+        }catch (NullPointerException e){
+            Log.e("xxxxx", e.toString());
+        }
 
         return view;
     }
@@ -114,7 +127,6 @@ public class SearchFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 
     //Pulling list from category web service
     private void getCategoryList() {
@@ -197,8 +209,6 @@ public class SearchFragment extends Fragment {
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
     }
-
 
 }

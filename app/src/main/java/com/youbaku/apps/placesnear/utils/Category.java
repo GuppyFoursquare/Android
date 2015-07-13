@@ -1,20 +1,19 @@
-//
-//  Category
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
-
 package com.youbaku.apps.placesnear.utils;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.AnimatedExpandableListView;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.SearchFragment;
+import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import org.json.JSONArray;
@@ -36,15 +35,17 @@ public class Category {
     public String objectId      = "";
     public boolean favourite    = false;
     private JSONObject name;
-    private List<SubCategory> subCatList = new ArrayList<>();
+    public ArrayList<SubCategory> subCatList = new ArrayList<>();
 
 
-    public static List<Category> categoryList;
+    public static ArrayList<Category> categoryList;
 
     //--- USED TO GET SELECTED CATEGORY ---
     public static String SELECTED_CATEGORY_ID   = "";
     public static String SELECTED_IMAGE_URL     = "";
-    public static boolean IS_CATEGORIES_FETCHED   = false;
+    public static boolean IS_CATEGORIES_FETCHED         = false;
+    public static boolean IS_SUBCATEGORIES_FETCHED      = false;
+    public static int FETCHED_SUBCATEGORY_NUM           = 0;
 
 
     @Override
@@ -93,10 +94,10 @@ public class Category {
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }
-    public static List<Category> getCategoryList() {
+    public static ArrayList<Category> getCategoryList() {
         return categoryList;
     }
-    public static void setCategoryList(List<Category> categoryList) {
+    public static void setCategoryList(ArrayList<Category> categoryList) {
         Category.categoryList = categoryList;
     }
 
@@ -105,16 +106,7 @@ public class Category {
     // ---------- ---------- ---------- INITIAL PROCESS ---------- ---------- ----------
     // *********************************************************************************************
 
-    static {
-
-        // Önce category'ler fetch edilir.
-        // Daha sonra subCategory'ler fetch edilir
-
-        // Initially gets category list
-        fetchCategoryList();
-    }
-
-    public static void fetchCategoryList(){
+    public static void fetchCategoryList(final Activity activity , final View view){
         //Calling Api
         String url = App.SitePath+"api/category.php";
 
@@ -145,7 +137,9 @@ public class Category {
 
                                     categoryList.add(category);
 
-                                    SubCategory.fetchSubcategoryList(category);
+                                    SubCategory.fetchSubcategoryList(activity,view,category);
+
+                                    Log.e("---GUPPY STATIC---" , "Category set :: " + category.objectId);
                                 }
 
                                 IS_CATEGORIES_FETCHED = true;
@@ -175,11 +169,23 @@ public class Category {
     }
 
 
+    public static void refreshSearchFragment(Activity activity , View expandableView){
+
+        if(SearchFragment.adapter!=null){
+            SearchFragment.adapter.setItems(Category.categoryList);
+        }else{
+            SearchFragment.adapter = new ExpandableListviewAdapter(activity , Category.categoryList);
+        }
+
+        AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
+        listView.setAdapter(SearchFragment.adapter);
+    }
+
     public List<SubCategory> getSubCatList() {
         return subCatList;
     }
 
     public void setSubCatList(List<SubCategory> subCatList) {
-        this.subCatList = subCatList;
+        this.subCatList = (ArrayList<SubCategory>) subCatList;
     }
 }

@@ -1,10 +1,21 @@
 package com.youbaku.apps.placesnear.utils;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.AnimatedExpandableListView;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.MainActivity;
+import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.SearchFragment;
+import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import org.json.JSONArray;
@@ -50,7 +61,7 @@ public class SubCategory {
     // ---------- ---------- ---------- INITIAL PROCESS ---------- ---------- ----------
     // *********************************************************************************************
 
-    public static void fetchSubcategoryList(final Category categoryObj){
+    public static void fetchSubcategoryList(final Activity activity , final View view , final Category categoryObj){
         //Calling Api
         String url = App.SitePath+"api/category.php?cat_id="+categoryObj.getObjectId();
 
@@ -59,6 +70,7 @@ public class SubCategory {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>(){
 
+                    @SuppressLint("LongLogTag")
                     @Override
                     public void onResponse(JSONObject response) {
 
@@ -77,11 +89,23 @@ public class SubCategory {
                                     subcategory.id = obj.getString("cat_id");
 
                                     categoryObj.getSubCatList().add(subcategory);
+
+                                    Log.e("---GUPPY STATIC---", "SubCategory set :: " + subcategory.id);
                                 }
+
+
+                                Category.FETCHED_SUBCATEGORY_NUM++;
+                                if(Category.FETCHED_SUBCATEGORY_NUM==Category.categoryList.size()){
+                                    Category.IS_SUBCATEGORIES_FETCHED = true;
+                                    Category.refreshSearchFragment(activity,view);
+                                }
+
+
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.e("---GUPPY SubCategory---", "SubCategory JSON Exception...");
                         }
 
                     }
@@ -95,4 +119,6 @@ public class SubCategory {
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
+
+
 }

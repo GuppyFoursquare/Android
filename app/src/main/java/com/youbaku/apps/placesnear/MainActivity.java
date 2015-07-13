@@ -20,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
@@ -51,8 +53,8 @@ import java.util.Map;
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener {
 
-    private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
+    private static ViewPager viewPager;
+    public static TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     public static Activity tt;
     public static MenuItem doLogin;
@@ -67,14 +69,26 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Checking internet connection here
+        tt = this;
+
+
+    // ********** ********** ********** ********** **********
+    // Checking internet connection here
+    // ********** ********** ********** ********** **********
         internetConnection=App.checkInternetConnection(this);
         if(!internetConnection){
             setContentView(R.layout.need_network);
             return;
         }else {
+
+            // Progress Bar will be added
+//            Category.fetchCategoryList(this);
+
             setContentView(R.layout.activity_main);
         }
+
+
+
 
         if(MyLocation.checkLocationServices(getApplicationContext())){
             setContentView(R.layout.need_location_service);
@@ -91,7 +105,9 @@ public class MainActivity extends ActionBarActivity implements
             bar.setIndeterminateDrawable(spin);
         }
 
-        // Initilization ActionBar
+    // ********** ********** ********** ********** **********
+    // Initilization ActionBar
+    // ********** ********** ********** ********** **********
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(App.DefaultActionBarColor)));
         actionBar.setDisplayShowHomeEnabled(true);
@@ -109,28 +125,32 @@ public class MainActivity extends ActionBarActivity implements
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        //initialize viewpager
+    // ********** ********** ********** ********** **********
+    // Initialize viewpager
+    // ********** ********** ********** ********** **********
         viewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mAdapter);
 
         if(mAdapter.getCount()!=0){
-
             //make loader visible false
             ((ProgressBar)findViewById(R.id.progress_bar_activity_main)).setVisibility(View.INVISIBLE);
         }
 
 
-
+    // ********** ********** ********** ********** **********
+    // Settings tabs
+    // ********** ********** ********** ********** **********
         // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
         }
 
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
+
+    // ********** ********** ********** ********** **********
+    // Adding viewPager Listener
+    // ********** ********** ********** ********** **********
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -233,6 +253,7 @@ public class MainActivity extends ActionBarActivity implements
     }
 
 
+
         private void login(){
 
             //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
@@ -314,6 +335,42 @@ public class MainActivity extends ActionBarActivity implements
 
             alertDialog.show();
         }
+
+
+
+        static {
+            // Initially gets category list
+//            Category.fetchCategoryList();
+        }
+
+
+//        //
+//        public static void refreshSearchFragment(Activity activity){
+//            //Setting Adapter
+////            ExpandableListviewAdapter adapter = new ExpandableListviewAdapter(SearchFragment.activity, Category.categoryList);
+////            AnimatedExpandableListView listView = (AnimatedExpandableListView)SearchFragment.view.findViewById(R.id.listView);
+////            listView.setAdapter(adapter);
+//
+//
+//
+//            if(SearchFragment.adapter!=null){
+//                SearchFragment.adapter.setItems(Category.categoryList);
+//            }else{
+//                SearchFragment.adapter = new ExpandableListviewAdapter(activity , Category.categoryList);
+//            }
+//
+//
+//            Log.e("GUPPY" , " -- Current id is :: " + MainActivity.viewPager.getCurrentItem() );
+//
+//            MainActivity.mAdapter.getItem(1);
+//
+////            View expandableView  = MainActivity.viewPager.getChildAt(1);
+////            expandableView = SearchFragment.view;
+//            AnimatedExpandableListView listView = (AnimatedExpandableListView).findViewById(R.id.listView);
+//            listView.setAdapter(SearchFragment.adapter);
+//        }
+
+
 
 
     }
