@@ -23,8 +23,13 @@ public class SubCategory {
 
     private String title;
     private String id;
+<<<<<<< HEAD
     private String subcategoy_image;
     private String subcategoy_name;
+=======
+    private String img;
+    private boolean selected;
+>>>>>>> 4a26ca3103b07105bcaa634d63556525355a5653
 
     public static String SELECTED_SUB_CATEGORY_ID="";
     public static String SELECTED_SUB_CATEGORY_NAME="";
@@ -43,7 +48,13 @@ public class SubCategory {
         this.title = title;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
 
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     // *********************************************************************************************
     // ---------- ---------- ---------- INITIAL PROCESS ---------- ---------- ----------
@@ -75,6 +86,7 @@ public class SubCategory {
 
                                     SubCategory subcategory = new SubCategory();
                                     subcategory.id = obj.getString("cat_id");
+                                    subcategory.setTitle(obj.getString("cat_name"));
 
                                     subcategory.setSubcategoy_name(obj.getString("cat_name"));
                                     subcategory.setSubcategoy_image(obj.getString("cat_image"));

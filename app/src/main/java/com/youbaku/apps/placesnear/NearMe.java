@@ -356,7 +356,7 @@ public class NearMe extends Fragment implements LocationListener {
         NearMeCategoryAdapter nearMeCategoryAdapter = new NearMeCategoryAdapter(activity);
         GridView nearMeGridView = (GridView) view.findViewById(R.id.nearmegrid);
         nearMeGridView.setAdapter(nearMeCategoryAdapter);
-        
+
     }
 
 

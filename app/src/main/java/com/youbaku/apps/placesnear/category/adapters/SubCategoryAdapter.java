@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.youbaku.apps.placesnear.R;
@@ -31,42 +32,38 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
         return list.size();
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if(convertView==null){
+        ViewHolder viewHolder = null;
+        if (convertView == null) {
             LayoutInflater inflater=(LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.sub_category_list_item,null);
+            viewHolder = new ViewHolder();
+
+            viewHolder.checkbox = (CheckBox) convertView.findViewById(R.id.checkedText);
+            viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
+                    list.get(getPosition).setSelected(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
+                }
+            });
+            convertView.setTag(viewHolder);
+            convertView.setTag(R.id.checkedText, viewHolder.checkbox);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
+        viewHolder.checkbox.setTag(position); // This line is important.
 
-        final SubCategory c = list.get(position);
-        CheckBox chck=(CheckBox)convertView.findViewById(R.id.checkedText);
-        chck.setText(c.getTitle());
-        //Button t=((Button)convertView.findViewById(R.id.subCatTitle));
-        /*t.setText(c.getTitle());
-
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "List Position is " + position, Toast.LENGTH_LONG).show();
-
-                Intent in = new Intent(getContext(), PlaceActivity.class);
-
-                //Take some useful data from current activity
-                in.putExtra(Place.ID, list.get(position).getId());
-                in.putExtra("title", list.get(position).getTitle());
-
-                SubCategory.SELECTED_SUB_CATEGORY_ID=list.get(position).getId();
-                SubCategory.SELECTED_SUB_CATEGORY_NAME=list.get(position).getTitle();
-
-                in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(in);
-
-
-            }
-        });
-*/
-
+        viewHolder.checkbox.setText(list.get(position).getTitle());
+        viewHolder.checkbox.setChecked(list.get(position).isSelected());
 
         return convertView;
     }
+    static class ViewHolder {
+        protected CheckBox checkbox;
+    }
+
 }
