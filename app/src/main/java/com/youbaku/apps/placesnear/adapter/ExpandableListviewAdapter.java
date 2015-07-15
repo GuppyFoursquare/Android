@@ -7,23 +7,14 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.AnimatedExpandableListView;
-import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.category.adapters.SubCategoryAdapter;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +86,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
         adap = new SubCategoryAdapter(parent.getContext(),subitems);
         gv = (GridView) finalConvertView1.findViewById(R.id.subGV);
         gv.setAdapter(adap);
+
 
 
         // initialize the following variables (i've done it based on your layout
