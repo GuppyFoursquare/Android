@@ -3,26 +3,18 @@ package com.youbaku.apps.placesnear.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.youbaku.apps.placesnear.AnimatedExpandableListView;
 import com.youbaku.apps.placesnear.App;
-import com.youbaku.apps.placesnear.MainActivity;
-import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.SearchFragment;
-import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by orxan on 17.06.2015.
@@ -31,17 +23,13 @@ public class SubCategory {
 
     private String title;
     private String id;
-    private String img;
+    private String subcategoy_image;
+    private String subcategoy_name;
 
     public static String SELECTED_SUB_CATEGORY_ID="";
     public static String SELECTED_SUB_CATEGORY_NAME="";
 
-    public String getImg() {
-        return img;
-    }
-    public void setImg(String img) {
-        this.img = img;
-    }
+
     public String getId() {
         return id;
     }
@@ -88,6 +76,9 @@ public class SubCategory {
                                     SubCategory subcategory = new SubCategory();
                                     subcategory.id = obj.getString("cat_id");
 
+                                    subcategory.setSubcategoy_name(obj.getString("cat_name"));
+                                    subcategory.setSubcategoy_image(obj.getString("cat_image"));
+
                                     categoryObj.getSubCatList().add(subcategory);
 
                                     Log.e("---GUPPY STATIC---", "SubCategory set :: " + subcategory.id);
@@ -121,4 +112,19 @@ public class SubCategory {
     }
 
 
+    public String getSubcategoy_image() {
+        return subcategoy_image;
+    }
+
+    public void setSubcategoy_image(String subcategoy_image) {
+        this.subcategoy_image = subcategoy_image;
+    }
+
+    public String getSubcategoy_name() {
+        return subcategoy_name;
+    }
+
+    public void setSubcategoy_name(String subcategoy_name) {
+        this.subcategoy_name = subcategoy_name;
+    }
 }

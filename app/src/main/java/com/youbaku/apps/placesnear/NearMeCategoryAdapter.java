@@ -9,8 +9,6 @@
 package com.youbaku.apps.placesnear;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +26,7 @@ import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.category.SubCategoryListActivty;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.utils.Category;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,12 +41,17 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
     private ArrayList<Category> list;
     private ArrayList subCategoryList;
-    private ArrayList placeList;
+    private ArrayList<Place> placeList;
     private ImageLoader mImageLoader;
 
-    public NearMeCategoryAdapter(Context context, ArrayList<Category> list) {
+//    public NearMeCategoryAdapter(Context context, ArrayList<Category> list) {
+//        super(context, R.layout.category_list_item);
+//        this.list=list;
+//    }
+
+    public NearMeCategoryAdapter(Context context) {
         super(context, R.layout.category_list_item);
-        this.list=list;
+        this.list=Category.categoryList;
     }
 
     @Override
@@ -63,20 +67,32 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
                 catview=inflater.inflate(R.layout.category_list_item,null);
             }
 
-            final Category c = list.get(position);
+            // Get grid category object
+            final Category gridCategory = list.get(position);
 
-            //Image Location
-            final String url = "http://youbaku.com/uploads/category_images/"+c.iconURL; // URL of the image
+            // Image Location
+            String url = "http://youbaku.com/uploads/category_images/"+gridCategory.iconURL; // URL of the image
 
-            mImageLoader = VolleySingleton.getInstance().getImageLoader();
+            // Get image view
             NetworkImageView image = (NetworkImageView)catview.findViewById(R.id.image_category_list_item);
 
-            image.setImageUrl(url,mImageLoader);
+            image.setImageUrl(url , VolleySingleton.getInstance().getImageLoader());
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    getCategoryPlaces(list.get(position).objectId);
+
+                    if(gridCategory.getSubCatList()==null || gridCategory.getSubCatList().size()==0){
+                        getCategoryPlaces(gridCategory.objectId);
+                    }else{
+
+                        ArrayList<String> subCategoryList = new ArrayList<String>();
+                        for(SubCategory s : gridCategory.getSubCatList()){
+                            subCategoryList.add(s.getId());
+                        }
+
+                        getPlacesWithSearch(subCategoryList);
+                    }
 
                 }
             });
@@ -85,6 +101,15 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
     }
 
 
+    /**
+     *
+     * @param mainCategoryID
+     *
+     * @description
+     *      Burada ilgili category'nin tüm subcategory'leri seçilir
+     *      Arkasından ilgili subcategory'lere ait tüm mekanlar çekilir.
+     *
+     */
     private void getCategoryPlaces(String mainCategoryID){
 
         //Calling Api
@@ -109,7 +134,6 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
                                     for (int i = 0; i < jArray.length(); i++) {
                                         JSONObject obj = jArray.getJSONObject(i);
                                         subCategoryList.add(obj.getString("cat_id"));
-                                        //Log.e("---GUPPY---" , "Cat id " + obj.getString("cat_id"));
                                     }
                                 }catch (JSONException e){
                                     e.printStackTrace();
@@ -155,8 +179,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
                         try {
 
-                            placeList=new ArrayList<Place>();
-
+                            Place.placesListNearMe.clear();
                             if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
                                 try{
@@ -175,8 +198,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
                                         double longitude = Double.parseDouble(obj.getString("plc_longitude"));
                                         place.setLocation(latitude, longitude);
 
-                                        placeList.add(place);
-                                        //Log.e("---GUPPY--- " , obj.toString());
+                                        Place.placesListNearMe.put(place.getId() , place);
                                     }
                                 }catch (JSONException e){
                                     e.printStackTrace();

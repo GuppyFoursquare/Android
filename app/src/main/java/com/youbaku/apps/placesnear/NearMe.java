@@ -86,11 +86,8 @@ public class NearMe extends Fragment implements LocationListener {
     private MapView mapView;
     private LatLng userLocation = new LatLng(40.3859933,49.8232647);
 
-
     public static ArrayList<Place> nearMePlacelist;
-    private Map<String,Place> placeMap = new HashMap<>();
     private NearMeTouchableWrapper nearMeTouchView;
-
     private ArrayList<Category> catlist;
     private NearMeCategoryAdapter adap;
     private LinearLayout l;
@@ -138,8 +135,11 @@ public class NearMe extends Fragment implements LocationListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.nearme_maps, container, false);
 
-        MapsInitializer.initialize(getActivity());
+        // Set Linear Layout
+        l=(LinearLayout)view.findViewById(R.id.nearmecategory);
+        l.setVisibility(View.INVISIBLE);
 
+        MapsInitializer.initialize(getActivity());
         switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
         {
             case ConnectionResult.SUCCESS:
@@ -167,7 +167,6 @@ public class NearMe extends Fragment implements LocationListener {
                             }else{
                                 setNearMeCategoryList(getActivity());
                             }
-
                         }
                     });
                 }
@@ -181,9 +180,6 @@ public class NearMe extends Fragment implements LocationListener {
             default: Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
         }
 
-
-        l=(LinearLayout)view.findViewById(R.id.nearmecategory);
-        l.setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -218,6 +214,7 @@ public class NearMe extends Fragment implements LocationListener {
 
             Set<String> placeKey  = Place.placesListNearMe.keySet();
 
+            nearMeMap.clear();
             Iterator ite = placeKey.iterator();
             while(ite.hasNext()){
                 Place p = Place.placesListNearMe.get(ite.next());
@@ -242,14 +239,23 @@ public class NearMe extends Fragment implements LocationListener {
 
 
 
+
+
+
+
+
+
+
+    // ---------- ---------- GOOGLE MAP FUNCTIONS ---------- ----------
+    // ---------- ---------- GOOGLE MAP FUNCTIONS ---------- ----------
     GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
-            Place.FOR_DETAIL = placeMap.get(marker.getTitle());
-            Place.ID = placeMap.get(marker.getTitle()).getId();
-            Place.EMAIL = placeMap.get(marker.getTitle()).getEmail();
+            Place.FOR_DETAIL = Place.placesListNearMe.get(marker.getTitle());
+            Place.ID = Place.placesListNearMe.get(marker.getTitle()).getId();
+            Place.EMAIL = Place.placesListNearMe.get(marker.getTitle()).getEmail();
             Intent in = new Intent(getActivity().getApplicationContext(), PlaceDetailActivity.class);
-            in.putExtra("title", placeMap.get(marker.getTitle()).getName());
+            in.putExtra("title", Place.placesListNearMe.get(marker.getTitle()).getName());
             startActivity(in);
             return true;
         }
@@ -258,11 +264,6 @@ public class NearMe extends Fragment implements LocationListener {
     GoogleMap.OnMapClickListener mapClickListener=new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
-           /* if(nearMeMarker==null)
-                nearMeMarker=nearMeMap.addMarker(new MarkerOptions().position(latLng));
-            else
-                nearMeMarker.setPosition(latLng);*/
-
             categoryGridViewChangeVisibility();
         }
     };
@@ -278,9 +279,10 @@ public class NearMe extends Fragment implements LocationListener {
                 //nearMeMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.3859933,49.8232647), cameraPosition.zoom));
                 //NearMeTouchableWrapper.mMapIsTouched = true;
             }
-
         }
     };
+    // ---------- ---------- GOOGLE MAP FUNCTIONS ---------- ----------
+    // ---------- ---------- GOOGLE MAP FUNCTIONS ---------- ----------
 
 
 
@@ -325,7 +327,7 @@ public class NearMe extends Fragment implements LocationListener {
 
                             }
 
-                            adap = new NearMeCategoryAdapter(getActivity(), list);
+                            adap = new NearMeCategoryAdapter(getActivity());
                             GridView grLv = (GridView) view.findViewById(R.id.nearmegrid);
                             grLv.setAdapter(adap);
 
@@ -350,9 +352,11 @@ public class NearMe extends Fragment implements LocationListener {
     }
 
     private void setNearMeCategoryList(Activity activity){
-        adap = new NearMeCategoryAdapter(activity , Category.categoryList);
-        GridView grLv = (GridView) view.findViewById(R.id.nearmegrid);
-        grLv.setAdapter(adap);
+
+        NearMeCategoryAdapter nearMeCategoryAdapter = new NearMeCategoryAdapter(activity);
+        GridView nearMeGridView = (GridView) view.findViewById(R.id.nearmegrid);
+        nearMeGridView.setAdapter(nearMeCategoryAdapter);
+        
     }
 
 

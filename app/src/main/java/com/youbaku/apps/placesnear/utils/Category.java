@@ -26,6 +26,8 @@ import java.util.Locale;
 
 public class Category {
 
+    public String categoryName = "";
+
     public String title         = "";
     public String subtitle      = "";
     public Bitmap icon;
@@ -41,8 +43,8 @@ public class Category {
     public static ArrayList<Category> categoryList;
 
     //--- USED TO GET SELECTED CATEGORY ---
-    public static String SELECTED_CATEGORY_ID   = "";
-    public static String SELECTED_IMAGE_URL     = "";
+    public static String SELECTED_CATEGORY_ID           = "";
+    public static String SELECTED_IMAGE_URL             = "";
     public static boolean IS_CATEGORIES_FETCHED         = false;
     public static boolean IS_SUBCATEGORIES_FETCHED      = false;
     public static int FETCHED_SUBCATEGORY_NUM           = 0;
@@ -181,11 +183,11 @@ public class Category {
         listView.setAdapter(SearchFragment.adapter);
     }
 
-    public List<SubCategory> getSubCatList() {
+    public ArrayList<SubCategory> getSubCatList() {
         return subCatList;
     }
 
-    public void setSubCatList(List<SubCategory> subCatList) {
+    public void setSubCatList(ArrayList<SubCategory> subCatList) {
         this.subCatList = (ArrayList<SubCategory>) subCatList;
     }
 }
