@@ -23,13 +23,9 @@ public class SubCategory {
 
     private String title;
     private String id;
-<<<<<<< HEAD
     private String subcategoy_image;
     private String subcategoy_name;
-=======
-    private String img;
     private boolean selected;
->>>>>>> 4a26ca3103b07105bcaa634d63556525355a5653
 
     public static String SELECTED_SUB_CATEGORY_ID="";
     public static String SELECTED_SUB_CATEGORY_NAME="";
