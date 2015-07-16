@@ -10,16 +10,18 @@ import android.widget.CompoundButton;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by orxan on 17.06.2015.
  */
 public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
-    private ArrayList<SubCategory> list;
 
+    private ArrayList<SubCategory> list;
     private ImageLoader mImageLoader;
 
     public static ArrayList selectedCatId;

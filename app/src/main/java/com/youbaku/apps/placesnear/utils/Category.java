@@ -1,6 +1,7 @@
 package com.youbaku.apps.placesnear.utils;
 
 import android.app.Activity;
+import android.app.ExpandableListActivity;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Category {
 
@@ -40,7 +43,6 @@ public class Category {
     public boolean favourite    = false;
     private JSONObject name;
     public ArrayList<SubCategory> subCatList = new ArrayList<>();
-
 
     public static ArrayList<Category> categoryList;
 
@@ -173,7 +175,7 @@ public class Category {
     }
 
 
-    public static void refreshSearchFragment(Activity activity , final View expandableView){
+    public static void refreshSearchFragment(final Activity activity , final View expandableView){
 
         if(SearchFragment.adapter!=null){
             final AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
@@ -188,12 +190,10 @@ public class Category {
 
                 @Override
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
                     // We call collapseGroupWithAnimation(int) and
                     // expandGroupWithAnimation(int) to animate group
                     // expansion/collapse.
-                    SubCategory.SELECTED_SUB_CATEGORIES_ID= SubCategoryAdapter.getSelectedCatId();
-                    Toast.makeText(expandableView.getContext(),"Size of selected Subcat :"+SubCategory.SELECTED_SUB_CATEGORIES_ID.size(),Toast.LENGTH_LONG).show();
-
                     if (listView.isGroupExpanded(groupPosition)) {
                         listView.collapseGroupWithAnimation(groupPosition);
                     } else {
@@ -203,6 +203,13 @@ public class Category {
                     return true;
                 }
 
+            });
+
+            listView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+                @Override
+                public void onGroupCollapse(int groupPosition) {
+                    Toast.makeText(activity , "collapse" , Toast.LENGTH_SHORT).show();
+                }
             });
 
 

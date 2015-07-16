@@ -53,6 +53,7 @@ import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.AllDealsDownloaded;
 import com.youbaku.apps.placesnear.place.filter.FilterFragment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
@@ -165,10 +166,20 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
 
+        //GET SELECTED SUBCATEGORIES
+        ArrayList selectedSubCategory = new ArrayList();
+        for(Category c : Category.categoryList){
+            for(SubCategory s : c.getSubCatList()){
+                if(s.isSelected()){
+                    selectedSubCategory.add(s.getId());
+                }
+            }
+        }
+
         //Calling Api
         String url2 = "http://193.140.63.162/youbaku/api/places.php?op=search";
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-        map.put("subcat_list", SubCategory.SELECTED_SUB_CATEGORIES_ID);
+        map.put("subcat_list", selectedSubCategory);
 
         final Activity tt = this;
         // Request a json response

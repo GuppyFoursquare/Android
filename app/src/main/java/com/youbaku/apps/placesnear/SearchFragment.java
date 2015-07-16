@@ -125,15 +125,7 @@ public class SearchFragment extends Fragment {
                 public void onClick(View v) {
 
                     Intent in = new Intent(getActivity(), PlaceActivity.class);
-                    SubCategory.SELECTED_SUB_CATEGORIES_ID = SubCategoryAdapter.getSelectedCatId();
-
-                    if (SubCategory.SELECTED_SUB_CATEGORIES_ID.size() == 0) {
-                        Toast.makeText(getActivity(), "Please select at least one category", Toast.LENGTH_LONG).show();
-                    } else {
-                        startActivity(in);
-                    }
-
-
+                    startActivity(in);
                 }
             });
 
