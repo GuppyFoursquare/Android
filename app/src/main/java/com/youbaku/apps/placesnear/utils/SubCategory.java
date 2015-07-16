@@ -78,7 +78,6 @@ public class SubCategory {
                             if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
                                 categoryObj.getSubCatList().clear();
-                                categoryObj.getSubcatList().clear();
                                 JSONArray responseSubcategoryList = response.getJSONArray("content");
 
                                 //Read JsonArray
@@ -91,9 +90,7 @@ public class SubCategory {
 
                                     subcategory.setSubcategoy_name(obj.getString("cat_name"));
                                     subcategory.setSubcategoy_image(obj.getString("cat_image"));
-
                                     categoryObj.getSubCatList().add(subcategory);
-                                    categoryObj.getSubcatList().put(subcategory.getId() , subcategory);
 
                                     Log.e("---GUPPY STATIC---", "SubCategory set :: " + subcategory.id);
                                 }

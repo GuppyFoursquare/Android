@@ -205,14 +205,6 @@ public class Category {
 
             });
 
-            listView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-                @Override
-                public void onGroupCollapse(int groupPosition) {
-                    Toast.makeText(activity , "collapse" , Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
         }else{
             SearchFragment.adapter = new ExpandableListviewAdapter(activity , Category.categoryList);
         }

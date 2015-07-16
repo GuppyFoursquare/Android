@@ -45,13 +45,6 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
         //return items.get(groupPosition).items.get(childPosition);
         // return subitems.get(childPosition);
 
-        // GET PRODUCT LIST FROM SERVER
-        // HTTP CALL
-        /*SubCategory myProduct = new SubCategory();
-        myProduct.setTitle("Orxan");
-        myProduct.setId("13");
-        return myProduct;*/
-
         return null;//subitems.get(childPosition);
     }
 
