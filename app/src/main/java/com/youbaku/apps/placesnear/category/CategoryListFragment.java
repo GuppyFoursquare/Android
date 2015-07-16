@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.android.volley.Request;
@@ -119,13 +118,6 @@ public class CategoryListFragment extends Fragment {
                             final GridView grLv = (GridView) view.findViewById(R.id.gridView1);
                             grLv.setAdapter(adap);
 
-                            grLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                public void onItemClick(AdapterView<?> parent, View v,
-                                                        int position, long id) {
-
-
-                                }
-                            });
 
 
 

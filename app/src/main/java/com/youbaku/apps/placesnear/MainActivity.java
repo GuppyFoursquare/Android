@@ -20,7 +20,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,12 +35,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.youbaku.apps.placesnear.utils.Category;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
     // Tab titles
-    private String[] tabs = { "Home","Find Place", "Nearme", "Popular" , "Login"};
+    private String[] tabs = { "Home","Find Place", "Nearme", "Popular" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +80,6 @@ public class MainActivity extends ActionBarActivity implements
 
             // Progress Bar will be added
 //            Category.fetchCategoryList(this);
-
             setContentView(R.layout.activity_main);
         }
 

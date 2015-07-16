@@ -51,12 +51,14 @@ public class SearchFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public  AnimatedExpandableListView listView;
+    public AnimatedExpandableListView listView;
     private Button searchBtn;
     public Activity activity;
 
     public static ExpandableListviewAdapter adapter;
     public static View view;
+
+    public static boolean internetConnection = true;
 
     /**
      * Use this factory method to create a new instance of
@@ -94,8 +96,16 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_search, container, false);
+
+
+        internetConnection = App.checkInternetConnection(getActivity());
+        if (!internetConnection) {
+            view = inflater.inflate(R.layout.need_network, container, false);
+
+        } else {
+
+            view = inflater.inflate(R.layout.fragment_search, container, false);
+        }
 
         searchBtn = (Button) view.findViewById(R.id.searcBtn);
 
@@ -107,19 +117,19 @@ public class SearchFragment extends Fragment {
 
         try {
 
+
             Category.refreshSearchFragment(getActivity(), view);
+
             searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    SubCategory.SELECTED_SUB_CATEGORIES_ID=new ArrayList();
-                        Intent in = new Intent(getActivity(), PlaceActivity.class);
-                        SubCategory.SELECTED_SUB_CATEGORIES_ID=SubCategoryAdapter.getSelectedCatId();
+                    Intent in = new Intent(getActivity(), PlaceActivity.class);
+                    SubCategory.SELECTED_SUB_CATEGORIES_ID = SubCategoryAdapter.getSelectedCatId();
 
-                    if(SubCategory.SELECTED_SUB_CATEGORIES_ID.size()==0){
-                        Toast.makeText(getActivity(),"Please select at least one category",Toast.LENGTH_LONG).show();
-                    }
-                    else {
+                    if (SubCategory.SELECTED_SUB_CATEGORIES_ID.size() == 0) {
+                        Toast.makeText(getActivity(), "Please select at least one category", Toast.LENGTH_LONG).show();
+                    } else {
                         startActivity(in);
                     }
 
@@ -128,12 +138,9 @@ public class SearchFragment extends Fragment {
             });
 
 
-
         } catch (NullPointerException e) {
             Log.e("xxxxx", e.toString());
         }
-
-
 
 
         return view;

@@ -2,7 +2,6 @@ package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,9 +52,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -233,7 +229,7 @@ public class NearMe extends Fragment implements LocationListener {
                 nearMeMap.addMarker(new MarkerOptions()
                         .position(placeLocation)
                         .title(p.getId())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker)));
             }
 
 
@@ -257,7 +253,7 @@ public class NearMe extends Fragment implements LocationListener {
                         // -----------------------------------------------------
                         // Burada markerView gerekli datalar ile doldurulacaktır.
                         // -----------------------------------------------------
-                        ((TextView)markerView.findViewById(R.id.nearmeinfo_placeid)).setText(selectedPlace.getId());
+                        ((TextView)markerView.findViewById(R.id.nearmeinfo_placerate)).setText("Rating: "+selectedPlace.getRating());
                         ((TextView)markerView.findViewById(R.id.nearmeinfo_placename)).setText(selectedPlace.getName());
 
                     }

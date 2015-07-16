@@ -72,6 +72,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
             convertView = inflater.inflate(R.layout.search_child_subcategory, parent, false);
             //holder.title = (TextView) convertView.findViewById(R.id.textTitle);
             // holder.hint = (TextView) convertView.findViewById(R.id.textHint);
+
             convertView.setTag(holder);
 
 

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -16,6 +17,7 @@ import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.SearchFragment;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.category.adapters.SubCategoryAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -171,7 +173,7 @@ public class Category {
     }
 
 
-    public static void refreshSearchFragment(Activity activity , View expandableView){
+    public static void refreshSearchFragment(Activity activity , final View expandableView){
 
         if(SearchFragment.adapter!=null){
             final AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
@@ -189,13 +191,13 @@ public class Category {
                     // We call collapseGroupWithAnimation(int) and
                     // expandGroupWithAnimation(int) to animate group
                     // expansion/collapse.
-
+                    SubCategory.SELECTED_SUB_CATEGORIES_ID= SubCategoryAdapter.getSelectedCatId();
+                    Toast.makeText(expandableView.getContext(),"Size of selected Subcat :"+SubCategory.SELECTED_SUB_CATEGORIES_ID.size(),Toast.LENGTH_LONG).show();
 
                     if (listView.isGroupExpanded(groupPosition)) {
                         listView.collapseGroupWithAnimation(groupPosition);
                     } else {
                         listView.expandGroupWithAnimation(groupPosition);
-
                     }
 
                     return true;
