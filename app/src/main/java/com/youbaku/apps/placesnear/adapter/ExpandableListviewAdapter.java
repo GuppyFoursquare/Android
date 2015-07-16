@@ -32,6 +32,7 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
     private GridView gv;
     private ImageLoader mImageLoader;
 
+
     public ExpandableListviewAdapter(Context context, List<Category> items) {
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -83,9 +84,16 @@ public class ExpandableListviewAdapter extends AnimatedExpandableListView.Animat
         subitems =  Category.categoryList.get(groupPosition).subCatList;
 //         holder.hint.setText(s.getId());
 
-        adap = new SubCategoryAdapter(parent.getContext(),subitems);
+        adap = new SubCategoryAdapter(parent.getContext(), subitems);
         gv = (GridView) finalConvertView1.findViewById(R.id.subGV);
         gv.setAdapter(adap);
+
+
+
+
+
+
+
 
 
 

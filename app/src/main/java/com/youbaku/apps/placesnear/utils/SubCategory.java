@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by orxan on 17.06.2015.
  */
@@ -29,6 +31,8 @@ public class SubCategory {
 
     public static String SELECTED_SUB_CATEGORY_ID="";
     public static String SELECTED_SUB_CATEGORY_NAME="";
+
+    public static ArrayList SELECTED_SUB_CATEGORIES_ID;
 
 
     public String getId() {

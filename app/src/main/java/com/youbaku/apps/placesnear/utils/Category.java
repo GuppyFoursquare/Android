@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
+import android.widget.ExpandableListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class Category {
@@ -174,13 +174,46 @@ public class Category {
     public static void refreshSearchFragment(Activity activity , View expandableView){
 
         if(SearchFragment.adapter!=null){
+            final AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
             SearchFragment.adapter.setItems(Category.categoryList);
+            listView.setAdapter(SearchFragment.adapter);
+            listView.expandGroup(0);
+
+
+            // In order to show animations, we need to use a custom click handler
+            // for our ExpandableListView.
+            listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                    // We call collapseGroupWithAnimation(int) and
+                    // expandGroupWithAnimation(int) to animate group
+                    // expansion/collapse.
+
+
+                    if (listView.isGroupExpanded(groupPosition)) {
+                        listView.collapseGroupWithAnimation(groupPosition);
+                    } else {
+                        listView.expandGroupWithAnimation(groupPosition);
+
+                    }
+
+                    return true;
+                }
+
+            });
+
+
         }else{
             SearchFragment.adapter = new ExpandableListviewAdapter(activity , Category.categoryList);
         }
 
-        AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
-        listView.setAdapter(SearchFragment.adapter);
+        //AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
+        //listView.setAdapter(SearchFragment.adapter);
+
+
+
+
     }
 
     public ArrayList<SubCategory> getSubCatList() {

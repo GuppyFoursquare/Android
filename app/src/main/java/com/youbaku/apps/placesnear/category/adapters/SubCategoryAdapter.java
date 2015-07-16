@@ -22,6 +22,8 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
 
     private ImageLoader mImageLoader;
 
+    public static ArrayList selectedCatId;
+
     public SubCategoryAdapter(Context context, ArrayList<SubCategory> list) {
         super(context, R.layout.category_list_item);
         this.list=list;
@@ -36,6 +38,7 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
+        selectedCatId=new ArrayList();
         if (convertView == null) {
             LayoutInflater inflater=(LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.sub_category_list_item,null);
@@ -48,6 +51,14 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
                     list.get(getPosition).setSelected(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
+                    //selectedCatId.add(list.get(getPosition).getId());
+
+                    if(list.get(position).isSelected()){
+                        selectedCatId.add(list.get(position).getId());
+                    }
+                    else {
+                        selectedCatId=new ArrayList();
+                    }
                 }
             });
             convertView.setTag(viewHolder);
@@ -55,9 +66,13 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+
+
         viewHolder.checkbox.setTag(position); // This line is important.
 
         viewHolder.checkbox.setText(list.get(position).getTitle());
+
         viewHolder.checkbox.setChecked(list.get(position).isSelected());
 
         return convertView;
@@ -66,4 +81,11 @@ public class SubCategoryAdapter extends ArrayAdapter<SubCategory> {
         protected CheckBox checkbox;
     }
 
+    public static ArrayList getSelectedCatId() {
+        return selectedCatId;
+    }
+
+    public static void setSelectedCatId(ArrayList selectedCatId) {
+        SubCategoryAdapter.selectedCatId = selectedCatId;
+    }
 }

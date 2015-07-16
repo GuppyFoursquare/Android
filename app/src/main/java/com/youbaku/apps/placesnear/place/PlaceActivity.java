@@ -65,6 +65,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 //
 
 public class PlaceActivity extends ActionBarActivity implements AllCommentsDownloaded, AllDealsDownloaded, MyLocationSet {
@@ -162,13 +164,16 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         }*/
 
         //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
-        //For testing Places request
-        String url2 = App.SitePath + "api/places.php?op=nearme&lat=40.372877&lon=49.842825" + "&scat_id=" + SubCategory.SELECTED_SUB_CATEGORY_ID;
-        JSONObject apiResponse = null;
+
+        //Calling Api
+        String url2 = "http://193.140.63.162/youbaku/api/places.php?op=search";
+        Map<String, ArrayList> map = new HashMap<String, ArrayList>();
+        map.put("subcat_list", SubCategory.SELECTED_SUB_CATEGORIES_ID);
+
         final Activity tt = this;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, url2, new JSONObject(map), new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {

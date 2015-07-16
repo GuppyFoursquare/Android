@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,8 +21,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceInfo;
-import com.youbaku.apps.placesnear.utils.FavoriteCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,70 +73,70 @@ public class TestActivty extends ActionBarActivity {
             bar.setIndeterminateDrawable(spin);
         }
 
-        t=(TextView)findViewById(R.id.hello_txt);
 
-        map.put("keyword", "a");
-        map.put("subcat_list","[81]");
-        queue = VolleySingleton.getRequestQueue();
-        String url =App.SitePath+"api/places.php?op=search";// the URL
-        request = new JsonObjectRequest(
-                Request.Method.POST, // the request method
-                url,
-                new JSONObject(map), // the parameters for the php
-                new Response.Listener<JSONObject>() { // the response listener
+        ArrayList categoryList=new ArrayList();
+        categoryList.add("1");
+        categoryList.add("18");
+
+        //Calling Api
+        String url = "http://193.140.63.162/youbaku/api/places.php?op=search";
+        Map<String, ArrayList> map = new HashMap<String, ArrayList>();
+        map.put("subcat_list", categoryList);
+
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url, new JSONObject(map), new Response.Listener<JSONObject>() {
+
                     @Override
-                    public void onResponse(JSONObject response){
-                        // here you parse the json response
+                    public void onResponse(JSONObject response) {
 
                         try {
 
 
-                            JSONArray jArray = response.getJSONArray("content");
-                            FavoriteCategory f = new FavoriteCategory();
-                            t=(TextView)findViewById(R.id.hello_txt);
-                            list=new ArrayList<>();
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
+                                try{
+                                    JSONArray jArray = response.getJSONArray("content");
+                                    //Read JsonArray
+                                    for (int i = 0; i < jArray.length(); i++) {
 
-                            //Read JsonArray
-                            for (int i = 0; i < jArray.length(); i++) {
-                                JSONObject obj = jArray.getJSONObject(i);
-                                final PlaceInfo s = new PlaceInfo();
-                                str=obj.getString("plc_name");
+                                        JSONObject obj = jArray.getJSONObject(i);
 
-                                PlaceInfo.str=obj.getString("plc_name");
-                               // Log.i("Places are: ", s.getDescription());
-                                t.setText(str);
+                                        Place place = new Place();
+                                        place.setId(obj.getString("plc_id"));
+                                        place.setName(obj.getString("plc_name"));
+                                        place.setImgUrl(obj.getString("plc_header_image"));
 
-                                ((ProgressBar)findViewById(R.id.progressBar2)).setVisibility(View.INVISIBLE);
+                                        double latitude = Double.parseDouble(obj.getString("plc_latitude"));
+                                        double longitude = Double.parseDouble(obj.getString("plc_longitude"));
+                                        place.setLocation(latitude, longitude);
 
-
+                                        t=(TextView)findViewById(R.id.hello_txt);
+                                        t.setText(place.getName());
+                                    }
+                                }catch (JSONException e){
+                                    e.printStackTrace();
+                                }
 
                             }
-                            Toast.makeText(getApplication(), "List data are: " + str, Toast.LENGTH_LONG).show();
+
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            t.setText(e.toString());
                         }
-
                     }
-                },
-                new Response.ErrorListener() { // the error listener
+                }, new Response.ErrorListener() {
+
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
 
-                      /* here you can warn the user that there
-                      was an error while trying to get the json
-                      information from the php  */
                     }
                 });
 
-
-
-        // executing the quere to get the json information
-        queue.add(request);
-
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
 
 

@@ -20,7 +20,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.category.SubCategoryListActivty;
+import com.youbaku.apps.placesnear.place.PlaceActivity;
 import com.youbaku.apps.placesnear.utils.Category;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
                 Toast.makeText(getContext(), "başarılı" + position + "-" + list.get(position).objectId,
                         Toast.LENGTH_SHORT).show();
-                Intent in = new Intent(getContext(), SubCategoryListActivty.class);
+                Intent in = new Intent(getContext(), PlaceActivity.class);
 
 
 

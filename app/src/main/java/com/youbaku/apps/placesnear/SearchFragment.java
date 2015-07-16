@@ -1,6 +1,7 @@
 package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -16,7 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.category.adapters.SubCategoryAdapter;
+import com.youbaku.apps.placesnear.place.PlaceActivity;
 import com.youbaku.apps.placesnear.utils.Category;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +51,8 @@ public class SearchFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public AnimatedExpandableListView listView;
+    public  AnimatedExpandableListView listView;
+    private Button searchBtn;
     public Activity activity;
 
     public static ExpandableListviewAdapter adapter;
@@ -90,17 +97,44 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        if(Category.categoryList==null || Category.categoryList.size()==0 ){
-            Category.fetchCategoryList(getActivity(),view);
+        searchBtn = (Button) view.findViewById(R.id.searcBtn);
+
+        if (Category.categoryList == null || Category.categoryList.size() == 0) {
+            Category.fetchCategoryList(getActivity(), view);
+
         }
 
 
-        try{
-            Category.refreshSearchFragment(getActivity(), view);
+        try {
 
-        }catch (NullPointerException e){
+            Category.refreshSearchFragment(getActivity(), view);
+            searchBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    SubCategory.SELECTED_SUB_CATEGORIES_ID=new ArrayList();
+                        Intent in = new Intent(getActivity(), PlaceActivity.class);
+                        SubCategory.SELECTED_SUB_CATEGORIES_ID=SubCategoryAdapter.getSelectedCatId();
+
+                    if(SubCategory.SELECTED_SUB_CATEGORIES_ID.size()==0){
+                        Toast.makeText(getActivity(),"Please select at least one category",Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        startActivity(in);
+                    }
+
+
+                }
+            });
+
+
+
+        } catch (NullPointerException e) {
             Log.e("xxxxx", e.toString());
         }
+
+
+
 
         return view;
     }
@@ -165,6 +199,7 @@ public class SearchFragment extends Fragment {
                             adapter = new ExpandableListviewAdapter(getActivity(), list);
                             listView = (AnimatedExpandableListView) view.findViewById(R.id.listView);
                             listView.setAdapter(adapter);
+
 
                             //set initial expand status to listview
                             listView.expandGroup(0);
