@@ -177,7 +177,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         }
 
         //Calling Api
-        String url2 = "http://193.140.63.162/youbaku/api/places.php?op=search";
+        String url2 = App.SitePath+"api/places.php?op=search";
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
         map.put("subcat_list", selectedSubCategory);
 

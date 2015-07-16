@@ -17,7 +17,6 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         //Hide title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         //Hide Status bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //Lock Portrait Mode
