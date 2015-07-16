@@ -8,6 +8,7 @@
 
 package com.youbaku.apps.placesnear;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,14 +44,16 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
     private ArrayList subCategoryList;
     private ArrayList<Place> placeList;
     private ImageLoader mImageLoader;
+    private Activity activity;
 
 //    public NearMeCategoryAdapter(Context context, ArrayList<Category> list) {
 //        super(context, R.layout.category_list_item);
 //        this.list=list;
 //    }
 
-    public NearMeCategoryAdapter(Context context) {
-        super(context, R.layout.category_list_item);
+    public NearMeCategoryAdapter(Activity activity) {
+        super(activity.getApplicationContext() , R.layout.category_list_item);
+        this.activity = activity;
         this.list=Category.categoryList;
     }
 
@@ -198,7 +201,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
                                         double longitude = Double.parseDouble(obj.getString("plc_longitude"));
                                         place.setLocation(latitude, longitude);
 
-                                        Place.placesListNearMe.put(place.getId() , place);
+                                        Place.placesListNearMe.put(place.getId(), place);
                                     }
                                 }catch (JSONException e){
                                     e.printStackTrace();
@@ -206,7 +209,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
                             }
 
-                            NearMe.reloadPlaceMarkers();
+                            NearMe.reloadPlaceMarkers(activity);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -16,8 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -79,6 +82,7 @@ public class NearMe extends Fragment implements LocationListener {
     private static final float MIN_DISTANCE = 1000;
     private boolean havePlace=true;
 
+    private Activity activity;
     private View view;
     private static GoogleMap nearMeMap;
     private LocationManager locationManager;
@@ -135,6 +139,9 @@ public class NearMe extends Fragment implements LocationListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.nearme_maps, container, false);
 
+        // Get Activity
+        activity = getActivity();
+
         // Set Linear Layout
         l=(LinearLayout)view.findViewById(R.id.nearmecategory);
         l.setVisibility(View.INVISIBLE);
@@ -181,6 +188,7 @@ public class NearMe extends Fragment implements LocationListener {
         }
 
 
+
         return view;
     }
 
@@ -210,17 +218,73 @@ public class NearMe extends Fragment implements LocationListener {
     }
 
 
-    public static void reloadPlaceMarkers(){
+    public static void reloadPlaceMarkers(final Activity activity){
 
             Set<String> placeKey  = Place.placesListNearMe.keySet();
 
             nearMeMap.clear();
+
+            // TODO: add marker to map
             Iterator ite = placeKey.iterator();
             while(ite.hasNext()){
                 Place p = Place.placesListNearMe.get(ite.next());
                 LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
-                nearMeMap.addMarker(new MarkerOptions().position(placeLocation).title(p.getId()));
+
+                nearMeMap.addMarker(new MarkerOptions()
+                        .position(placeLocation)
+                        .title(p.getId())
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
             }
+
+
+            nearMeMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+
+                    // Getting view from the layout file info_window_layout
+                    View markerView =  activity.getLayoutInflater().inflate(R.layout.nearme_marker, null);
+
+                    // Find Place
+                    Place selectedPlace = null;
+                    for(Place p : nearMePlacelist){
+                        if(p.getId().equalsIgnoreCase(marker.getTitle())){
+                            selectedPlace = p;
+                        }
+                    }
+
+                    if(selectedPlace!=null){
+
+                        // -----------------------------------------------------
+                        // Burada markerView gerekli datalar ile doldurulacaktır.
+                        // -----------------------------------------------------
+                        ((TextView)markerView.findViewById(R.id.nearmeinfo_placeid)).setText(selectedPlace.getId());
+                        ((TextView)markerView.findViewById(R.id.nearmeinfo_placename)).setText(selectedPlace.getName());
+
+                    }
+
+
+
+                    return markerView;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    return null;
+                }
+
+            });
+
+            nearMeMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Place.FOR_DETAIL = Place.placesListNearMe.get(marker.getTitle());
+                    Place.ID = Place.placesListNearMe.get(marker.getTitle()).getId();
+                    Place.EMAIL = Place.placesListNearMe.get(marker.getTitle()).getEmail();
+                    Intent in = new Intent(activity.getApplicationContext(), PlaceDetailActivity.class);
+                    in.putExtra("title", Place.placesListNearMe.get(marker.getTitle()).getName());
+                    activity.startActivity(in);
+                }
+            });
     }
 
 
@@ -232,7 +296,7 @@ public class NearMe extends Fragment implements LocationListener {
             nearMeMap.animateCamera(ca);
             nearMeMap.setOnMapClickListener(mapClickListener);
 
-            reloadPlaceMarkers();
+            reloadPlaceMarkers(activity);
 
             l.setVisibility(View.INVISIBLE);
     }
@@ -251,12 +315,9 @@ public class NearMe extends Fragment implements LocationListener {
     GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
-            Place.FOR_DETAIL = Place.placesListNearMe.get(marker.getTitle());
-            Place.ID = Place.placesListNearMe.get(marker.getTitle()).getId();
-            Place.EMAIL = Place.placesListNearMe.get(marker.getTitle()).getEmail();
-            Intent in = new Intent(getActivity().getApplicationContext(), PlaceDetailActivity.class);
-            in.putExtra("title", Place.placesListNearMe.get(marker.getTitle()).getName());
-            startActivity(in);
+
+            marker.showInfoWindow();
+
             return true;
         }
     };
