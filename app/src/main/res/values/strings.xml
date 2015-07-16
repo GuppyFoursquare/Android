@@ -189,6 +189,7 @@
     <string name="reservationbuttonlabel">Booking a place</string>
     <string name="selectCategoryLabel">Select one or more categories</string>
     <string name="searcBtnLabel">Search</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

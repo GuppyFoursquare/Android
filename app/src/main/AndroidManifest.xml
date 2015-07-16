@@ -34,11 +34,6 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".place.PlaceActivity"
@@ -85,7 +80,6 @@
             android:parentActivityName=".place.PlaceDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name=".place.PlaceDetailActivity"
             android:label="@string/title_activity_place_detail"
@@ -99,6 +93,15 @@
             android:name=".TestActivty"
             android:label="@string/title_activity_test_activty" >
         </activity>
+        <activity
+            android:name=".SplashScreenActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
