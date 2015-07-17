@@ -97,7 +97,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
 
         //Image Location
-        String url = "http://youbaku.com/uploads/places_header_images//"+list.get(position).getImgUrl(); // URL of the image
+        String url = App.SitePath+"uploads/places_header_images/"+list.get(position).getImgUrl(); // URL of the image
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
 
         final NetworkImageView im = ((NetworkImageView) convertView.findViewById(R.id.image_place_list_item));

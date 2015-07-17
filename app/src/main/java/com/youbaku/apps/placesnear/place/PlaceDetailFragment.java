@@ -166,15 +166,9 @@ public class PlaceDetailFragment extends Fragment{
                                     break;
 
                                 photos[i].setOnClickListener(openPhotoActivity);
-                                String image_url="http://localhost/youbaku/uploads/places_images/medium/143017047610.jpg";
-                                /*Picasso.with(getActivity())
-                                        .load(image_url)
-                                        .placeholder(getResources().getDrawable(R.drawable.placeholder_photo_thumbnail))
-                                        .fit()
-                                        .into(photos[i]);*/
-                                //Image Location
 
-                                String url = "http://youbaku.com/uploads/places_images/large/"+p.photos.get(i).url; // URL of the image
+
+                                String url = App.SitePath+"uploads/places_images/large/"+p.photos.get(i).url; // URL of the image
                                 mImageLoader = VolleySingleton.getInstance().getImageLoader();
                                 photos[i].setImageUrl(url, mImageLoader);
                             }
