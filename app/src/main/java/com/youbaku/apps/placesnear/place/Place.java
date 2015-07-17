@@ -246,9 +246,8 @@ public class Place {
      * Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
      * datalar dönmemektedir.
      */
-    public static void getGenericPlaceList( int METHOD, String URL , Map parameters ,final Map<String,Place> resultPlaceList  ){
+    public static void fetchGenericPlaceList( int METHOD, String URL , Map parameters ,final Map<String,Place> resultPlaceList  ){
 
-        Log.e("---GUPPY PLACE---" , "START....");
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (METHOD, URL, new Response.Listener<JSONObject>() {
@@ -257,8 +256,6 @@ public class Place {
                     public void onResponse(JSONObject response) {
 
                         try {
-
-                            Log.e("---GUPPY PLACE---" , "START FETCH");
 
                             if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
@@ -289,10 +286,6 @@ public class Place {
 
                                         String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
                                         place.setIsActive(isActive.equalsIgnoreCase("1"));
-
-
-                                        Log.e("---GUPPY PLACE---" , "Place id is :: " + place.getId());
-
 
 
                                         //Put place to list
@@ -327,7 +320,7 @@ public class Place {
     }
 
     public static void fetchPopularPlaces(){
-        getGenericPlaceList(
+        fetchGenericPlaceList(
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
