@@ -14,6 +14,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comment {
+
+
+
+
     public static final String NAME="name";
     public static final String TEXT="comment";
     public static final String EMAIL="email";

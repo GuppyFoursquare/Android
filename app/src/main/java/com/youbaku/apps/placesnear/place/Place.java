@@ -1,17 +1,24 @@
-//
-//  Place
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
+
 
 package com.youbaku.apps.placesnear.place;
 
 import android.graphics.Bitmap;
+import android.text.Html;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.Deal;
 import com.youbaku.apps.placesnear.photo.Photo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -21,11 +28,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Place {
-    public static  String ID="plc_id";
-    public static  String EMAIL="plc_email";
+
+    // ----- ----- ----- ----- ----- ----- ----- ----- -----
+    // ----- ----- GENERIC FETCHING PLACES PARAMETERS ----- -----
+    // ----- ----- ----- ----- ----- ----- ----- ----- -----
+    public static final String PLC_ID="plc_id";
+    public static final String PLC_NAME="plc_name";
+    public static final String PLC_EMAIL="plc_email";
+    public static final String PLC_WEBSITE="plc_website";
+    public static final String PLC_HEADER_IMAGE="plc_header_image";
+    public static final String PLC_ADDRESS="plc_address";
+    public static final String PLC_CONTACT="plc_contact";
+    public static final String PLC_LATITUDE="plc_latitude";
+    public static final String PLC_LONGITUDE="plc_longitude";
+    public static final String PLC_INFO="plc_info";
+    public static final String PLC_IS_ACTIVE="plc_is_active";
 
 
 
+
+    public static String ID="plc_id";
+    public static String EMAIL="plc_email";
     public static final String NAME="plc_name";
     public static final String PHOTO="plc_header_image";
     public static final String WEBPAGE="plc_website";
@@ -49,23 +72,20 @@ public class Place {
     public static Place FOR_DETAIL;
 
     public String imgUrl;
-
-
-
     public String id="";
     public String name="";
-    public String phone="";
+    private String phone="";
     public String category="";
-    public String address="";
+    private String address="";
+    private String web="";
+    public String email="";
+    private String description="";
+    private boolean isActive=true;
 
-    public String description="";
-    public boolean isActive=true;
     public boolean isFavourite=false;
     public String color="";
     public int likes=0;
     public double rating=10.0;
-    public String web="";
-    public String email;
     public String facebook="";
     public String twitter="";
     public Bitmap photo;
@@ -81,15 +101,9 @@ public class Place {
     public String close="";
     public boolean liked=false;
 
-
     public static Map<String,Place> placesListNearMe = new HashMap<>();
+    public static Map<String,Place> placesListPopular = new HashMap<>();
 
-
-    public Place() {
-
-
-
-    }
 
 
 
@@ -162,6 +176,162 @@ public class Place {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWeb() {
+        return web;
+    }
+
+    public void setWeb(String web) {
+        this.web = web;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+
+
+
+
+
+
+
+    /**
+     *
+     * @param jsonObj
+     * @param key
+     * @return
+     */
+    private static String getJsonValueIfExist(JSONObject jsonObj, String key){
+
+            try {
+                if (jsonObj.has(key)) {
+                    return jsonObj.getString(key);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        return "";
+    }
+
+    /**
+     *
+     * @param METHOD            Request.Method.GET || Request.Method.POST
+     * @param URL
+     * @param parameters
+     * @param resultPlaceList
+     *
+     * Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
+     * datalar dönmemektedir.
+     */
+    public static void getGenericPlaceList( int METHOD, String URL , Map parameters ,final Map<String,Place> resultPlaceList  ){
+
+        Log.e("---GUPPY PLACE---" , "START....");
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (METHOD, URL, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            Log.e("---GUPPY PLACE---" , "START FETCH");
+
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+
+                                JSONArray responsePlaceList = response.getJSONArray("content");
+                                if (responsePlaceList.length() > 0) {
+
+
+                                    for (int i = 0; i < responsePlaceList.length(); i++) {
+
+                                        JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
+
+                                        //Inflate places
+                                        Place place = new Place();
+                                        place.setId(getJsonValueIfExist(jsonPlace,Place.PLC_ID));
+                                        place.setName(getJsonValueIfExist(jsonPlace,Place.PLC_NAME));
+                                        place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
+                                        place.setAddress(getJsonValueIfExist(jsonPlace,Place.PLC_ADDRESS));
+                                        place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
+                                        place.setWeb(getJsonValueIfExist(jsonPlace,Place.PLC_WEBSITE));
+                                        place.setPhone(getJsonValueIfExist(jsonPlace,Place.PLC_CONTACT));
+
+                                        double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
+                                        double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
+                                        place.setLocation(latitude, longitude);
+
+                                        String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
+                                        place.setDescription(htmlToString);
+
+                                        String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
+                                        place.setIsActive(isActive.equalsIgnoreCase("1"));
+
+
+                                        Log.e("---GUPPY PLACE---" , "Place id is :: " + place.getId());
+
+
+
+                                        //Put place to list
+                                        try{
+                                            resultPlaceList.put(place.getId() , place);
+                                        }catch (NullPointerException e){
+                                            Log.e("---GUPPY---" , "getGenericPlaceList > resultPlaceList parameter is null");
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+            VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+    }
+
+    public static void fetchPopularPlaces(){
+        getGenericPlaceList(
+                Request.Method.GET,
+                App.SitePath + "api/places.php?op=search&popular=1",
+                null,
+                placesListPopular);
     }
 
 }

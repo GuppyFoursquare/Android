@@ -94,9 +94,9 @@ public class AddPlace extends Fragment {
 
         p=new Place();
         if(App.moderatePlaces)
-            p.isActive=false;
+            p.setIsActive(false);
         else
-            p.isActive=true;
+            p.setIsActive(true);
     }
 
     @Override
@@ -177,13 +177,13 @@ public class AddPlace extends Fragment {
         place.put(Place.POSITION,pGeo);
         place.put(Place.NAME,p.name);
         place.put(Place.CATEGORY,p.category);
-        place.put(Place.DESCRIPTION,p.description);
-        place.put(Place.ADDRESS,p.address);
-        place.put(Place.WEBPAGE,p.web);
-        place.put(Place.PHONE,p.phone);
+        place.put(Place.DESCRIPTION, p.getDescription());
+        place.put(Place.ADDRESS, p.getAddress());
+        place.put(Place.WEBPAGE, p.getWeb());
+        place.put(Place.PHONE, p.getPhone());
         place.put(Place.TWITTER,p.twitter);
         place.put(Place.FACEBOOK,p.facebook);
-        place.put(Place.ISACTIVE,p.isActive);
+        place.put(Place.ISACTIVE, p.getIsActive());
         place.put(Place.LIKES,p.likes+"");
         place.put(Place.RATING,p.rating+"");
         place.saveInBackground(new SaveCallback() {
@@ -324,7 +324,7 @@ public class AddPlace extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            p.address=s.toString();
+            p.setAddress(s.toString());
         }
     };
 
@@ -341,7 +341,7 @@ public class AddPlace extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            p.description=s.toString();
+            p.setDescription(s.toString());
         }
     };
 
@@ -358,7 +358,7 @@ public class AddPlace extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            p.web=s.toString();
+            p.setWeb(s.toString());
         }
     };
 
@@ -375,7 +375,7 @@ public class AddPlace extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            p.phone=s.toString();
+            p.setPhone(s.toString());
         }
     };
 

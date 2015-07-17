@@ -133,22 +133,22 @@ public class FavoritesManager {
 
                     final Place p = new Place();
                     p.name = o.getString(Place.NAME);
-                    p.description = o.getString(Place.DESCRIPTION);
+                    p.setDescription(o.getString(Place.DESCRIPTION));
                     p.category = CategoryList.getCategory(o.getString(Place.CATEGORY)).title;
                     p.color = App.DefaultActionBarColor;
                     p.id = o.getObjectId();
                     p.likes = Integer.parseInt(o.getString(Place.LIKES));
-                    p.isActive = o.getBoolean(Place.ISACTIVE);
+                    p.setIsActive(o.getBoolean(Place.ISACTIVE));
                     p.rating = Double.parseDouble(o.getString(Place.RATING));
                     p.open = o.getString(Place.OPENHOUR);
                     p.close = o.getString(Place.CLOSEHOUR);
-                    p.web = o.getString(Place.WEBPAGE);
+                    p.setWeb(o.getString(Place.WEBPAGE));
                     p.facebook = o.getString(Place.FACEBOOK);
                     p.twitter = o.getString(Place.TWITTER);
-                    p.phone = o.getString(Place.PHONE);
+                    p.setPhone(o.getString(Place.PHONE));
                     p.liked=preferences.getBoolean(p.id,false);
                     p.isFavourite=true;
-                    p.address=o.getString(Place.ADDRESS);
+                    p.setAddress(o.getString(Place.ADDRESS));
 
                     ParseGeoPoint geo = o.getParseGeoPoint(Place.POSITION);
                     p.setLocation(geo.getLatitude(), geo.getLongitude());

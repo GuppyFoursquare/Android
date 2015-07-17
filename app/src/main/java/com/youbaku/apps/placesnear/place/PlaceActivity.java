@@ -248,24 +248,24 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     p.setId(o.getString("plc_id"));
                                     p.setName(o.getString("plc_name"));
                                     p.setImgUrl(o.getString("plc_header_image"));
-                                    p.address = o.getString("plc_address");
+                                    p.setAddress(o.getString("plc_address"));
                                     p.setRating(rating);
-                                    p.web = o.getString("plc_website");
+                                    p.setWeb(o.getString("plc_website"));
                                     p.email=o.getString("plc_email");
-                                    p.phone = o.getString("plc_contact");
+                                    p.setPhone(o.getString("plc_contact"));
                                     p.open = o.getString("plc_intime");
                                     p.close = o.getString("plc_outtime");
 
 
                                     String isActive = o.getString("plc_is_active");
                                     if (isActive == "1") {
-                                        p.isActive = true;
+                                        p.setIsActive(true);
                                     } else {
-                                        p.isActive = false;
+                                        p.setIsActive(false);
                                     }
 
                                     String PLACE_INFO_WITHOUT_HTML_TAG = String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
-                                    p.description = PLACE_INFO_WITHOUT_HTML_TAG;
+                                    p.setDescription(PLACE_INFO_WITHOUT_HTML_TAG);
 
 
                                     double latitude = Double.parseDouble(o.getString("plc_latitude"));

@@ -225,17 +225,17 @@ public class PlaceDetailFragment extends Fragment{
             topInfo.setText(p.name + " : " + getResources().getString(R.string.closedbuttonlabel));
         }
 
-        if(p.description.length()>0) {
+        if(p.getDescription().length()>0) {
             description.setVisibility(View.VISIBLE);
-            description.setText(p.description + "");
+            description.setText(p.getDescription() + "");
         }else {
             description.setVisibility(View.GONE);
         }
 
-        if(p.address!=null && p.address.length()>0){
+        if(p.getAddress() !=null && p.getAddress().length()>0){
             ((TextView)view.findViewById(R.id.address_title_text_place_detail)).setVisibility(View.VISIBLE);
             address.setVisibility(View.VISIBLE);
-            address.setText(p.address);
+            address.setText(p.getAddress());
         }else {
             ((TextView)view.findViewById(R.id.address_title_text_place_detail)).setVisibility(View.GONE);
             address.setVisibility(View.GONE);
@@ -303,9 +303,9 @@ public class PlaceDetailFragment extends Fragment{
 
         int faceColor=p.facebook.length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
         int mapColor=color;
-        int phoneColor=p.phone.length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
+        int phoneColor= p.getPhone().length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
         int twitColor=p.twitter.length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
-        int webColor=p.web.length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
+        int webColor= p.getWeb().length()<1 ? Color.parseColor(App.SVGPassiveColor):color;
 
         SVG face= SVGParser.getSVGFromResource(getActivity().getResources(),R.raw.icon_facebook,App.SVGOldColor,faceColor);
         SVG map= SVGParser.getSVGFromResource(getActivity().getResources(),R.raw.icon_map,App.SVGOldColor,mapColor);
@@ -331,13 +331,13 @@ public class PlaceDetailFragment extends Fragment{
         iconTwit.setImageDrawable(twit.createPictureDrawable());
         iconMap.setImageDrawable(map.createPictureDrawable());
 
-        if(p.web.length()>0)
+        if(p.getWeb().length()>0)
             iconWeb.setOnClickListener(toWeb);
         if(p.facebook.length()>0)
             iconFace.setOnClickListener(toFace);
         if(p.twitter.length()>0)
             iconTwit.setOnClickListener(toTwit);
-        if(p.phone.length()>0)
+        if(p.getPhone().length()>0)
             iconPhone.setOnClickListener(toPhone);
         iconMap.setOnClickListener(toMapView);
     }
@@ -390,10 +390,10 @@ public class PlaceDetailFragment extends Fragment{
         @Override
         public void onClick(View v) {
             Intent in=new Intent(getActivity(), WebActivity.class);
-            in.putExtra(WebActivity.URL, p.web);
+            in.putExtra(WebActivity.URL, p.getWeb());
             in.putExtra(WebActivity.TITLE, p.name);
             in.putExtra(WebActivity.COLOR,color);
-            in.putExtra(WebActivity.SUBTITLE,p.web);
+            in.putExtra(WebActivity.SUBTITLE, p.getWeb());
             startActivity(in);
         }
     };
@@ -426,7 +426,7 @@ public class PlaceDetailFragment extends Fragment{
         @Override
         public void onClick(View v) {
             Intent in=new Intent(Intent.ACTION_VIEW);
-            in.setData(Uri.parse("tel:"+p.phone));
+            in.setData(Uri.parse("tel:"+ p.getPhone()));
             startActivity(in);
         }
     };

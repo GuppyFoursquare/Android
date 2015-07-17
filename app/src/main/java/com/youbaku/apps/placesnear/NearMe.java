@@ -492,13 +492,13 @@ public class NearMe extends Fragment implements LocationListener {
                                     p.setName(o.getString("plc_name"));
                                     p.setImgUrl(o.getString("plc_header_image"));
                                     p.setRating(rating);
-                                    p.address = o.getString("plc_address");
-                                    p.web = o.getString("plc_website");
+                                    p.setAddress(o.getString("plc_address"));
+                                    p.setWeb(o.getString("plc_website"));
                                     p.email=o.getString("plc_email");
-                                    p.phone = o.getString("plc_contact");
+                                    p.setPhone(o.getString("plc_contact"));
                                     p.open = o.getString("plc_intime");
                                     p.close = o.getString("plc_outtime");
-                                    p.isActive = o.getString("plc_is_active").equalsIgnoreCase("1") ? true : false;
+                                    p.setIsActive(o.getString("plc_is_active").equalsIgnoreCase("1") ? true : false);
                                     p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString())));
                                     p.setLocation(Double.parseDouble(o.getString("plc_latitude")), Double.parseDouble(o.getString("plc_longitude")));
 
