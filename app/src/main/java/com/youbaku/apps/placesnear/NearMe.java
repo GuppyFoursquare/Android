@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
@@ -234,11 +237,13 @@ public class NearMe extends Fragment implements LocationListener {
 
 
             nearMeMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                boolean not_first_time_showing_info_window;
                 @Override
-                public View getInfoWindow(Marker marker) {
+                public View getInfoWindow(final Marker marker) {
 
                     // Getting view from the layout file info_window_layout
                     View markerView =  activity.getLayoutInflater().inflate(R.layout.nearme_marker, null);
+                    ImageView im = (ImageView) markerView.findViewById(R.id.nearmemarker_plc_img);
 
                     // Find Place
                     Place selectedPlace = null;
@@ -255,6 +260,33 @@ public class NearMe extends Fragment implements LocationListener {
                         // -----------------------------------------------------
                         ((TextView)markerView.findViewById(R.id.nearmeinfo_placerate)).setText("Rating: "+selectedPlace.getRating());
                         ((TextView)markerView.findViewById(R.id.nearmeinfo_placename)).setText(selectedPlace.getName());
+
+                        //Place resimlerini göstermek için Picasso kullanıldı. Sebebi volley - InfoAdapterde networkimageview kullanmak daha sorunlu picassoya gore.
+                        //Aşağdakı kodun amacı resimleri ilk başta load yaparken gecikmesinin karşısını almaktır.
+                        //---Related Link : http://stackoverflow.com/questions/18938187/add-an-image-from-url-into-custom-infowindow-google-maps-v2
+                        String imgUrl = App.SitePath + "uploads/places_header_images/" + selectedPlace.getImgUrl(); // URL of the image
+                        if (not_first_time_showing_info_window) {
+                            Picasso.with(activity).load(imgUrl).placeholder(R.drawable.place_detail_image_placeholder).into(im);
+
+                        } else {
+                            not_first_time_showing_info_window = true;
+                            Picasso.with(activity).load(imgUrl).placeholder(R.drawable.place_detail_image_placeholder).into(im, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    if (marker != null && marker.isInfoWindowShown()) {
+                                        marker.showInfoWindow();
+                                    }
+
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Log.e(getClass().getSimpleName(), " error loading thumbnail");
+                                }
+                            });
+                        }
+
+
 
                     }
 
