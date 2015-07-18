@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -258,7 +259,21 @@ public class NearMe extends Fragment implements LocationListener {
                         // -----------------------------------------------------
                         // Burada markerView gerekli datalar ile doldurulacaktır.
                         // -----------------------------------------------------
-                        ((TextView)markerView.findViewById(R.id.nearmeinfo_placerate)).setText("Rating: "+selectedPlace.getRating());
+                        //Ratinglerin puana gore renklendirilmesi
+                        TextView rateTxt=(TextView) markerView.findViewById(R.id.nearmeinfo_placerate);
+
+                        if(selectedPlace.rating > 3.5 && selectedPlace.rating <=5.0 ){
+                            rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));
+                        }
+                        else if(selectedPlace.rating >= 3.0 && selectedPlace.rating <=3.5 ){
+                            rateTxt.setBackgroundColor(Color.parseColor(App.YellowColor));
+                        }
+                        else{
+                            rateTxt.setBackgroundColor(Color.parseColor(App.ButtonColor));
+                        }
+
+                        rateTxt.setText(selectedPlace.getRating() + "/5.0");
+
                         ((TextView)markerView.findViewById(R.id.nearmeinfo_placename)).setText(selectedPlace.getName());
 
                         //Place resimlerini göstermek için Picasso kullanıldı. Sebebi volley - InfoAdapterde networkimageview kullanmak daha sorunlu picassoya gore.
