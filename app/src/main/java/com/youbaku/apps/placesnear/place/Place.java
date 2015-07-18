@@ -12,16 +12,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.photo.Photo;
 import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.Deal;
-import com.youbaku.apps.placesnear.photo.Photo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -315,7 +314,8 @@ public class Place {
                                                 comment.text = obj.getString("place_rating_comment");
                                                 comment.comment_id = obj.getString("place_rating_id");
                                                 comment.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                comment.name = obj.getString("places_rating_by");
+                                                comment.name = obj.getString("usr_username");
+                                                //comment.user_img=obj.getString("usr_profile_picture");
                                                 place.comments.add(comment);
                                             } catch (ParseException e) {
                                                 e.printStackTrace();

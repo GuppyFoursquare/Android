@@ -221,7 +221,8 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                                 c.text = obj.getString("place_rating_comment");
                                                 c.comment_id = obj.getString("place_rating_id");
                                                 c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                c.name = obj.getString("places_rating_by");
+                                                c.name = obj.getString("usr_username");
+                                                //c.user_img=obj.getString("usr_profile_picture");
                                                 p.comments.add(c);
 
                                             } catch (ParseException e) {

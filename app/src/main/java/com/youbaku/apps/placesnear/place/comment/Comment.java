@@ -50,6 +50,14 @@ public class Comment {
         this.text = text;
     }
 
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
+    }
+
     public String getComment_id() {
         return comment_id;
     }
@@ -62,6 +70,7 @@ public class Comment {
     public String text="";
     public String email="";
     public String place="";
+    public String user_img="";
     public double rating=0;
     public Date created;
     public boolean isActive=!App.moderateReviews;
