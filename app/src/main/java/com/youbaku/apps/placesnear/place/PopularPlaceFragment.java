@@ -103,18 +103,10 @@ public class PopularPlaceFragment extends Fragment {
 
         // Eğer popular list fetch edilmiş ise adapter'a ekle
         // Değilse fetch et ve ekle
-        if(Place.placesListPopular!=null && Place.placesListPopular.size()>0){
-
-            ArrayList<Place> popularPlaces = new ArrayList<>();
-            Set<String> keys = Place.placesListPopular.keySet();
-            Iterator iterator = keys.iterator();
-            while(iterator.hasNext()){
-                String key = (String)iterator.next();
-                popularPlaces.add(Place.placesListPopular.get(key));
-            }
+        if(Place.placesArrayListNearMe!=null && Place.placesArrayListNearMe.size()>0){
 
             listFragment = new PlaceListFragment();
-            listFragment.setList(popularPlaces);
+            listFragment.setList(Place.placesArrayListNearMe);
             listFragment.setColor(App.DefaultBackgroundColor);
             listFragment.setOnItemClickListener(listSelected);
             final FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -141,11 +133,11 @@ public class PopularPlaceFragment extends Fragment {
     AdapterView.OnItemClickListener listSelected = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Place.FOR_DETAIL = list.get(position);
-            Place.ID = list.get(position).getId();
-            Place.EMAIL = list.get(position).getEmail();
+            Place.FOR_DETAIL = Place.placesArrayListNearMe.get(position);
+            Place.ID = Place.placesArrayListNearMe.get(position).getId();
+            Place.EMAIL = Place.placesArrayListNearMe.get(position).getEmail();
             Intent in = new Intent(getActivity(), PlaceDetailActivity.class);
-            in.putExtra("title", list.get(position).getName());
+            in.putExtra("title", Place.placesArrayListNearMe.get(position).getName());
             startActivity(in);
         }
     };

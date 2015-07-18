@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,9 +102,10 @@ public class Place {
     public String close="";
     public boolean liked=false;
 
+    public static ArrayList<Place> placesArrayListNearMe = new ArrayList<>();
+
     public static Map<String,Place> placesListNearMe = new HashMap<>();
     public static Map<String,Place> placesListPopular = new HashMap<>();
-
 
 
 
@@ -331,12 +333,101 @@ public class Place {
             VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
 
+
+
+    /**
+     *
+     * @param METHOD            Request.Method.GET || Request.Method.POST
+     * @param URL
+     * @param parameters
+     * @param resultPlaceList
+     *
+     * Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
+     * datalar dönmemektedir.
+     */
+    public static <T> void fetchGenericPlaceList( int METHOD, String URL , Map parameters , final ArrayList<Place> resultPlaceList , final T adapter){
+
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (METHOD, URL, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+
+                                JSONArray responsePlaceList = response.getJSONArray("content");
+                                if (responsePlaceList.length() > 0) {
+
+                                    for (int i = 0; i < responsePlaceList.length(); i++) {
+
+                                        JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
+
+                                        //Inflate places
+                                        Place place = new Place();
+                                        place.setId(getJsonValueIfExist(jsonPlace,Place.PLC_ID));
+                                        place.setName(getJsonValueIfExist(jsonPlace,Place.PLC_NAME));
+                                        place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
+                                        place.setAddress(getJsonValueIfExist(jsonPlace,Place.PLC_ADDRESS));
+                                        place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
+                                        place.setWeb(getJsonValueIfExist(jsonPlace,Place.PLC_WEBSITE));
+                                        place.setPhone(getJsonValueIfExist(jsonPlace,Place.PLC_CONTACT));
+
+                                        double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
+                                        double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
+                                        place.setLocation(latitude, longitude);
+
+                                        String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
+                                        place.setDescription(htmlToString);
+
+                                        String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
+                                        place.setIsActive(isActive.equalsIgnoreCase("1"));
+
+
+                                        //Put place to list
+                                        try{
+                                            resultPlaceList.add(place);
+                                        }catch (NullPointerException e){
+                                            Log.e("---GUPPY---" , "getGenericPlaceList > resultPlaceList parameter is null");
+                                        }
+
+                                    }
+
+                                    if(adapter!=null){
+                                        ((PlaceAdapter)adapter).setList(resultPlaceList);
+                                        ((PlaceAdapter)adapter).notifyDataSetChanged();
+                                    }
+
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+    }
+
     public static void fetchPopularPlaces(){
         fetchGenericPlaceList(
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
-                placesListPopular,
+                placesArrayListNearMe,
                 null);
     }
 
@@ -345,7 +436,7 @@ public class Place {
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
-                placesListPopular,
+                placesArrayListNearMe,
                 adapter);
     }
 
