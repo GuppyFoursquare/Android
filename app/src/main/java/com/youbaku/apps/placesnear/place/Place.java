@@ -3,6 +3,8 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.location.Location;
 import android.text.Html;
 import android.util.Log;
 
@@ -85,6 +87,7 @@ public class Place {
     private double longitude=0;
     private double latitude=0;
     private boolean locationSet=false;
+    private float[] distance=new float[1];
 
     public boolean isFavourite=false;
     public String color="";
@@ -94,7 +97,6 @@ public class Place {
     public String twitter="";
     public Bitmap photo;
     public File file;
-    public float[] distance=new float[1];
     public ArrayList<Comment> comments=new ArrayList<Comment>();
     public ArrayList<Deal> deals=new ArrayList<Deal>();
     public ArrayList<Photo> photos=new ArrayList<Photo>();
@@ -322,6 +324,9 @@ public class Place {
                                             }
                                         }
 
+                                        // GET distance
+                                        Location.distanceBetween(40.372877, 49.842825, place.getLatitude(), place.getLongitude(), place.getDistance());
+
 
                                         //Put place to list
                                         try{
@@ -377,4 +382,11 @@ public class Place {
                 adapter);
     }
 
+    public float[] getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float[] distance) {
+        this.distance = distance;
+    }
 }

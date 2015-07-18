@@ -84,7 +84,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
            // ((App)getApplication()).track(App.ANALYSIS_MAP);
             ab.setTitle(in.getStringExtra(Place.NAME));
             ab.setBackgroundDrawable(new ColorDrawable(in.getIntExtra(PlaceActivity.COLOR,0x0093d4)));
-            String dist= App.getDistanceString(PlaceFilter.getInstance().metrics,Place.FOR_DETAIL.distance[0]);
+            String dist= App.getDistanceString(PlaceFilter.getInstance().metrics, Place.FOR_DETAIL.getDistance()[0]);
             ab.setSubtitle(dist+" "+getResources().getString(R.string.titledistancelabel));
         }
             setUpMapIfNeeded();

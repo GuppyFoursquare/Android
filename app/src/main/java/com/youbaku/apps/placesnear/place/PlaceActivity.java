@@ -275,7 +275,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
                                     //Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
-                                    Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);//For testing
+                                    Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.getDistance());//For testing
 
                                     boolean pop = true;
                                     if (filter.popular && p.rating < 3.0) {
@@ -288,8 +288,8 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
 
                                     boolean filterKeyword = filter.keyword.length() != 0 ? p.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
-                                    boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.distance[0] / 1000 : true;
-                                    boolean filterDistanceMl = filter.getDistance(PlaceFilter.DistanceSystem.ml) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.ml) > p.distance[0] / 1000 * 0.6214 : true;
+                                    boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.getDistance()[0] / 1000 : true;
+                                    boolean filterDistanceMl = filter.getDistance(PlaceFilter.DistanceSystem.ml) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.ml) > p.getDistance()[0] / 1000 * 0.6214 : true;
 
 
                                     if (pop && open && filterKeyword && filterDistance && filterDistanceMl) {
@@ -577,9 +577,9 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                         else
                             return 0;
                     } else {
-                        if (lhs.distance[0] < rhs.distance[0]) {
+                        if (lhs.getDistance()[0] < rhs.getDistance()[0]) {
                             return -1;
-                        } else if (lhs.distance[0] > rhs.distance[0]) {
+                        } else if (lhs.getDistance()[0] > rhs.getDistance()[0]) {
                             return 1;
                         } else {
                             return 0;

@@ -98,30 +98,22 @@ public class PopularPlaceFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_popular_place, container, false);
 
 
+
+        listFragment = new PlaceListFragment();
         // IF popular places are fetched before then set it to adapter directly
         // OTHERWISE fetch first and set to adapter
         if(Place.placesArrayListNearMe!=null && Place.placesArrayListNearMe.size()>0){
-
-            listFragment = new PlaceListFragment();
             listFragment.setList(Place.placesArrayListNearMe);
-            listFragment.setColor(App.DefaultBackgroundColor);
-            listFragment.setOnItemClickListener(listSelected);
-            final FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.main_activity_popular_place, listFragment);
-            ft.commit();
-
         }else{
-
-            listFragment = new PlaceListFragment();
-            listFragment.setAdapter(new PlaceAdapter(getActivity(),null, Color.parseColor("#00000000")));
-            listFragment.setColor(App.DefaultBackgroundColor);
-            listFragment.setOnItemClickListener(listSelected);
-            final FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.main_activity_popular_place, listFragment);
-            ft.commit();
-
+            listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListNearMe, Color.parseColor("#00000000")));
             Place.fetchPopularPlaces(listFragment.getAdapter());
         }
+
+        listFragment.setColor(App.DefaultBackgroundColor);
+        listFragment.setOnItemClickListener(listSelected);
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.main_activity_popular_place, listFragment);
+        ft.commit();
 
         return view;
 

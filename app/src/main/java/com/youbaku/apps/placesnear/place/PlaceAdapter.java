@@ -91,7 +91,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
         ((TextView)convertView.findViewById(R.id.name_place_list_item)).setText(getList().get(position).getName());
         ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(getList().get(position).getAddress());
         //((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
-        ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics, getList().get(position).distance[0]));
+        ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics, getList().get(position).getDistance()[0]));
        ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(getList().get(position).comments.size()+"");
         //((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).getId()+"");
 
