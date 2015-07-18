@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -36,6 +38,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,203 +101,40 @@ public class PopularPlaceFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_popular_place, container, false);
 
 
+        // Eğer popular list fetch edilmiş ise adapter'a ekle
+        // Değilse fetch et ve ekle
+        if(Place.placesListPopular!=null && Place.placesListPopular.size()>0){
 
-        //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
-        //For testing Places request
-        String url2 = App.SitePath + "api/places.php?op=search&popular=1";
-        JSONObject apiResponse = null;
-        final Activity tt = getActivity();
-        // Request a json response
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
+            ArrayList<Place> popularPlaces = new ArrayList<>();
+            Set<String> keys = Place.placesListPopular.keySet();
+            Iterator iterator = keys.iterator();
+            while(iterator.hasNext()){
+                String key = (String)iterator.next();
+                popularPlaces.add(Place.placesListPopular.get(key));
+            }
 
-                    @Override
-                    public void onResponse(JSONObject response) {
+            listFragment = new PlaceListFragment();
+            listFragment.setList(popularPlaces);
+            listFragment.setColor(App.DefaultBackgroundColor);
+            listFragment.setOnItemClickListener(listSelected);
+            final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.main_activity_popular_place, listFragment);
+            ft.commit();
 
-                        try {
+        }else{
 
-                            JSONArray jArray = response.getJSONArray("content");
-                            list = new ArrayList<Place>();
-                            System.out.println("places downloaded " + jArray.length());
+            listFragment = new PlaceListFragment();
+            listFragment.setAdapter(new PlaceAdapter(getActivity(),null, Color.parseColor("#00000000")));
+            listFragment.setColor(App.DefaultBackgroundColor);
+            listFragment.setOnItemClickListener(listSelected);
+            final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.main_activity_popular_place, listFragment);
+            ft.commit();
 
-                            if (jArray.length() > 0) {
-
-
-                                //Read JsonArray
-                                for (int i = 0; i < jArray.length(); i++) {
-                                    JSONObject o = jArray.getJSONObject(i);
-
-
-                                    double rating = 0.0;
-                                    if (o.has("plc_avg_rating")) {
-
-                                        final PlaceFilter filter = PlaceFilter.getInstance();
-                                        final Place p = new Place();
-
-                                        if (o.has("rating")) {
-
-                                            JSONArray arr = o.getJSONArray("rating");
-
-
-                                            for (int j = 0; j < arr.length(); j++) {
-                                                final Comment c = new Comment();
-                                                JSONObject obj = arr.getJSONObject(j);
-                                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                                                try {
-                                                    Date d = format.parse(obj.getString("places_rating_created_date"));
-                                                    c.created = d;
-                                                    c.text = obj.getString("place_rating_comment");
-                                                    c.comment_id = obj.getString("place_rating_id");
-                                                    c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                    c.name = obj.getString("places_rating_by");
-                                                    p.comments.add(c);
-
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
-
-
-                                                //Toast.makeText(getApplicationContext(),"Yes! There is rating array which is "+c.text,Toast.LENGTH_LONG).show();
-
-                                            }
-
-                                        }
-
-                                        rating = Double.parseDouble(o.getString("plc_avg_rating"));
-                                        //Inflate places
-                                        p.setId(o.getString("plc_id"));
-                                        p.setName(o.getString("plc_name"));
-                                        p.setImgUrl(o.getString("plc_header_image"));
-                                        p.setAddress(o.getString("plc_address"));
-                                        p.setRating(rating);
-                                        p.setWeb(o.getString("plc_website"));
-                                        p.email = o.getString("plc_email");
-                                        p.setPhone(o.getString("plc_contact"));
-                                        //p.open = o.getString("plc_intime");
-                                        //p.close = o.getString("plc_outtime");
-
-
-                                        String isActive = o.getString("plc_is_active");
-                                        if (isActive == "1") {
-                                            p.setIsActive(true);
-                                        } else {
-                                            p.setIsActive(false);
-                                        }
-
-                                        String PLACE_INFO_WITHOUT_HTML_TAG = String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
-                                        p.setDescription(PLACE_INFO_WITHOUT_HTML_TAG);
-
-
-                                        double latitude = Double.parseDouble(o.getString("plc_latitude"));
-                                        double longitude = Double.parseDouble(o.getString("plc_longitude"));
-                                        p.setLocation(latitude, longitude);
-
-                                        p.setLocation(latitude, longitude);
-                                        MyLocation my = MyLocation.getMyLocation(getActivity());
-                                        //Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
-                                        Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.distance);//For testing
-
-                                        boolean pop = true;
-                                        if (filter.popular && p.rating < 3.0) {
-                                            pop = false;
-                                        }
-                                        boolean open = true;
-                                        if (filter.open) {
-                                            open = p.isOpen();
-                                        }
-
-
-                                        boolean filterKeyword = filter.keyword.length() != 0 ? p.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
-                                        boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.distance[0] / 1000 : true;
-                                        boolean filterDistanceMl = filter.getDistance(PlaceFilter.DistanceSystem.ml) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.ml) > p.distance[0] / 1000 * 0.6214 : true;
-
-
-                                        if (pop && open && filterKeyword && filterDistance && filterDistanceMl) {
-                                            list.add(p);
-                                        }
-                                    } else {
-                                        rating = 0.0;
-                                    }
-
-
-
-
-                                }
-
-                                listFragment = new PlaceListFragment();
-                                listFragment.setList(list);
-                                listFragment.setColor(App.DefaultBackgroundColor);
-                                listFragment.setOnItemClickListener(listSelected);
-                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.replace(R.id.main_activity_popular_place, listFragment);
-                                ft.commit();
-                                //getChildFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
-
-                                // --GUPPY COMMENT IMPORTANT--
-                                /*
-                                 * try-catch kaldırılması durumunda server geciktirilme durumunda(sleep)
-                                 * Volley sonucunun fragment'i değiştirme isteğinden ve ilgili fragment'in
-                                 * olmamasından hata ile karşılaşılıyor.
-                                 */
-
-                                try {
-
-                                } catch (IllegalStateException e) {
-                                    Log.e("--- GUPPY ---", "Error occur on replace fragment");
-                                }
-
-                            } else {
-
-                                AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                                bu.setMessage(getResources().getString(R.string.novenuemessage));
-                                bu.setNegativeButton(getResources().getString(R.string.alertcancelbuttonlabel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                });
-                                bu.setPositiveButton(getResources().getString(R.string.newfilterbuttonlabel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                });
-                                bu.show();
-                            }
-
-
-                        } catch (JSONException e) {
-
-                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-                            bu.show();
-                            e.printStackTrace();
-                            return;
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-
-        // Add the request to the queue
-        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
+            Place.fetchPopularPlaces(listFragment.getAdapter());
+        }
 
         return view;
-
 
     }
 
@@ -330,6 +171,5 @@ public class PopularPlaceFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 
 }

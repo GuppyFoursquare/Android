@@ -43,13 +43,13 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
     public PlaceAdapter(Context context, ArrayList<Place> list, int ratingColor) {
         super(context, R.layout.place_list_item);
-        this.list=list;
+        this.setList(list);
         color=ratingColor;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return getList()!=null ? getList().size() : 0;
     }
 
     @Override
@@ -88,16 +88,16 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
         }
 
 
-        ((TextView)convertView.findViewById(R.id.name_place_list_item)).setText(list.get(position).getName());
-        ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(list.get(position).getAddress());
+        ((TextView)convertView.findViewById(R.id.name_place_list_item)).setText(getList().get(position).getName());
+        ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(getList().get(position).getAddress());
         //((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
-        ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics,list.get(position).distance[0]));
-       ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).comments.size()+"");
+        ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics, getList().get(position).distance[0]));
+       ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(getList().get(position).comments.size()+"");
         //((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).getId()+"");
 
 
         //Image Location
-        String url = App.SitePath+"uploads/places_header_images/"+list.get(position).getImgUrl(); // URL of the image
+        String url = App.SitePath+"uploads/places_header_images/"+ getList().get(position).getImgUrl(); // URL of the image
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
 
         final NetworkImageView im = ((NetworkImageView) convertView.findViewById(R.id.image_place_list_item));
@@ -129,26 +129,34 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
 
         //im.setImageDrawable(getContext().getResources().getDrawable(R.drawable.placeholder_placelist));
-        if(list.get(position).photos!=null && list.get(position).photos.size()>0) {
+        if(getList().get(position).photos!=null && getList().get(position).photos.size()>0) {
             Picasso.with(getContext())
-                    .load(list.get(position).photos.get(0).url)
+                    .load(getList().get(position).photos.get(0).url)
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);
         }
    TextView rateTxt=(TextView)convertView.findViewById(R.id.rating_place_list_item);
 
-        if(list.get(position).rating > 3.5 && list.get(position).rating <=5.0 ){
+        if(getList().get(position).rating > 3.5 && getList().get(position).rating <=5.0 ){
             rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));
         }
-        else if(list.get(position).rating >= 3.0 && list.get(position).rating <=3.5 ){
+        else if(getList().get(position).rating >= 3.0 && getList().get(position).rating <=3.5 ){
             rateTxt.setBackgroundColor(Color.parseColor(App.YellowColor));
         }
         else{
             rateTxt.setBackgroundColor(Color.parseColor(App.ButtonColor));
         }
 
-        rateTxt.setText(list.get(position).rating + "/5.0");
+        rateTxt.setText(getList().get(position).rating + "/5.0");
 
         return convertView;
+    }
+
+    public ArrayList<Place> getList() {
+        return list;
+    }
+
+    public void setList(ArrayList<Place> list) {
+        this.list = list;
     }
 }

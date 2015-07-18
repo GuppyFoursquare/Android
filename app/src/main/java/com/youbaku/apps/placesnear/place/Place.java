@@ -246,7 +246,7 @@ public class Place {
      * Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
      * datalar dönmemektedir.
      */
-    public static void fetchGenericPlaceList( int METHOD, String URL , Map parameters ,final Map<String,Place> resultPlaceList  ){
+    public static <T> void fetchGenericPlaceList( int METHOD, String URL , Map parameters ,final Map<String,Place> resultPlaceList , final T adapter){
 
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -261,7 +261,13 @@ public class Place {
 
                                 JSONArray responsePlaceList = response.getJSONArray("content");
                                 if (responsePlaceList.length() > 0) {
-
+                                    /**
+                                     * placeList arrayList değişkeni adapter'lerin map yerine arraylist
+                                     * kullanmalarından kaynaklanıyordur. Eğer kodlamaya başlanırken
+                                     * arraylist yerine map kullanılsaydı böyle bir değişkene ihtiyaç
+                                     * duyulmazdı... <ksk>
+                                     */
+                                    ArrayList<Place> placeList = new ArrayList<>();
 
                                     for (int i = 0; i < responsePlaceList.length(); i++) {
 
@@ -290,11 +296,17 @@ public class Place {
 
                                         //Put place to list
                                         try{
+                                            placeList.add(place);
                                             resultPlaceList.put(place.getId() , place);
                                         }catch (NullPointerException e){
                                             Log.e("---GUPPY---" , "getGenericPlaceList > resultPlaceList parameter is null");
                                         }
 
+                                    }
+
+                                    if(adapter!=null){
+                                        ((PlaceAdapter)adapter).setList(placeList);
+                                        ((PlaceAdapter)adapter).notifyDataSetChanged();
                                     }
 
                                 }
@@ -324,7 +336,17 @@ public class Place {
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
-                placesListPopular);
+                placesListPopular,
+                null);
+    }
+
+    public static void fetchPopularPlaces(PlaceAdapter adapter){
+        fetchGenericPlaceList(
+                Request.Method.GET,
+                App.SitePath + "api/places.php?op=search&popular=1",
+                null,
+                placesListPopular,
+                adapter);
     }
 
 }

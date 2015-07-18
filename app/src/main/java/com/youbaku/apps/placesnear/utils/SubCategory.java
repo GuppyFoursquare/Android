@@ -91,8 +91,6 @@ public class SubCategory {
                                     subcategory.setSubcategoy_name(obj.getString("cat_name"));
                                     subcategory.setSubcategoy_image(obj.getString("cat_image"));
                                     categoryObj.getSubCatList().add(subcategory);
-
-                                    Log.e("---GUPPY STATIC---", "SubCategory set :: " + subcategory.id);
                                 }
 
 

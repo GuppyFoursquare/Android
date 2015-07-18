@@ -44,7 +44,7 @@ public class PlaceListFragment extends ListFragment {
             System.err.println("CategoryListFragment.setList should be used before fragment used on screen");
             return;
         }
-        adap=new PlaceAdapter(getActivity(),list, Color.parseColor(themeColor));
+        setAdapter(new PlaceAdapter(getActivity(),list, Color.parseColor(themeColor)));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PlaceListFragment extends ListFragment {
         getListView().setDivider(new ColorDrawable(Color.parseColor(App.BackgroundGrayColor)));
         getListView().setDividerHeight(App.dpTopx(getActivity(), 20));
         getListView().setSelector(new ColorDrawable(Color.parseColor("#00000000")));
-        setListAdapter(adap);
+        setListAdapter(getAdapter());
         if(listen!=null)
             getListView().setOnItemClickListener(listen);
         if(empty)
@@ -79,4 +79,11 @@ public class PlaceListFragment extends ListFragment {
     }
 
 
+    public PlaceAdapter getAdapter() {
+        return adap;
+    }
+
+    public void setAdapter(PlaceAdapter adap) {
+        this.adap = adap;
+    }
 }
