@@ -19,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.category.adapters.SubCategoryAdapter;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
@@ -119,13 +118,28 @@ public class SearchFragment extends Fragment {
 
 
             Category.refreshSearchFragment(getActivity(), view);
-
             searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Intent in = new Intent(getActivity(), PlaceActivity.class);
-                    startActivity(in);
+                    //GET SELECTED SUBCATEGORIES
+                    ArrayList selectedSubCategory = new ArrayList();
+                    for(Category c : Category.categoryList){
+                        for(SubCategory s : c.getSubCatList()){
+                            if(s.isSelected()){
+                                selectedSubCategory.add(s.getId());
+                            }
+                        }
+
+                    }
+
+                    if(selectedSubCategory.size()==0 ){
+                        Toast.makeText(getActivity(), "You should select at least one category!", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Intent in = new Intent(getActivity(), PlaceActivity.class);
+                        startActivity(in);
+                    }
                 }
             });
 
