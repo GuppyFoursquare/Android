@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +45,7 @@ public class Place {
     public static final String PLC_LONGITUDE="plc_longitude";
     public static final String PLC_INFO="plc_info";
     public static final String PLC_IS_ACTIVE="plc_is_active";
+    public static final String RATING="rating";
 
 
 
@@ -67,7 +69,6 @@ public class Place {
 
     public static final String DESCRIPTION="description";
     public static final String FACEBOOK="facebook";
-    public static final String RATING="rating";
     public static final String PLACE="place";
     public static final String DISTANCE="distance";
     public static Place FOR_DETAIL;
@@ -82,6 +83,9 @@ public class Place {
     public String email="";
     private String description="";
     private boolean isActive=true;
+    private double longitude=0;
+    private double latitude=0;
+    private boolean locationSet=false;
 
     public boolean isFavourite=false;
     public String color="";
@@ -95,17 +99,14 @@ public class Place {
     public ArrayList<Comment> comments=new ArrayList<Comment>();
     public ArrayList<Deal> deals=new ArrayList<Deal>();
     public ArrayList<Photo> photos=new ArrayList<Photo>();
-    private double longitude=0;
-    private double latitude=0;
-    private boolean locationSet=false;
     public String open="";
     public String close="";
     public boolean liked=false;
 
+    public static ArrayList<String> placesIDArrayListNearMe = new ArrayList<>();
     public static ArrayList<Place> placesArrayListNearMe = new ArrayList<>();
 
     public static Map<String,Place> placesListNearMe = new HashMap<>();
-    public static Map<String,Place> placesListPopular = new HashMap<>();
 
 
 
@@ -238,102 +239,18 @@ public class Place {
         return "";
     }
 
-    /**
-     *
-     * @param METHOD            Request.Method.GET || Request.Method.POST
-     * @param URL
-     * @param parameters
-     * @param resultPlaceList
-     *
-     * Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
-     * datalar dönmemektedir.
-     */
-    public static <T> void fetchGenericPlaceList( int METHOD, String URL , Map parameters ,final Map<String,Place> resultPlaceList , final T adapter){
+    private static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key){
 
-        // Request a json response
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (METHOD, URL, new Response.Listener<JSONObject>() {
+        try {
+            if (jsonObj.has(key)) {
+                return jsonObj.getJSONArray(key);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
-
-                                JSONArray responsePlaceList = response.getJSONArray("content");
-                                if (responsePlaceList.length() > 0) {
-                                    /**
-                                     * placeList arrayList değişkeni adapter'lerin map yerine arraylist
-                                     * kullanmalarından kaynaklanıyordur. Eğer kodlamaya başlanırken
-                                     * arraylist yerine map kullanılsaydı böyle bir değişkene ihtiyaç
-                                     * duyulmazdı... <ksk>
-                                     */
-                                    ArrayList<Place> placeList = new ArrayList<>();
-
-                                    for (int i = 0; i < responsePlaceList.length(); i++) {
-
-                                        JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
-
-                                        //Inflate places
-                                        Place place = new Place();
-                                        place.setId(getJsonValueIfExist(jsonPlace,Place.PLC_ID));
-                                        place.setName(getJsonValueIfExist(jsonPlace,Place.PLC_NAME));
-                                        place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
-                                        place.setAddress(getJsonValueIfExist(jsonPlace,Place.PLC_ADDRESS));
-                                        place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
-                                        place.setWeb(getJsonValueIfExist(jsonPlace,Place.PLC_WEBSITE));
-                                        place.setPhone(getJsonValueIfExist(jsonPlace,Place.PLC_CONTACT));
-
-                                        double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
-                                        double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
-                                        place.setLocation(latitude, longitude);
-
-                                        String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
-                                        place.setDescription(htmlToString);
-
-                                        String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
-                                        place.setIsActive(isActive.equalsIgnoreCase("1"));
-
-
-                                        //Put place to list
-                                        try{
-                                            placeList.add(place);
-                                            resultPlaceList.put(place.getId() , place);
-                                        }catch (NullPointerException e){
-                                            Log.e("---GUPPY---" , "getGenericPlaceList > resultPlaceList parameter is null");
-                                        }
-
-                                    }
-
-                                    if(adapter!=null){
-                                        ((PlaceAdapter)adapter).setList(placeList);
-                                        ((PlaceAdapter)adapter).notifyDataSetChanged();
-                                    }
-
-                                }
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-
-            VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+        return null;
     }
-
-
 
     /**
      *
@@ -384,6 +301,26 @@ public class Place {
 
                                         String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
                                         place.setIsActive(isActive.equalsIgnoreCase("1"));
+
+                                        // GET ratings
+                                        JSONArray ratings = getJsonArayIfExist(jsonPlace,Place.RATING);
+                                        for (int j = 0; ratings!=null && j<ratings.length(); j++) {
+                                            Comment comment = new Comment();
+                                            JSONObject obj = ratings.getJSONObject(j);
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                                            try {
+                                                Date date = format.parse(obj.getString("places_rating_created_date"));
+                                                comment.created = date;
+                                                comment.text = obj.getString("place_rating_comment");
+                                                comment.comment_id = obj.getString("place_rating_id");
+                                                comment.rating = Double.parseDouble(obj.getString("place_rating_rating"));
+                                                comment.name = obj.getString("places_rating_by");
+                                                place.comments.add(comment);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
 
 
                                         //Put place to list
