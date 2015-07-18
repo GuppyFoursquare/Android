@@ -310,7 +310,8 @@ public class App extends Application {
     public static boolean checkInternetConnection(Context context){
         ConnectivityManager con=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nf=con.getActiveNetworkInfo();
-        if(con.getActiveNetworkInfo()==null || !nf.isConnected()){
+        NetworkInfo mWifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if(con.getActiveNetworkInfo()==null || !nf.isConnected() && !mWifi.isConnected()){
             return false;
         }
         return true;

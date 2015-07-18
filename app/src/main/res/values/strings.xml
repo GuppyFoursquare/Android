@@ -190,6 +190,7 @@
     <string name="selectCategoryLabel">Select one or more categories</string>
     <string name="searcBtnLabel">Search</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="labelGo">GO</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

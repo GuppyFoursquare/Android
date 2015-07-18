@@ -170,6 +170,7 @@
     <string name="loginlabel">Sign in</string>
     <string name="loginrequirement">You should login first to add comment!</string>
     <string name="reservationbuttonlabel">Booking a place</string>
+    <string name="labelGo">Go</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 
