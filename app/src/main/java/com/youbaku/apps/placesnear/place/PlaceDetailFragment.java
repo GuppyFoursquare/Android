@@ -35,7 +35,6 @@ import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.App;
-import com.youbaku.apps.placesnear.Gravatar;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MapsActivity;
@@ -243,11 +242,17 @@ public class PlaceDetailFragment extends Fragment{
             else
                 comment.setText(t);
             commentInfo.setText(p.comments.get(0).getCreatedDate() + " , by  " + p.comments.get(0).name);
-            Picasso.with(getActivity())
-                    .load(Gravatar.getURL(p.comments.get(0).email))
-                    .placeholder(R.drawable.placeholder_user)
-                    .fit()
-                    .into(commentView);
+            if(p.comments.get(0).getUser_img()==""){
+                commentView.setImageResource(R.drawable.placeholder_user);
+            }
+            else{
+                Picasso.with(getActivity())
+                        .load(p.comments.get(0).getUser_img())
+                        .placeholder(R.drawable.placeholder_user)
+                        .fit()
+                        .into(commentView);
+            }
+
             if(OnCommentClick!=null){
                 ((RelativeLayout)view.findViewById(R.id.comment_container_place_detail))
                         .setOnClickListener(OnCommentClick);

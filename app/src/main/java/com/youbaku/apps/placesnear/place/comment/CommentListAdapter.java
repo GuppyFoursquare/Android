@@ -16,9 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.youbaku.apps.placesnear.Gravatar;
-import com.youbaku.apps.placesnear.R;
 import com.squareup.picasso.Picasso;
+import com.youbaku.apps.placesnear.R;
 
 import java.util.ArrayList;
 
@@ -47,12 +46,17 @@ public class CommentListAdapter extends ArrayAdapter {
         TextView info=(TextView)convertView.findViewById(R.id.info_comment_list_item);
 
         comment.setText(list.get(position).text);
-        info.setText(list.get(position).getCreatedDate() + " , " +list.get(position).name);
-        Picasso.with(getContext())
-                .load(Gravatar.getURL(list.get(position).email))
-                .placeholder(R.drawable.placeholder_user)
-                .fit()
-                .into(image);
+        info.setText(list.get(position).getCreatedDate() + " , " + list.get(position).name);
+        if(list.get(position).getUser_img()==""){
+            image.setImageResource(R.drawable.placeholder_user);
+        }
+        else{
+            Picasso.with(getContext())
+                    .load(list.get(position).getUser_img())
+                    .placeholder(R.drawable.placeholder_user)
+                    .fit()
+                    .into(image);
+        }
 
         return convertView;
     }

@@ -3,7 +3,6 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.location.Location;
 import android.text.Html;
 import android.util.Log;
@@ -317,7 +316,16 @@ public class Place {
                                                 comment.comment_id = obj.getString("place_rating_id");
                                                 comment.rating = Double.parseDouble(obj.getString("place_rating_rating"));
                                                 comment.name = obj.getString("usr_username");
-                                                //comment.user_img=obj.getString("usr_profile_picture");
+
+                                                //Getting User Image
+                                                if(obj.isNull("usr_profile_picture")){
+                                                    comment.user_img="";
+                                                    Log.i("---GUPPY USER IMAGE---","No Available Image");
+                                                }
+                                                else{
+                                                    comment.user_img = obj.getString("usr_profile_picture").toString();
+                                                }
+
                                                 place.comments.add(comment);
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
