@@ -11,9 +11,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.maps.model.LatLng;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.MyApplication;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.photo.Photo;
 import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.Deal;
@@ -35,101 +36,99 @@ public class Place {
     // ----- ----- ----- ----- ----- ----- ----- ----- -----
     // ----- ----- GENERIC FETCHING PLACES PARAMETERS ----- -----
     // ----- ----- ----- ----- ----- ----- ----- ----- -----
-    public static final String PLC_ID="plc_id";
-    public static final String PLC_NAME="plc_name";
-    public static final String PLC_EMAIL="plc_email";
-    public static final String PLC_WEBSITE="plc_website";
-    public static final String PLC_HEADER_IMAGE="plc_header_image";
-    public static final String PLC_ADDRESS="plc_address";
-    public static final String PLC_CONTACT="plc_contact";
-    public static final String PLC_LATITUDE="plc_latitude";
-    public static final String PLC_LONGITUDE="plc_longitude";
-    public static final String PLC_INFO="plc_info";
-    public static final String PLC_IS_ACTIVE="plc_is_active";
-    public static final String RATING="rating";
-    public static final String RATING_CREATED_DATE="places_rating_created_date";
-    public static final String RATING_COMMENT="place_rating_comment";
-    public static final String RATING_ID="place_rating_id";
-    public static final String RATING_RATING="place_rating_rating";
-    public static final String RATING_USR_USERNAME="usr_username";
-    public static final String RATING_USR_PROFILE_PICTURE="usr_profile_picture";
+    public static final String PLC_ID = "plc_id";
+    public static final String PLC_NAME = "plc_name";
+    public static final String PLC_EMAIL = "plc_email";
+    public static final String PLC_WEBSITE = "plc_website";
+    public static final String PLC_HEADER_IMAGE = "plc_header_image";
+    public static final String PLC_ADDRESS = "plc_address";
+    public static final String PLC_CONTACT = "plc_contact";
+    public static final String PLC_LATITUDE = "plc_latitude";
+    public static final String PLC_LONGITUDE = "plc_longitude";
+    public static final String PLC_INFO = "plc_info";
+    public static final String PLC_IS_ACTIVE = "plc_is_active";
+    public static final String RATING = "rating";
+    public static final String RATING_CREATED_DATE = "places_rating_created_date";
+    public static final String RATING_COMMENT = "place_rating_comment";
+    public static final String RATING_ID = "place_rating_id";
+    public static final String RATING_RATING = "place_rating_rating";
+    public static final String RATING_USR_USERNAME = "usr_username";
+    public static final String RATING_USR_PROFILE_PICTURE = "usr_profile_picture";
 
 
-    public static String ID="plc_id";
-    public static String EMAIL="plc_email";
-    public static final String NAME="plc_name";
-    public static final String PHOTO="plc_header_image";
-    public static final String WEBPAGE="plc_website";
-    public static final String POSITION="position";
-    public static final String ADDRESS="plc_address";
-    public static final String PHONE="plc_contact";
-    public static final String OPENHOUR="plc_intime";
-    public static final String CLOSEHOUR="plc_outtime";
-    public static final String LIKES="likescount";
-    public static final String TWITTER="twitter";
-    public static final String CATEGORY="category";
-    public static final String ISACTIVE="isactive";
+    public static String ID = "plc_id";
+    public static String EMAIL = "plc_email";
+    public static final String NAME = "plc_name";
+    public static final String PHOTO = "plc_header_image";
+    public static final String WEBPAGE = "plc_website";
+    public static final String POSITION = "position";
+    public static final String ADDRESS = "plc_address";
+    public static final String PHONE = "plc_contact";
+    public static final String OPENHOUR = "plc_intime";
+    public static final String CLOSEHOUR = "plc_outtime";
+    public static final String LIKES = "likescount";
+    public static final String TWITTER = "twitter";
+    public static final String CATEGORY = "category";
+    public static final String ISACTIVE = "isactive";
 
 
-
-    public static final String DESCRIPTION="description";
-    public static final String FACEBOOK="facebook";
-    public static final String PLACE="place";
-    public static final String DISTANCE="distance";
+    public static final String DESCRIPTION = "description";
+    public static final String FACEBOOK = "facebook";
+    public static final String PLACE = "place";
+    public static final String DISTANCE = "distance";
     public static Place FOR_DETAIL;
 
     public String imgUrl;
-    public String id="";
-    public String name="";
-    private String phone="";
-    public String category="";
-    private String address="";
-    private String web="";
-    public String email="";
-    private String description="";
-    private boolean isActive=true;
-    private double longitude=0;
-    private double latitude=0;
-    private boolean locationSet=false;
-    private float[] distance=new float[1];
+    public String id = "";
+    public String name = "";
+    private String phone = "";
+    public String category = "";
+    private String address = "";
+    private String web = "";
+    public String email = "";
+    private String description = "";
+    private boolean isActive = true;
+    private double longitude = 0;
+    private double latitude = 0;
+    private boolean locationSet = false;
+    private float[] distance = new float[1];
 
-    public boolean isFavourite=false;
-    public String color="";
-    public int likes=0;
-    public double rating=10.0;
-    public String facebook="";
-    public String twitter="";
+    public boolean isFavourite = false;
+    public String color = "";
+    public int likes = 0;
+    public double rating = 10.0;
+    public String facebook = "";
+    public String twitter = "";
     public Bitmap photo;
     public File file;
-    public ArrayList<Comment> comments=new ArrayList<Comment>();
-    public ArrayList<Deal> deals=new ArrayList<Deal>();
-    public ArrayList<Photo> photos=new ArrayList<Photo>();
-    public String open="";
-    public String close="";
-    public boolean liked=false;
+    public ArrayList<Comment> comments = new ArrayList<Comment>();
+    public ArrayList<Deal> deals = new ArrayList<Deal>();
+    public ArrayList<Photo> photos = new ArrayList<Photo>();
+    public String open = "";
+    public String close = "";
+    public boolean liked = false;
 
     public static ArrayList<Place> placesArrayListPopular = new ArrayList<>();
     public static ArrayList<Place> placesArrayListNearMe = new ArrayList<>();
 
-    public static Map<String,Place> placesListNearMe = new HashMap<>();
+    public static Map<String, Place> placesListNearMe = new HashMap<>();
 
 
-
-    public void setLocation(double latitude, double longitude){
-        this.latitude=latitude;
-        this.longitude=longitude;
-        locationSet=true;
+    public void setLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        locationSet = true;
     }
 
-    public boolean isOpen(){
+    public boolean isOpen() {
         try {
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             Date now = format.parse(format.format(new Date()));
             Date open = format.parse(this.open);
             Date close = format.parse(this.close);
-            if(!now.after(open) || !now.before(close))
+            if (!now.after(open) || !now.before(close))
                 return false;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -137,51 +136,66 @@ public class Place {
         return true;
     }
 
-    public double getLongitude(){
+    public double getLongitude() {
         return longitude;
     }
-    public double getLatitude(){
+
+    public double getLatitude() {
         return latitude;
     }
-    public boolean isLocationSet(){
+
+    public boolean isLocationSet() {
         return locationSet;
     }
+
     public static String getID() {
         return ID;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getImgUrl() {
         return imgUrl;
     }
+
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
     public double getRating() {
         return rating;
     }
+
     public void setRating(double rating) {
         this.rating = rating;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -219,32 +233,25 @@ public class Place {
     }
 
 
-
-
-
-
-
-
     /**
-     *
      * @param jsonObj
      * @param key
      * @return
      */
-    private static String getJsonValueIfExist(JSONObject jsonObj, String key){
+    private static String getJsonValueIfExist(JSONObject jsonObj, String key) {
 
-            try {
-                if (jsonObj.has(key)) {
-                    return jsonObj.getString(key);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            if (jsonObj.has(key)) {
+                return jsonObj.getString(key);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return "";
     }
 
-    private static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key){
+    private static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key) {
 
         try {
             if (jsonObj.has(key)) {
@@ -258,16 +265,13 @@ public class Place {
     }
 
     /**
-     *
-     * @param METHOD            Request.Method.GET || Request.Method.POST
+     * @param METHOD          Request.Method.GET || Request.Method.POST
      * @param URL
      * @param parameters
-     * @param resultPlaceList
-     *
-     * Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
-     * datalar dönmemektedir.
+     * @param resultPlaceList Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
+     *                        datalar dönmemektedir.
      */
-    public static <T> void fetchGenericPlaceList( int METHOD, String URL , Map parameters , final ArrayList<Place> resultPlaceList , final T adapter){
+    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, final T adapter) {
 
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -278,7 +282,7 @@ public class Place {
 
                         try {
 
-                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+                            if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
                                 JSONArray responsePlaceList = response.getJSONArray("content");
                                 if (responsePlaceList.length() > 0) {
@@ -290,13 +294,13 @@ public class Place {
 
                                         //Inflate places
                                         Place place = new Place();
-                                        place.setId(getJsonValueIfExist(jsonPlace,Place.PLC_ID));
-                                        place.setName(getJsonValueIfExist(jsonPlace,Place.PLC_NAME));
+                                        place.setId(getJsonValueIfExist(jsonPlace, Place.PLC_ID));
+                                        place.setName(getJsonValueIfExist(jsonPlace, Place.PLC_NAME));
                                         place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
-                                        place.setAddress(getJsonValueIfExist(jsonPlace,Place.PLC_ADDRESS));
+                                        place.setAddress(getJsonValueIfExist(jsonPlace, Place.PLC_ADDRESS));
                                         place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
-                                        place.setWeb(getJsonValueIfExist(jsonPlace,Place.PLC_WEBSITE));
-                                        place.setPhone(getJsonValueIfExist(jsonPlace,Place.PLC_CONTACT));
+                                        place.setWeb(getJsonValueIfExist(jsonPlace, Place.PLC_WEBSITE));
+                                        place.setPhone(getJsonValueIfExist(jsonPlace, Place.PLC_CONTACT));
 
                                         double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
                                         double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
@@ -309,9 +313,9 @@ public class Place {
                                         place.setIsActive(isActive.equalsIgnoreCase("1"));
 
                                         // GET ratings
-                                        double averageRating=0;
-                                        JSONArray ratings = getJsonArayIfExist(jsonPlace,Place.RATING);
-                                        for (int j = 0; ratings!=null && j<ratings.length(); j++) {
+                                        double averageRating = 0;
+                                        JSONArray ratings = getJsonArayIfExist(jsonPlace, Place.RATING);
+                                        for (int j = 0; ratings != null && j < ratings.length(); j++) {
                                             Comment comment = new Comment();
                                             JSONObject jsonComment = ratings.getJSONObject(j);
                                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -335,26 +339,27 @@ public class Place {
                                                 e.printStackTrace();
                                             }
                                         }
-                                        place.setRating(averageRating/(double)ratings.length());
-
+                                        place.setRating(averageRating / (double) ratings.length());
+                                        MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
                                         // GET distance
                                         // --GUPPY COMMENT IMPORTANT--
                                         // -- Location will be set --
-                                        Location.distanceBetween(40.372877, 49.842825, place.getLatitude(), place.getLongitude(), place.getDistance());
+
+                                        Location.distanceBetween(my.latitude, my.longitude, place.getLatitude(), place.getLongitude(), place.getDistance());
 
 
                                         //Put place to list
-                                        try{
+                                        try {
                                             resultPlaceList.add(place);
-                                        }catch (NullPointerException e){
-                                            Log.e("---GUPPY---" , "getGenericPlaceList > resultPlaceList parameter is null");
+                                        } catch (NullPointerException e) {
+                                            Log.e("---GUPPY---", "getGenericPlaceList > resultPlaceList parameter is null");
                                         }
 
                                     }
 
-                                    if(adapter!=null){
-                                        ((PlaceAdapter)adapter).setList(resultPlaceList);
-                                        ((PlaceAdapter)adapter).notifyDataSetChanged();
+                                    if (adapter != null) {
+                                        ((PlaceAdapter) adapter).setList(resultPlaceList);
+                                        ((PlaceAdapter) adapter).notifyDataSetChanged();
                                     }
 
                                 }
@@ -379,7 +384,7 @@ public class Place {
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
 
-    public static void fetchPopularPlaces(){
+    public static void fetchPopularPlaces() {
         fetchGenericPlaceList(
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
@@ -388,7 +393,7 @@ public class Place {
                 null);
     }
 
-    public static void fetchPopularPlaces(PlaceAdapter adapter){
+    public static void fetchPopularPlaces(PlaceAdapter adapter) {
         fetchGenericPlaceList(
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
@@ -397,17 +402,17 @@ public class Place {
                 adapter);
     }
 
-    public static void fetchNearMePlaces(PlaceAdapter adapter){
+    public static void fetchNearMePlaces(PlaceAdapter adapter) {
 
         // --GUPPY COMMENT IMPORTANT--
         // -- Location will be set --
-        LatLng userLocation = new LatLng(40.3859933,49.8232647);
-        double userLatitude = userLocation.latitude;
-        double userLongitude = userLocation.longitude;
+        MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
+        double userLatitude = my.latitude;
+        double userLongitude = my.longitude;
 
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?op=nearme&lat="+userLatitude+"&lon="+userLongitude,
+                App.SitePath + "api/places.php?op=nearme&lat=" + userLatitude + "&lon=" + userLongitude,
                 null,
                 placesArrayListNearMe,
                 adapter);

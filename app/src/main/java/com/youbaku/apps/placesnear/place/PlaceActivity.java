@@ -157,12 +157,13 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             App.showInternetError(this);
             return;
         }
-        /*MyLocation my = MyLocation.getMyLocation(getApplicationContext());
+
+        MyLocation my = MyLocation.getMyLocation(getApplicationContext());
         if (!my.isSet()) {
             my.subscriber = this;
             my.callLocation();
             return;
-        }*/
+        }
 
         //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
 
@@ -284,8 +285,8 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                                     p.setLocation(latitude, longitude);
 
                                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-                                    //Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.distance);
-                                    Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.getDistance());//For testing
+                                    Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.getDistance());
+                                   // Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.getDistance());//For testing
 
                                     boolean pop = true;
                                     if (filter.popular && p.rating < 3.0) {

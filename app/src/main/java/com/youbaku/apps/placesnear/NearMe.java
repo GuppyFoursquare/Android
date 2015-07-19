@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
 import com.youbaku.apps.placesnear.place.comment.Comment;
@@ -80,7 +81,7 @@ public class NearMe extends Fragment implements LocationListener {
 
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 1000;
-    private boolean havePlace=true;
+    private boolean havePlace = true;
 
     private Activity activity;
     private View view;
@@ -88,14 +89,14 @@ public class NearMe extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private Marker nearMeMarker;
     private MapView mapView;
-    private LatLng userLocation = new LatLng(40.3859933,49.8232647);
+
+    private LatLng userLocation;
 
     public static ArrayList<Place> nearMePlacelist;
     private NearMeTouchableWrapper nearMeTouchView;
     private ArrayList<Category> catlist;
     private NearMeCategoryAdapter adap;
     private LinearLayout l;
-
 
 
     private OnFragmentInteractionListener mListener;
@@ -143,17 +144,16 @@ public class NearMe extends Fragment implements LocationListener {
         activity = getActivity();
 
         // Set Linear Layout
-        l=(LinearLayout)view.findViewById(R.id.nearmecategory);
+        l = (LinearLayout) view.findViewById(R.id.nearmecategory);
         l.setVisibility(View.INVISIBLE);
 
         MapsInitializer.initialize(getActivity());
-        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
-        {
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
             case ConnectionResult.SUCCESS:
 
                 mapView = (MapView) view.findViewById(R.id.nearmemap);
                 mapView.onCreate(savedInstanceState);
-                if(mapView!=null) {
+                if (mapView != null) {
                     mapView.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
@@ -164,14 +164,14 @@ public class NearMe extends Fragment implements LocationListener {
                             // --- If places are already fetched then not fetch again
                             if (Place.placesListNearMe == null || Place.placesListNearMe.size() == 0) {
                                 getNearMePlaces();
-                            }else{
+                            } else {
                                 setUpMapIfNeeded();
                             }
 
                             // --- If categories are already fetched then not fetch again
-                            if(Category.categoryList==null || Category.categoryList.size()==0){
+                            if (Category.categoryList == null || Category.categoryList.size() == 0) {
                                 getNearMeCategoryList();
-                            }else{
+                            } else {
                                 setNearMeCategoryList(getActivity());
                             }
                         }
@@ -184,9 +184,9 @@ public class NearMe extends Fragment implements LocationListener {
             case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
                 Toast.makeText(getActivity(), "UPDATE REQUIRED", Toast.LENGTH_SHORT).show();
                 break;
-            default: Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
+            default:
+                Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
         }
-
 
 
         return view;
@@ -198,11 +198,13 @@ public class NearMe extends Fragment implements LocationListener {
         mapView.onResume();
         super.onResume();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -213,144 +215,134 @@ public class NearMe extends Fragment implements LocationListener {
     /**
      * Bu method ile category view'i haritada görülür ya da gizlenir
      */
-    public void categoryGridViewChangeVisibility(){
-            l.setVisibility(l.getVisibility()==View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+    public void categoryGridViewChangeVisibility() {
+        l.setVisibility(l.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
     }
 
 
-    public static void reloadPlaceMarkers(final Activity activity){
+    public static void reloadPlaceMarkers(final Activity activity) {
 
-            Set<String> placeKey  = Place.placesListNearMe.keySet();
+        Set<String> placeKey = Place.placesListNearMe.keySet();
 
-            nearMeMap.clear();
+        nearMeMap.clear();
 
-            // TODO: add marker to map
-            Iterator ite = placeKey.iterator();
-            while(ite.hasNext()){
-                Place p = Place.placesListNearMe.get(ite.next());
-                LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
+        // TODO: add marker to map
+        Iterator ite = placeKey.iterator();
+        while (ite.hasNext()) {
+            Place p = Place.placesListNearMe.get(ite.next());
+            LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
 
-                nearMeMap.addMarker(new MarkerOptions()
-                        .position(placeLocation)
-                        .title(p.getId())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker)));
+            nearMeMap.addMarker(new MarkerOptions()
+                    .position(placeLocation)
+                    .title(p.getId())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker)));
+        }
+
+
+        nearMeMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            boolean not_first_time_showing_info_window;
+
+            @Override
+            public View getInfoWindow(final Marker marker) {
+
+                // Getting view from the layout file info_window_layout
+                View markerView = activity.getLayoutInflater().inflate(R.layout.nearme_marker, null);
+                ImageView im = (ImageView) markerView.findViewById(R.id.nearmemarker_plc_img);
+
+                // Find Place
+                Place selectedPlace = null;
+                for (Place p : nearMePlacelist) {
+                    if (p.getId().equalsIgnoreCase(marker.getTitle())) {
+                        selectedPlace = p;
+                    }
+                }
+
+                if (selectedPlace != null) {
+
+                    // -----------------------------------------------------
+                    // Burada markerView gerekli datalar ile doldurulacaktır.
+                    // -----------------------------------------------------
+                    //Ratinglerin puana gore renklendirilmesi
+                    TextView rateTxt = (TextView) markerView.findViewById(R.id.nearmeinfo_placerate);
+
+                    if (selectedPlace.rating > 3.5 && selectedPlace.rating <= 5.0) {
+                        rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));
+                    } else if (selectedPlace.rating >= 3.0 && selectedPlace.rating <= 3.5) {
+                        rateTxt.setBackgroundColor(Color.parseColor(App.YellowColor));
+                    } else {
+                        rateTxt.setBackgroundColor(Color.parseColor(App.ButtonColor));
+                    }
+
+                    rateTxt.setText(selectedPlace.getRating() + "/5.0");
+
+                    ((TextView) markerView.findViewById(R.id.nearmeinfo_placename)).setText(selectedPlace.getName());
+
+                    //Place resimlerini göstermek için Picasso kullanıldı. Sebebi volley - InfoAdapterde networkimageview kullanmak daha sorunlu picassoya gore.
+                    //Aşağdakı kodun amacı resimleri ilk başta load yaparken gecikmesinin karşısını almaktır.
+                    //---Related Link : http://stackoverflow.com/questions/18938187/add-an-image-from-url-into-custom-infowindow-google-maps-v2
+                    String imgUrl = App.SitePath + "uploads/places_header_images/" + selectedPlace.getImgUrl(); // URL of the image
+                    if (not_first_time_showing_info_window) {
+                        Picasso.with(activity).load(imgUrl).placeholder(R.drawable.place_detail_image_placeholder).into(im);
+
+                    } else {
+                        not_first_time_showing_info_window = true;
+                        Picasso.with(activity).load(imgUrl).placeholder(R.drawable.place_detail_image_placeholder).into(im, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                if (marker != null && marker.isInfoWindowShown()) {
+                                    marker.showInfoWindow();
+                                }
+
+                            }
+
+                            @Override
+                            public void onError() {
+                                Log.e(getClass().getSimpleName(), " error loading thumbnail");
+                            }
+                        });
+                    }
+
+
+                }
+
+
+                return markerView;
             }
 
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
 
-            nearMeMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                boolean not_first_time_showing_info_window;
-                @Override
-                public View getInfoWindow(final Marker marker) {
+        });
 
-                    // Getting view from the layout file info_window_layout
-                    View markerView =  activity.getLayoutInflater().inflate(R.layout.nearme_marker, null);
-                    ImageView im = (ImageView) markerView.findViewById(R.id.nearmemarker_plc_img);
-
-                    // Find Place
-                    Place selectedPlace = null;
-                    for(Place p : nearMePlacelist){
-                        if(p.getId().equalsIgnoreCase(marker.getTitle())){
-                            selectedPlace = p;
-                        }
-                    }
-
-                    if(selectedPlace!=null){
-
-                        // -----------------------------------------------------
-                        // Burada markerView gerekli datalar ile doldurulacaktır.
-                        // -----------------------------------------------------
-                        //Ratinglerin puana gore renklendirilmesi
-                        TextView rateTxt=(TextView) markerView.findViewById(R.id.nearmeinfo_placerate);
-
-                        if(selectedPlace.rating > 3.5 && selectedPlace.rating <=5.0 ){
-                            rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));
-                        }
-                        else if(selectedPlace.rating >= 3.0 && selectedPlace.rating <=3.5 ){
-                            rateTxt.setBackgroundColor(Color.parseColor(App.YellowColor));
-                        }
-                        else{
-                            rateTxt.setBackgroundColor(Color.parseColor(App.ButtonColor));
-                        }
-
-                        rateTxt.setText(selectedPlace.getRating() + "/5.0");
-
-                        ((TextView)markerView.findViewById(R.id.nearmeinfo_placename)).setText(selectedPlace.getName());
-
-                        //Place resimlerini göstermek için Picasso kullanıldı. Sebebi volley - InfoAdapterde networkimageview kullanmak daha sorunlu picassoya gore.
-                        //Aşağdakı kodun amacı resimleri ilk başta load yaparken gecikmesinin karşısını almaktır.
-                        //---Related Link : http://stackoverflow.com/questions/18938187/add-an-image-from-url-into-custom-infowindow-google-maps-v2
-                        String imgUrl = App.SitePath + "uploads/places_header_images/" + selectedPlace.getImgUrl(); // URL of the image
-                        if (not_first_time_showing_info_window) {
-                            Picasso.with(activity).load(imgUrl).placeholder(R.drawable.place_detail_image_placeholder).into(im);
-
-                        } else {
-                            not_first_time_showing_info_window = true;
-                            Picasso.with(activity).load(imgUrl).placeholder(R.drawable.place_detail_image_placeholder).into(im, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    if (marker != null && marker.isInfoWindowShown()) {
-                                        marker.showInfoWindow();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Log.e(getClass().getSimpleName(), " error loading thumbnail");
-                                }
-                            });
-                        }
-
-
-
-                    }
-
-
-
-                    return markerView;
-                }
-
-                @Override
-                public View getInfoContents(Marker marker) {
-                    return null;
-                }
-
-            });
-
-            nearMeMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    Place.FOR_DETAIL = Place.placesListNearMe.get(marker.getTitle());
-                    Place.ID = Place.placesListNearMe.get(marker.getTitle()).getId();
-                    Place.EMAIL = Place.placesListNearMe.get(marker.getTitle()).getEmail();
-                    Intent in = new Intent(activity.getApplicationContext(), PlaceDetailActivity.class);
-                    in.putExtra("title", Place.placesListNearMe.get(marker.getTitle()).getName());
-                    activity.startActivity(in);
-                }
-            });
+        nearMeMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Place.FOR_DETAIL = Place.placesListNearMe.get(marker.getTitle());
+                Place.ID = Place.placesListNearMe.get(marker.getTitle()).getId();
+                Place.EMAIL = Place.placesListNearMe.get(marker.getTitle()).getEmail();
+                Intent in = new Intent(activity.getApplicationContext(), PlaceDetailActivity.class);
+                in.putExtra("title", Place.placesListNearMe.get(marker.getTitle()).getName());
+                activity.startActivity(in);
+            }
+        });
     }
 
 
     private void setUpMapIfNeeded() {
 
-            //nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.nearmefragmap)).getMap();
+        //nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.nearmefragmap)).getMap();
+        MyLocation my = MyLocation.getMyLocation(getActivity());
+        userLocation = new LatLng(my.latitude, my.longitude);
+        CameraUpdate ca = CameraUpdateFactory.newLatLngZoom(userLocation, 12);
+        nearMeMap.animateCamera(ca);
+        nearMeMap.setOnMapClickListener(mapClickListener);
 
-            CameraUpdate ca= CameraUpdateFactory.newLatLngZoom(userLocation, 12);
-            nearMeMap.animateCamera(ca);
-            nearMeMap.setOnMapClickListener(mapClickListener);
+        reloadPlaceMarkers(activity);
 
-            reloadPlaceMarkers(activity);
-
-            l.setVisibility(View.INVISIBLE);
+        l.setVisibility(View.INVISIBLE);
     }
-
-
-
-
-
-
-
-
 
 
     // ---------- ---------- GOOGLE MAP FUNCTIONS ---------- ----------
@@ -365,7 +357,7 @@ public class NearMe extends Fragment implements LocationListener {
         }
     };
 
-    GoogleMap.OnMapClickListener mapClickListener=new GoogleMap.OnMapClickListener() {
+    GoogleMap.OnMapClickListener mapClickListener = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
             categoryGridViewChangeVisibility();
@@ -378,7 +370,7 @@ public class NearMe extends Fragment implements LocationListener {
 
             if (!NearMeTouchableWrapper.mMapIsTouched) {
 
-                Log.e("---GUPPY---" , "on Camera Change " + cameraPosition.zoom);
+                Log.e("---GUPPY---", "on Camera Change " + cameraPosition.zoom);
 
                 //nearMeMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.3859933,49.8232647), cameraPosition.zoom));
                 //NearMeTouchableWrapper.mMapIsTouched = true;
@@ -389,21 +381,13 @@ public class NearMe extends Fragment implements LocationListener {
     // ---------- ---------- GOOGLE MAP FUNCTIONS ---------- ----------
 
 
-
-
-
-
-
-
-
-
     // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
     // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
     //Pulling list from category web service
-    private void getNearMeCategoryList(){
+    private void getNearMeCategoryList() {
 
         //Calling Api
-        String url = App.SitePath+"api/category.php";
+        String url = App.SitePath + "api/category.php";
 
         JSONObject apiResponse = null;
         // Request a json response
@@ -415,7 +399,7 @@ public class NearMe extends Fragment implements LocationListener {
 
                         try {
 
-                            ArrayList list=new ArrayList<Category>();
+                            ArrayList list = new ArrayList<Category>();
                             JSONArray jArray = response.getJSONArray("content");
 
 
@@ -423,10 +407,10 @@ public class NearMe extends Fragment implements LocationListener {
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject obj = jArray.getJSONObject(i);
 
-                                final Category c=new Category();
-                                c.title=obj.getString("cat_name")+"";
+                                final Category c = new Category();
+                                c.title = obj.getString("cat_name") + "";
                                 c.setObjectId(obj.getString("cat_id"));
-                                c.iconURL=obj.getString("cat_image");
+                                c.iconURL = obj.getString("cat_image");
                                 list.add(c);
 
                             }
@@ -455,7 +439,7 @@ public class NearMe extends Fragment implements LocationListener {
 
     }
 
-    private void setNearMeCategoryList(Activity activity){
+    private void setNearMeCategoryList(Activity activity) {
 
         NearMeCategoryAdapter nearMeCategoryAdapter = new NearMeCategoryAdapter(activity);
         GridView nearMeGridView = (GridView) view.findViewById(R.id.nearmegrid);
@@ -464,146 +448,142 @@ public class NearMe extends Fragment implements LocationListener {
     }
 
 
+    private void getNearMePlaces() {
+        MyLocation my = MyLocation.getMyLocation(getActivity());
 
-    private void getNearMePlaces(){
-
-        final double userLatitude = userLocation.latitude;
-        final double userLongitude = userLocation.longitude;
-
-        String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat="+userLatitude+"&lon="+userLongitude;
+        String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
         JSONObject apiResponse = null;
 
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, nearMeURL, apiResponse, new Response.Listener<JSONObject>() {
 
-                @Override
-                public void onResponse(JSONObject response) {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                    try {
+                        try {
 
-                        if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
+                            if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
-                            JSONArray places = response.getJSONArray("content");
-                            setList(new ArrayList<Place>());
+                                JSONArray places = response.getJSONArray("content");
+                                setList(new ArrayList<Place>());
 
-                            Place.placesListNearMe.clear();
+                                Place.placesListNearMe.clear();
 
-                            System.out.println("places downloaded " + places.length());
+                                System.out.println("places downloaded " + places.length());
 
-                            if (places.length() > 0) {
+                                if (places.length() > 0) {
 
-                                //firstFilter = false;
-                                //placesDownload = true;
+                                    //firstFilter = false;
+                                    //placesDownload = true;
 
-                                //Read JsonArray
-                                for (int i = 0; i < places.length(); i++) {
-                                    JSONObject o = places.getJSONObject(i);
-                                    final PlaceFilter filter = PlaceFilter.getInstance();
-                                    final Place p = new Place();
+                                    //Read JsonArray
+                                    for (int i = 0; i < places.length(); i++) {
+                                        JSONObject o = places.getJSONObject(i);
+                                        final PlaceFilter filter = PlaceFilter.getInstance();
+                                        final Place p = new Place();
 
-                                    if (o.has("rating")) {
+                                        if (o.has("rating")) {
 
-                                        JSONArray arr = o.getJSONArray("rating");
+                                            JSONArray arr = o.getJSONArray("rating");
 
-                                        for (int j = 0; j < arr.length(); j++) {
-                                            final Comment c = new Comment();
-                                            JSONObject obj = arr.getJSONObject(j);
-                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            for (int j = 0; j < arr.length(); j++) {
+                                                final Comment c = new Comment();
+                                                JSONObject obj = arr.getJSONObject(j);
+                                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                                            try {
-                                                Date d = format.parse(obj.getString("places_rating_created_date"));
-                                                c.created = d;
-                                                c.text = obj.getString("place_rating_comment");
-                                                c.comment_id = obj.getString("place_rating_id");
-                                                c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                c.name = obj.getString("places_rating_by");
+                                                try {
+                                                    Date d = format.parse(obj.getString("places_rating_created_date"));
+                                                    c.created = d;
+                                                    c.text = obj.getString("place_rating_comment");
+                                                    c.comment_id = obj.getString("place_rating_id");
+                                                    c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
+                                                    c.name = obj.getString("places_rating_by");
 
-                                                //Getting User Image
-                                                if(obj.isNull("usr_profile_picture")){
-                                                    c.user_img="";
-                                                    Log.i("---GUPPY USER IMAGE---","No Available Image");
+                                                    //Getting User Image
+                                                    if (obj.isNull("usr_profile_picture")) {
+                                                        c.user_img = "";
+                                                        Log.i("---GUPPY USER IMAGE---", "No Available Image");
+                                                    } else {
+                                                        c.user_img = obj.getString("usr_profile_picture").toString();
+                                                    }
+
+                                                    p.comments.add(c);
+
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
                                                 }
-                                                else{
-                                                    c.user_img = obj.getString("usr_profile_picture").toString();
-                                                }
-
-                                                p.comments.add(c);
-
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
                                             }
                                         }
+
+
+                                        double rating = 0.0;
+                                        if (o.has("plc_avg_rating")) {
+                                            rating = Double.parseDouble(o.getString("plc_avg_rating"));
+                                        } else {
+                                            rating = 0.0;
+                                        }
+
+                                        //Inflate places
+                                        p.setId(o.getString("plc_id"));
+                                        p.setName(o.getString("plc_name"));
+                                        p.setImgUrl(o.getString("plc_header_image"));
+                                        p.setRating(rating);
+                                        p.setAddress(o.getString("plc_address"));
+                                        p.setWeb(o.getString("plc_website"));
+                                        p.email = o.getString("plc_email");
+                                        p.setPhone(o.getString("plc_contact"));
+                                        p.open = o.getString("plc_intime");
+                                        p.close = o.getString("plc_outtime");
+                                        p.setIsActive(o.getString("plc_is_active").equalsIgnoreCase("1") ? true : false);
+                                        p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString())));
+                                        p.setLocation(Double.parseDouble(o.getString("plc_latitude")), Double.parseDouble(o.getString("plc_longitude")));
+
+                                        getList().add(p);
+
+                                        Place.placesListNearMe.put(p.getId(), p);
                                     }
 
+                                    setUpMapIfNeeded();
 
-                                    double rating = 0.0;
-                                    if (o.has("plc_avg_rating")) {
-                                        rating = Double.parseDouble(o.getString("plc_avg_rating"));
-                                    } else {
-                                        rating = 0.0;
-                                    }
-
-                                    //Inflate places
-                                    p.setId(o.getString("plc_id"));
-                                    p.setName(o.getString("plc_name"));
-                                    p.setImgUrl(o.getString("plc_header_image"));
-                                    p.setRating(rating);
-                                    p.setAddress(o.getString("plc_address"));
-                                    p.setWeb(o.getString("plc_website"));
-                                    p.email=o.getString("plc_email");
-                                    p.setPhone(o.getString("plc_contact"));
-                                    p.open = o.getString("plc_intime");
-                                    p.close = o.getString("plc_outtime");
-                                    p.setIsActive(o.getString("plc_is_active").equalsIgnoreCase("1") ? true : false);
-                                    p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString())));
-                                    p.setLocation(Double.parseDouble(o.getString("plc_latitude")), Double.parseDouble(o.getString("plc_longitude")));
-
-                                    getList().add(p);
-
-                                    Place.placesListNearMe.put(p.getId() , p);
+                                } else {
+                                    Toast.makeText(getActivity(), "Response place # is 0", Toast.LENGTH_LONG).show();
                                 }
 
-                                setUpMapIfNeeded();
-
+                                // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
+                                // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
                             } else {
-                                Toast.makeText(getActivity() , "Response place # is 0" , Toast.LENGTH_LONG).show();
+
                             }
 
-                        // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
-                        // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
-                        }else{
+                        } catch (JSONException e) {
 
-                        }
-
-                    } catch (JSONException e) {
-
-                        AlertDialog.Builder bu = new AlertDialog.Builder(getActivity());
-                        bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                        bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                        bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            AlertDialog.Builder bu = new AlertDialog.Builder(getActivity());
+                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
+                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
+                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 //                                    refreshList();
-                            }
-                        });
-                        bu.show();
+                                }
+                            });
+                            bu.show();
 
-                        e.printStackTrace();
-                        Log.e("--- GUPPY --- " , "Response JSON error");
+                            e.printStackTrace();
+                            Log.e("--- GUPPY --- ", "Response JSON error");
 
-                        return;
+                            return;
+                        }
                     }
-                }
 
 
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // TODO Auto-generated method stub
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
 
-                }
-            });
+                    }
+                });
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
@@ -611,14 +591,6 @@ public class NearMe extends Fragment implements LocationListener {
     }
     // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
     // ---------- ---------- VOLLEY FUNCTIONS ---------- ----------
-
-
-
-
-
-
-
-
 
 
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
@@ -654,16 +626,8 @@ public class NearMe extends Fragment implements LocationListener {
     // ---------- ---------- IMPLEMENT LOCATION ---------- ----------
 
 
-
-
-
-
-
-
-
-
-
-    /**a
+    /**
+     * a
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -677,7 +641,6 @@ public class NearMe extends Fragment implements LocationListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 
 
     // TODO: Rename method, update argument and hook method into UI event
