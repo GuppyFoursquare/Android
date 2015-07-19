@@ -46,8 +46,12 @@ public class Place {
     public static final String PLC_INFO="plc_info";
     public static final String PLC_IS_ACTIVE="plc_is_active";
     public static final String RATING="rating";
-
-
+    public static final String RATING_CREATED_DATE="places_rating_created_date";
+    public static final String RATING_COMMENT="place_rating_comment";
+    public static final String RATING_ID="place_rating_id";
+    public static final String RATING_RATING="place_rating_rating";
+    public static final String RATING_USR_USERNAME="usr_username";
+    public static final String RATING_USR_PROFILE_PICTURE="usr_profile_picture";
 
 
     public static String ID="plc_id";
@@ -103,7 +107,7 @@ public class Place {
     public String close="";
     public boolean liked=false;
 
-    public static ArrayList<String> placesIDArrayListNearMe = new ArrayList<>();
+    public static ArrayList<Place> placesArrayListPopular = new ArrayList<>();
     public static ArrayList<Place> placesArrayListNearMe = new ArrayList<>();
 
     public static Map<String,Place> placesListNearMe = new HashMap<>();
@@ -307,29 +311,24 @@ public class Place {
                                         JSONArray ratings = getJsonArayIfExist(jsonPlace,Place.RATING);
                                         for (int j = 0; ratings!=null && j<ratings.length(); j++) {
                                             Comment comment = new Comment();
-                                            JSONObject obj = ratings.getJSONObject(j);
+                                            JSONObject jsonComment = ratings.getJSONObject(j);
                                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                                             try {
-                                                Date date = format.parse(obj.getString("places_rating_created_date"));
+                                                // --GUPPY COMMENT IMPORTANT--
+                                                // -- Comments variable change to encapsulation --
+                                                Date date = format.parse(getJsonValueIfExist(jsonComment, Place.RATING_CREATED_DATE));
                                                 comment.created = date;
-                                                comment.text = obj.getString("place_rating_comment");
-                                                comment.comment_id = obj.getString("place_rating_id");
-                                                comment.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                comment.name = obj.getString("usr_username");
+                                                comment.text = getJsonValueIfExist(jsonComment, Place.RATING_COMMENT);
+                                                comment.comment_id = getJsonValueIfExist(jsonComment, Place.RATING_ID);
+                                                comment.rating = Double.parseDouble(getJsonValueIfExist(jsonComment, Place.RATING_RATING));
+                                                comment.name = getJsonValueIfExist(jsonComment, Place.RATING_USR_USERNAME);
+                                                comment.user_img = getJsonValueIfExist(jsonComment, Place.RATING_USR_PROFILE_PICTURE);
 
                                                 averageRating += comment.rating;
 
-                                                //Getting User Image
-                                                if(obj.isNull("usr_profile_picture")){
-                                                    comment.user_img="";
-                                                    Log.i("---GUPPY USER IMAGE---","No Available Image");
-                                                }
-                                                else{
-                                                    comment.user_img = obj.getString("usr_profile_picture").toString();
-                                                }
-
                                                 place.comments.add(comment);
+
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
                                             }
@@ -338,6 +337,7 @@ public class Place {
 
                                         // GET distance
                                         // --GUPPY COMMENT IMPORTANT--
+                                        // -- Location will be set --
                                         Location.distanceBetween(40.372877, 49.842825, place.getLatitude(), place.getLongitude(), place.getDistance());
 
 
@@ -382,7 +382,7 @@ public class Place {
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
-                placesArrayListNearMe,
+                placesArrayListPopular,
                 null);
     }
 
@@ -391,7 +391,7 @@ public class Place {
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
-                placesArrayListNearMe,
+                placesArrayListPopular,
                 adapter);
     }
 

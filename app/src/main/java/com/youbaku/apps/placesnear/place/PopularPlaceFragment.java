@@ -102,10 +102,10 @@ public class PopularPlaceFragment extends Fragment {
         listFragment = new PlaceListFragment();
         // IF popular places are fetched before then set it to adapter directly
         // OTHERWISE fetch first and set to adapter
-        if(Place.placesArrayListNearMe!=null && Place.placesArrayListNearMe.size()>0){
-            listFragment.setList(Place.placesArrayListNearMe);
+        if(Place.placesArrayListPopular!=null && Place.placesArrayListPopular.size()>0){
+            listFragment.setList(Place.placesArrayListPopular);
         }else{
-            listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListNearMe, Color.BLACK));
+            listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListPopular, Color.BLACK));
             Place.fetchPopularPlaces(listFragment.getAdapter());
         }
 
@@ -123,19 +123,17 @@ public class PopularPlaceFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            // TODO: NEED UPDATE
             /**
-             * --GUPPY COMMENT IMPORTANT--
-             * --GUPPY COMMENT IMPORTANT--
-             *
              * Before start Activity we have to fetch place info from server then
              * start activity. Otherwise place info may not be includes all information.
+             *
+             * Place info fetched at PlaceDetailActivity > PlaceDetailFragment
              */
-            Place.FOR_DETAIL = Place.placesArrayListNearMe.get(position);
-            Place.ID = Place.placesArrayListNearMe.get(position).getId();
-            Place.EMAIL = Place.placesArrayListNearMe.get(position).getEmail();
+            Place.FOR_DETAIL = Place.placesArrayListPopular.get(position);
+            Place.ID = Place.placesArrayListPopular.get(position).getId();
+            Place.EMAIL = Place.placesArrayListPopular.get(position).getEmail();
             Intent in = new Intent(getActivity(), PlaceDetailActivity.class);
-            in.putExtra("title", Place.placesArrayListNearMe.get(position).getName());
+            in.putExtra("title", Place.placesArrayListPopular.get(position).getName());
             startActivity(in);
         }
     };
