@@ -303,6 +303,7 @@ public class Place {
                                         place.setIsActive(isActive.equalsIgnoreCase("1"));
 
                                         // GET ratings
+                                        double averageRating=0;
                                         JSONArray ratings = getJsonArayIfExist(jsonPlace,Place.RATING);
                                         for (int j = 0; ratings!=null && j<ratings.length(); j++) {
                                             Comment comment = new Comment();
@@ -316,6 +317,8 @@ public class Place {
                                                 comment.comment_id = obj.getString("place_rating_id");
                                                 comment.rating = Double.parseDouble(obj.getString("place_rating_rating"));
                                                 comment.name = obj.getString("usr_username");
+
+                                                averageRating += comment.rating;
 
                                                 //Getting User Image
                                                 if(obj.isNull("usr_profile_picture")){
@@ -331,8 +334,10 @@ public class Place {
                                                 e.printStackTrace();
                                             }
                                         }
+                                        place.setRating(averageRating/(double)ratings.length());
 
                                         // GET distance
+                                        // --GUPPY COMMENT IMPORTANT--
                                         Location.distanceBetween(40.372877, 49.842825, place.getLatitude(), place.getLongitude(), place.getDistance());
 
 
