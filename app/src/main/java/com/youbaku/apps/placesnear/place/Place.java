@@ -11,6 +11,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.maps.model.LatLng;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.photo.Photo;
@@ -282,6 +283,7 @@ public class Place {
                                 JSONArray responsePlaceList = response.getJSONArray("content");
                                 if (responsePlaceList.length() > 0) {
 
+                                    resultPlaceList.clear();
                                     for (int i = 0; i < responsePlaceList.length(); i++) {
 
                                         JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
@@ -392,6 +394,22 @@ public class Place {
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
                 placesArrayListPopular,
+                adapter);
+    }
+
+    public static void fetchNearMePlaces(PlaceAdapter adapter){
+
+        // --GUPPY COMMENT IMPORTANT--
+        // -- Location will be set --
+        LatLng userLocation = new LatLng(40.3859933,49.8232647);
+        double userLatitude = userLocation.latitude;
+        double userLongitude = userLocation.longitude;
+
+        fetchGenericPlaceList(
+                Request.Method.GET,
+                App.SitePath + "api/places.php?op=nearme&lat="+userLatitude+"&lon="+userLongitude,
+                null,
+                placesArrayListNearMe,
                 adapter);
     }
 
