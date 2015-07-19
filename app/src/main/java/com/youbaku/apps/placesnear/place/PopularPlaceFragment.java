@@ -105,7 +105,7 @@ public class PopularPlaceFragment extends Fragment {
         if(Place.placesArrayListNearMe!=null && Place.placesArrayListNearMe.size()>0){
             listFragment.setList(Place.placesArrayListNearMe);
         }else{
-            listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListNearMe, Color.parseColor("#00000000")));
+            listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListNearMe, Color.BLACK));
             Place.fetchPopularPlaces(listFragment.getAdapter());
         }
 

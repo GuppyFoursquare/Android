@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,7 +125,6 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
         int height=(width/16)*9;
         params.height=height;
-        System.out.println(width+" x "+height);
         im.setLayoutParams(params);
 
 
