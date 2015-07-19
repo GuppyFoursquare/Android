@@ -19,6 +19,13 @@ import android.widget.AdapterView;
 import com.youbaku.apps.placesnear.App;
 import java.util.ArrayList;
 
+
+/**
+ * This is the generic class for place list fragment which is used by
+ *  - PopularPlaceFragment
+ *  - ...
+ *
+ */
 public class PlaceListFragment extends ListFragment {
     private ArrayList<Place> list;
     private PlaceAdapter adap;

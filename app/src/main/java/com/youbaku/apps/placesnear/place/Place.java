@@ -18,6 +18,8 @@ import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.photo.Photo;
 import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.Deal;
+import com.youbaku.apps.placesnear.utils.Category;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,6 +111,7 @@ public class Place {
     public boolean liked = false;
 
     public static ArrayList<Place> placesArrayListPopular = new ArrayList<>();
+    public static ArrayList<Place> placesArrayListSearch = new ArrayList<>();
     public static ArrayList<Place> placesArrayListNearMe = new ArrayList<>();
 
     public static Map<String, Place> placesListNearMe = new HashMap<>();
@@ -339,12 +342,16 @@ public class Place {
                                                 e.printStackTrace();
                                             }
                                         }
-                                        place.setRating(averageRating / (double) ratings.length());
-                                        MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
-                                        // GET distance
-                                        // --GUPPY COMMENT IMPORTANT--
-                                        // -- Location will be set --
 
+                                        try{
+                                            place.setRating(averageRating/(double) ratings.length());
+                                        }catch (NullPointerException e){
+                                            Log.e("---GUPPY---", "ratings return NULL");
+                                        }
+
+
+                                        // GET distance
+                                        MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
                                         Location.distanceBetween(my.latitude, my.longitude, place.getLatitude(), place.getLongitude(), place.getDistance());
 
 
@@ -402,17 +409,37 @@ public class Place {
                 adapter);
     }
 
+    public static void fetchSearchPlaces(PlaceAdapter adapter) {
+
+        // Preparing for parameters
+        ArrayList selectedSubCategory = new ArrayList();
+        for(Category c : Category.categoryList){
+            for(SubCategory s : c.getSubCatList()){
+                if(s.isSelected()){
+                    selectedSubCategory.add(s.getId());
+                }
+            }
+        }
+
+        // Parameters
+        Map<String, ArrayList> map = new HashMap<String, ArrayList>();
+        map.put("subcat_list", selectedSubCategory);
+
+        fetchGenericPlaceList(
+                Request.Method.POST,
+                App.SitePath+"api/places.php?op=search",
+                map,
+                placesArrayListSearch,
+                adapter);
+    }
+
     public static void fetchNearMePlaces(PlaceAdapter adapter) {
 
-        // --GUPPY COMMENT IMPORTANT--
-        // -- Location will be set --
         MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
-        double userLatitude = my.latitude;
-        double userLongitude = my.longitude;
 
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?op=nearme&lat=" + userLatitude + "&lon=" + userLongitude,
+                App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
                 null,
                 placesArrayListNearMe,
                 adapter);

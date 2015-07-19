@@ -24,6 +24,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
@@ -147,10 +148,72 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
             bar.setIndeterminateDrawable(spin);
         }
 
+
+
+        // --GUPPY COMMENT IMPORTANT--
+        /**
+         *  Clear code olması adına aşağıdaki alan ve comment'li AdapterView.OnItemClickListener
+         *  çalıştırılması gerekmektedir. Tabi bu durumda aşağıdaki refreshList methodu silinmesi
+         *  gerekmektedir.
+         *
+         *  Ancak problemli olan bazı kısımlar bulunmaktadır. Örneğin bu durumda servis istenilen
+         *  dataları dönmemektedir. Bu durumda servis tarafında değişiklik yapılması gerekmektedir.
+         *
+         *  Web servislerde değişiklik şu sekilde olmalıdır. İstenilen sonuç dönmesi durumunda
+         *  sonuçların id'lerine sahip place değerlerinin tamamı gelmesi gerekmektedir.
+         *
+         */
+
         refreshList();
+
+//        listFragment = new PlaceListFragment();
+//        // IF popular places are fetched before then set it to adapter directly
+//        // OTHERWISE fetch first and set to adapter
+//        if(Place.placesArrayListSearch!=null && Place.placesArrayListSearch.size()>0){
+//            listFragment.setList(Place.placesArrayListSearch);
+//        }else{
+//            listFragment.setAdapter(new PlaceAdapter(this,Place.placesArrayListSearch, Color.BLACK));
+//            Place.fetchSearchPlaces(listFragment.getAdapter());
+//        }
+//
+//        listFragment.setColor(App.DefaultBackgroundColor);
+//        listFragment.setOnItemClickListener(listSelected);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
 
     }
 
+
+    // --GUPPY COMMENT IMPORTANT--
+//    AdapterView.OnItemClickListener listSelected = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            /**
+//             * Before start Activity we have to fetch place info from server then
+//             * start activity. Otherwise place info may not be includes all information.
+//             *
+//             * Place info fetched at PlaceDetailActivity > PlaceDetailFragment
+//             */
+//            Place.FOR_DETAIL = Place.placesArrayListSearch.get(position);
+//            Place.ID = Place.placesArrayListSearch.get(position).getId();
+//            Place.EMAIL = Place.placesArrayListSearch.get(position).getEmail();
+//            Intent in = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+//            in.putExtra("title", Place.placesArrayListSearch.get(position).getName());
+//            startActivity(in);
+//        }
+//    };
+
+    AdapterView.OnItemClickListener listSelected = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Place.FOR_DETAIL = list.get(position);
+            Place.ID = list.get(position).getId();
+            Place.EMAIL = list.get(position).getEmail();
+            Intent in = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+            in.putExtra("title", list.get(position).getName());
+            startActivity(in);
+        }
+    };
 
     private void refreshList() {
         if (!App.checkInternetConnection(this) && onScreen) {
@@ -485,18 +548,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         }
         screen = sc;
     }
-
-    AdapterView.OnItemClickListener listSelected = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Place.FOR_DETAIL = list.get(position);
-            Place.ID = list.get(position).getId();
-            Place.EMAIL = list.get(position).getEmail();
-            Intent in = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-            in.putExtra("title", list.get(position).getName());
-            startActivity(in);
-        }
-    };
 
 
     /* private void  refreshFavourite(){
