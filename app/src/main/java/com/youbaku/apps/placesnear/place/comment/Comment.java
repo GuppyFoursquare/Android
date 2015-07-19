@@ -28,7 +28,7 @@ public class Comment {
     private static int DOWNLOADED=0;
     private static AllCommentsDownloaded subscriber;
 
-    public String comment_id="";
+
 
     public static String getNAME() {
         return NAME;
@@ -50,13 +50,6 @@ public class Comment {
         this.text = text;
     }
 
-    public String getUser_img() {
-        return user_img;
-    }
-
-    public void setUser_img(String user_img) {
-        this.user_img = user_img;
-    }
 
     public String getComment_id() {
         return comment_id;
@@ -73,6 +66,7 @@ public class Comment {
     public String user_img="";
     public double rating=0;
     public Date created;
+    public String comment_id="";
     public boolean isActive=!App.moderateReviews;
 
     public Comment() {}
@@ -99,4 +93,11 @@ public class Comment {
         return ft.format(created);
     }
 
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
+    }
 }
