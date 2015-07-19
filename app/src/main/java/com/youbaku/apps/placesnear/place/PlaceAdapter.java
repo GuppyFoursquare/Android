@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -83,7 +84,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
             iDist.setLayoutParams(params);
 
 
-            ((TextView)convertView.findViewById(R.id.           location_text_place_list_item)).setTextColor(color);
+            ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setTextColor(color);
             ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setTextColor(color);
         }
 
@@ -92,7 +93,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
         ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(getList().get(position).getAddress());
         //((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
         ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics, getList().get(position).getDistance()[0]));
-       ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(getList().get(position).comments.size()+"");
+        ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(getList().get(position).comments.size()+"");
         //((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).getId()+"");
 
 
@@ -135,7 +136,8 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);
         }
-   TextView rateTxt=(TextView)convertView.findViewById(R.id.rating_place_list_item);
+
+        TextView rateTxt=(TextView)convertView.findViewById(R.id.rating_place_list_item);
 
         if(getList().get(position).rating > 3.5 && getList().get(position).rating <=5.0 ){
             rateTxt.setBackgroundColor(Color.parseColor(App.GreenColor));
