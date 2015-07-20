@@ -334,43 +334,6 @@ public class MainActivity extends ActionBarActivity implements
         }
 
 
-
-        static {
-            // Initially gets category list
-//            Category.fetchCategoryList();
-//            Place.fetchPopularPlaces();
-        }
-
-
-//        //
-//        public static void refreshSearchFragment(Activity activity){
-//            //Setting Adapter
-////            ExpandableListviewAdapter adapter = new ExpandableListviewAdapter(SearchFragment.activity, Category.categoryList);
-////            AnimatedExpandableListView listView = (AnimatedExpandableListView)SearchFragment.view.findViewById(R.id.listView);
-////            listView.setAdapter(adapter);
-//
-//
-//
-//            if(SearchFragment.adapter!=null){
-//                SearchFragment.adapter.setItems(Category.categoryList);
-//            }else{
-//                SearchFragment.adapter = new ExpandableListviewAdapter(activity , Category.categoryList);
-//            }
-//
-//
-//            Log.e("GUPPY" , " -- Current id is :: " + MainActivity.viewPager.getCurrentItem() );
-//
-//            MainActivity.mAdapter.getItem(1);
-//
-////            View expandableView  = MainActivity.viewPager.getChildAt(1);
-////            expandableView = SearchFragment.view;
-//            AnimatedExpandableListView listView = (AnimatedExpandableListView).findViewById(R.id.listView);
-//            listView.setAdapter(SearchFragment.adapter);
-//        }
-
-
-
-
     }
 
 

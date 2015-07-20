@@ -2,6 +2,7 @@
 
 package com.youbaku.apps.placesnear.place;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.text.Html;
@@ -267,6 +268,9 @@ public class Place {
         return null;
     }
 
+    // --GUPPY COMMENT IMPORTANT--
+    // PlaceActivity checkDownloads() methodu entegre edilecek
+
     /**
      * @param METHOD          Request.Method.GET || Request.Method.POST
      * @param URL
@@ -274,11 +278,17 @@ public class Place {
      * @param resultPlaceList Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
      *                        datalar dönmemektedir.
      */
-    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, final T adapter) {
+    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, Activity activity, final T adapter) {
+
+        if (activity!=null && !App.checkInternetConnection(activity) ) {
+            App.showInternetError(activity);
+            return;
+        }
 
         // Request a json response
+        JSONObject params = (parameters!=null) ? (new JSONObject(parameters)) : (null);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (METHOD, URL, new Response.Listener<JSONObject>() {
+                (METHOD, URL, params, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -346,6 +356,7 @@ public class Place {
                                         try{
                                             place.setRating(averageRating/(double) ratings.length());
                                         }catch (NullPointerException e){
+                                            place.setRating(3);
                                             Log.e("---GUPPY---", "ratings return NULL");
                                         }
 
@@ -364,6 +375,9 @@ public class Place {
 
                                     }
 
+                                    // --GUPPY COMMENT IMPORTANT--
+                                    // Buradaki adapter generic type olarak setList almalıdır
+                                    // PlaceAdapter casting çıkarılmalıdır
                                     if (adapter != null) {
                                         ((PlaceAdapter) adapter).setList(resultPlaceList);
                                         ((PlaceAdapter) adapter).notifyDataSetChanged();
@@ -391,25 +405,27 @@ public class Place {
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
 
-    public static void fetchPopularPlaces() {
+    public static void fetchPopularPlaces(Activity activity) {
         fetchGenericPlaceList(
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
                 placesArrayListPopular,
+                activity,
                 null);
     }
 
-    public static void fetchPopularPlaces(PlaceAdapter adapter) {
+    public static void fetchPopularPlaces(Activity activity, PlaceAdapter adapter) {
         fetchGenericPlaceList(
                 Request.Method.GET,
                 App.SitePath + "api/places.php?op=search&popular=1",
                 null,
                 placesArrayListPopular,
+                activity,
                 adapter);
     }
 
-    public static void fetchSearchPlaces(PlaceAdapter adapter) {
+    public static void fetchSearchPlaces(Activity activity, PlaceAdapter adapter) {
 
         // Preparing for parameters
         ArrayList selectedSubCategory = new ArrayList();
@@ -427,13 +443,14 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.POST,
-                App.SitePath+"api/places.php?op=search",
+                App.SitePath + "api/places.php?op=search",
                 map,
                 placesArrayListSearch,
+                activity,
                 adapter);
     }
 
-    public static void fetchNearMePlaces(PlaceAdapter adapter) {
+    public static void fetchNearMePlaces(Activity activity,PlaceAdapter adapter) {
 
         MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
 
@@ -442,6 +459,7 @@ public class Place {
                 App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
                 null,
                 placesArrayListNearMe,
+                activity,
                 adapter);
     }
 

@@ -106,7 +106,7 @@ public class PopularPlaceFragment extends Fragment {
             listFragment.setList(Place.placesArrayListPopular);
         }else{
             listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListPopular, Color.BLACK));
-            Place.fetchPopularPlaces(listFragment.getAdapter());
+            Place.fetchPopularPlaces(getActivity(), listFragment.getAdapter());
         }
 
         listFragment.setColor(App.DefaultBackgroundColor);

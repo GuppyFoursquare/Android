@@ -24,6 +24,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -38,6 +39,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -76,15 +78,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     public static final String TITLE = "title";
 
     @Override
-    public void locationSet() {
-        refreshList();
-    }
-
+    public void locationSet() {}
 
     private enum Screen {list, filter, favorite}
 
     private Screen screen = Screen.list;
-
     private String color = "";
     private String title = "";
     private ArrayList<Place> list = new ArrayList<>();
@@ -138,7 +136,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
 
         ((RelativeLayout) findViewById(R.id.main_activity_place)).setBackgroundColor(Color.parseColor(App.DefaultBackgroundColor));
-
         if (Build.VERSION.SDK_INT > 10) {
             bar = (ProgressBar) findViewById(R.id.progressBar);
             SpinKitDrawable1 spin = new SpinKitDrawable1(this);
@@ -149,297 +146,37 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         }
 
 
+        // --GUPPY COMMENT UPDATE--
+        listFragment = new PlaceListFragment();
+        listFragment.setAdapter(new PlaceAdapter(this,Place.placesArrayListSearch, Color.BLACK));
+        listFragment.setColor(App.DefaultBackgroundColor);
+        listFragment.setOnItemClickListener(listSelected);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
 
-        // --GUPPY COMMENT IMPORTANT--
-        /**
-         *  Clear code olması adına aşağıdaki alan ve comment'li AdapterView.OnItemClickListener
-         *  çalıştırılması gerekmektedir. Tabi bu durumda aşağıdaki refreshList methodu silinmesi
-         *  gerekmektedir.
-         *
-         *  Ancak problemli olan bazı kısımlar bulunmaktadır. Örneğin bu durumda servis istenilen
-         *  dataları dönmemektedir. Bu durumda servis tarafında değişiklik yapılması gerekmektedir.
-         *
-         *  Web servislerde değişiklik şu sekilde olmalıdır. İstenilen sonuç dönmesi durumunda
-         *  sonuçların id'lerine sahip place değerlerinin tamamı gelmesi gerekmektedir.
-         *
-         */
-
-        refreshList();
-
-//        listFragment = new PlaceListFragment();
-//        // IF popular places are fetched before then set it to adapter directly
-//        // OTHERWISE fetch first and set to adapter
-//        if(Place.placesArrayListSearch!=null && Place.placesArrayListSearch.size()>0){
-//            listFragment.setList(Place.placesArrayListSearch);
-//        }else{
-//            listFragment.setAdapter(new PlaceAdapter(this,Place.placesArrayListSearch, Color.BLACK));
-//            Place.fetchSearchPlaces(listFragment.getAdapter());
-//        }
-//
-//        listFragment.setColor(App.DefaultBackgroundColor);
-//        listFragment.setOnItemClickListener(listSelected);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
-
+        Place.fetchSearchPlaces(this,listFragment.getAdapter());
     }
 
 
-    // --GUPPY COMMENT IMPORTANT--
-//    AdapterView.OnItemClickListener listSelected = new AdapterView.OnItemClickListener() {
-//        @Override
-//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            /**
-//             * Before start Activity we have to fetch place info from server then
-//             * start activity. Otherwise place info may not be includes all information.
-//             *
-//             * Place info fetched at PlaceDetailActivity > PlaceDetailFragment
-//             */
-//            Place.FOR_DETAIL = Place.placesArrayListSearch.get(position);
-//            Place.ID = Place.placesArrayListSearch.get(position).getId();
-//            Place.EMAIL = Place.placesArrayListSearch.get(position).getEmail();
-//            Intent in = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-//            in.putExtra("title", Place.placesArrayListSearch.get(position).getName());
-//            startActivity(in);
-//        }
-//    };
-
+    // --GUPPY COMMENT UPDATE--
     AdapterView.OnItemClickListener listSelected = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Place.FOR_DETAIL = list.get(position);
-            Place.ID = list.get(position).getId();
-            Place.EMAIL = list.get(position).getEmail();
+
+            /**
+             * Before start Activity we have to fetch place info from server then
+             * start activity. Otherwise place info may not be includes all information.
+             *
+             * Place info fetched at PlaceDetailActivity > PlaceDetailFragment
+             */
+            Place.FOR_DETAIL = Place.placesArrayListSearch.get(position);
+            Place.ID = Place.placesArrayListSearch.get(position).getId();
+            Place.EMAIL = Place.placesArrayListSearch.get(position).getEmail();
             Intent in = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-            in.putExtra("title", list.get(position).getName());
+            in.putExtra("title", Place.placesArrayListSearch.get(position).getName());
             startActivity(in);
         }
     };
 
-    private void refreshList() {
-        if (!App.checkInternetConnection(this) && onScreen) {
-            App.showInternetError(this);
-            return;
-        }
-
-        MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-        if (!my.isSet()) {
-            my.subscriber = this;
-            my.callLocation();
-            return;
-        }
-
-        //String url2 = App.SitePath+"api/places.php?op=nearme&lat="+my.latitude+"&lon="+my.longitude+"&scat_id="+ SubCategory.SELECTED_SUB_CATEGORY_ID;
-
-        //GET SELECTED SUBCATEGORIES
-        ArrayList selectedSubCategory = new ArrayList();
-        for(Category c : Category.categoryList){
-            for(SubCategory s : c.getSubCatList()){
-                if(s.isSelected()){
-                    selectedSubCategory.add(s.getId());
-                }
-            }
-        }
-
-        //Calling Api
-        String url2 = App.SitePath+"api/places.php?op=search";
-        Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-        map.put("subcat_list", selectedSubCategory);
-
-        final Activity tt = this;
-        // Request a json response
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, url2, new JSONObject(map), new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-                            JSONArray jArray = response.getJSONArray("content");
-                            list = new ArrayList<Place>();
-                            System.out.println("places downloaded " + jArray.length());
-
-                            if (jArray.length() > 0) {
-
-                                firstFilter = false;
-                                placesDownload = true;
-                                //Read JsonArray
-                                for (int i = 0; i < jArray.length(); i++) {
-                                    JSONObject o = jArray.getJSONObject(i);
-                                    final PlaceFilter filter = PlaceFilter.getInstance();
-                                    final Place p = new Place();
-
-                                    if (o.has("rating")) {
-
-                                        JSONArray arr = o.getJSONArray("rating");
-
-
-                                        for (int j = 0; j < arr.length(); j++) {
-                                            final Comment c = new Comment();
-                                            JSONObject obj = arr.getJSONObject(j);
-                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                                            try {
-                                                Date d = format.parse(obj.getString("places_rating_created_date"));
-                                                c.created = d;
-                                                c.text = obj.getString("place_rating_comment");
-                                                c.comment_id = obj.getString("place_rating_id");
-                                                c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                c.name = obj.getString("usr_username");
-
-                                                //Getting User Image
-                                                if(obj.isNull("usr_profile_picture")){
-                                                    c.user_img="";
-                                                    Log.i("---GUPPY USER IMAGE---","No Available Image");
-                                                }
-                                                else{
-                                                    c.user_img = obj.getString("usr_profile_picture").toString();
-                                                }
-
-
-                                                p.comments.add(c);
-
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-
-
-                                            //Toast.makeText(getApplicationContext(),"Yes! There is rating array which is "+c.text,Toast.LENGTH_LONG).show();
-
-                                        }
-
-                                    }
-
-
-                                    double rating = 0.0;
-                                    if (o.has("plc_avg_rating")) {
-                                        rating = Double.parseDouble(o.getString("plc_avg_rating"));
-                                    } else {
-                                        rating = 0.0;
-                                    }
-
-
-                                    //Inflate places
-                                    p.setId(o.getString("plc_id"));
-                                    p.setName(o.getString("plc_name"));
-                                    p.setImgUrl(o.getString("plc_header_image"));
-                                    p.setAddress(o.getString("plc_address"));
-                                    p.setRating(rating);
-                                    p.setWeb(o.getString("plc_website"));
-                                    p.email=o.getString("plc_email");
-                                    p.setPhone(o.getString("plc_contact"));
-                                    p.open = o.getString("plc_intime");
-                                    p.close = o.getString("plc_outtime");
-
-
-                                    String isActive = o.getString("plc_is_active");
-                                    if (isActive == "1") {
-                                        p.setIsActive(true);
-                                    } else {
-                                        p.setIsActive(false);
-                                    }
-
-                                    String PLACE_INFO_WITHOUT_HTML_TAG = String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString()));
-                                    p.setDescription(PLACE_INFO_WITHOUT_HTML_TAG);
-
-
-                                    double latitude = Double.parseDouble(o.getString("plc_latitude"));
-                                    double longitude = Double.parseDouble(o.getString("plc_longitude"));
-                                    p.setLocation(latitude, longitude);
-
-                                    MyLocation my = MyLocation.getMyLocation(getApplicationContext());
-                                    Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.getDistance());
-                                   // Location.distanceBetween(40.372877, 49.842825, p.getLatitude(), p.getLongitude(), p.getDistance());//For testing
-
-                                    boolean pop = true;
-                                    if (filter.popular && p.rating < 3.0) {
-                                        pop = false;
-                                    }
-                                    boolean open = true;
-                                    if (filter.open) {
-                                        open = p.isOpen();
-                                    }
-
-
-                                    boolean filterKeyword = filter.keyword.length() != 0 ? p.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
-                                    boolean filterDistance = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > p.getDistance()[0] / 1000 : true;
-                                    boolean filterDistanceMl = filter.getDistance(PlaceFilter.DistanceSystem.ml) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.ml) > p.getDistance()[0] / 1000 * 0.6214 : true;
-
-
-                                    if (pop && open && filterKeyword && filterDistance && filterDistanceMl) {
-                                        list.add(p);
-                                    }
-
-                                }
-
-                                // --GUPPY COMMENT IMPORTANT--
-                                /*
-                                 * try-catch kaldırılması durumunda server geciktirilme durumunda(sleep)
-                                 * Volley sonucunun fragment'i değiştirme isteğinden ve ilgili fragment'in
-                                 * olmamasından hata ile karşılaşılıyor.
-                                 */
-
-                                try {
-                                    checkDownloads();
-                                } catch (IllegalStateException e) {
-                                    Log.e("--- GUPPY ---", "Error occur on replace fragment");
-                                }
-
-                            } else {
-                                setSupportProgressBarIndeterminateVisibility(false);
-                                AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                                bu.setMessage(getResources().getString(R.string.novenuemessage));
-                                bu.setNegativeButton(getResources().getString(R.string.alertcancelbuttonlabel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                });
-                                bu.setPositiveButton(getResources().getString(R.string.newfilterbuttonlabel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (fi == null)
-                                            fi = new FilterFragment();
-                                        firstFilter = true;
-                                        fi.setColor(Color.parseColor(color));
-                                        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, fi).commit();
-                                        setScreen(Screen.filter);
-                                    }
-                                });
-                                bu.show();
-                            }
-
-
-                        } catch (JSONException e) {
-
-                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    refreshList();
-                                }
-                            });
-                            bu.show();
-                            e.printStackTrace();
-                            return;
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-
-        // Add the request to the queue
-        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -492,7 +229,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                 if (bar != null)
                     bar.setVisibility(View.VISIBLE);
-                refreshList();
+
+                // --GUPPY COMMENT IMPORTANT--
+                // Generic filter methodu oluşturulup çağırılacaktır
+//                refreshList();
+
                 doFilter.setVisible(false);
                 setSupportProgressBarIndeterminateVisibility(true);
                 return true;
@@ -550,60 +291,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     }
 
 
-    /* private void  refreshFavourite(){
-         if(!App.checkInternetConnection(this) && onScreen) {
-             App.showInternetError(this);
-             return;
-         }
-         MyLocation my=MyLocation.getMyLocation(getApplicationContext());
-         if(!my.isSet()){
-             my.subscriber=this;
-             my.callLocation();
-             return;
-         }
-
-         FavoritesManager.refresh(this,new FavoritesCallback() {
-             @Override
-             public void favoritesReady(ArrayList<Place> places) {
-                 setSupportProgressBarIndeterminateVisibility(false);
-                 listFragment = new PlaceListFragment();
-
-                 if(places!=null) {
-                     list = places;
-                     listFragment.setList(list);
-                     listFragment.setOnItemClickListener(listSelected);
-                 }
-                 listFragment.setEmptyText(getResources().getString(R.string.nofavoritedvenuemessage));
-                 listFragment.setColor(color);
-                 getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
-                 setScreen(Screen.favorite);
-                 if(bar!=null)
-                     bar.setVisibility(View.GONE);
-             }
-         });
-     }
-
-
-
-     @Override
-     public void CommentsDownloaded() {
-         commentsDownload=true;
-         checkDownloads();
-     }
-
-     @Override
-     public void dealsDownloaded() {
-         dealsDownload=true;
-         checkDownloads();
-     }
-
-     @Override
-     public void locationSet(){
-         if(!CategoryList.getCategory(Category.SELECTED_CATEGORY_ID).favourite)
-             refreshList();
-         else
-             refreshFavourite();
-     }*/
     @Override
     public void CommentsDownloaded() {
         commentsDownload = true;
