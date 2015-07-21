@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.MyApplication;
+import com.youbaku.apps.placesnear.adapter.Adapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.photo.Photo;
@@ -272,11 +273,16 @@ public class Place {
     // PlaceActivity checkDownloads() methodu entegre edilecek
 
     /**
-     * @param METHOD          Request.Method.GET || Request.Method.POST
+     * @param METHOD            Request.Method.GET || Request.Method.POST
      * @param URL
      * @param parameters
-     * @param resultPlaceList Burada generic place verileri çekilmektedir. Rating(comment), ek fotolar gibi
-     *                        datalar dönmemektedir.
+     * @param resultPlaceList   Burada generic place verileri çekilmektedir.
+     * @param activity
+     * @param adapter           This parameter can be any adapter but IT HAVE TO IMPLEMENT
+     *                          com.youbaku.apps.placesnear.adapter.Adapter and ALSO NOT FORGET THE
+     *                          OVERRIDE notifyDataSetChanged()
+     *
+     *                          Example :: PlaceAdapter
      */
     public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, Activity activity, final T adapter) {
 
@@ -295,12 +301,12 @@ public class Place {
 
                         try {
 
+                            resultPlaceList.clear();
                             if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
                                 JSONArray responsePlaceList = response.getJSONArray("content");
                                 if (responsePlaceList.length() > 0) {
 
-                                    resultPlaceList.clear();
                                     for (int i = 0; i < responsePlaceList.length(); i++) {
 
                                         JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
@@ -375,16 +381,25 @@ public class Place {
 
                                     }
 
-                                    // --GUPPY COMMENT IMPORTANT--
-                                    // Buradaki adapter generic type olarak setList almalıdır
-                                    // PlaceAdapter casting çıkarılmalıdır
+                                    // --GUPPY COMMENT UPDATE--
                                     if (adapter != null) {
-                                        ((PlaceAdapter) adapter).setList(resultPlaceList);
-                                        ((PlaceAdapter) adapter).notifyDataSetChanged();
+                                        try {
+                                            ((Adapter) adapter).setAdapterList(resultPlaceList);
+                                            ((Adapter) adapter).notifyDataSetChanged();
+                                        }catch (ClassCastException e){
+                                            Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
+                                        }
                                     }
 
                                 }
 
+                            }else{
+                                try{
+                                    String resultStatus = response.getString("status");
+                                    Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + resultStatus);
+                                }catch (NullPointerException e){
+                                    Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + "NULL");
+                                }                                 
                             }
 
                         } catch (JSONException e) {

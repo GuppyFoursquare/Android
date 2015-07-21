@@ -1,10 +1,4 @@
-//
-//  PlaceAdapter
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
+
 
 package com.youbaku.apps.placesnear.place;
 
@@ -32,12 +26,14 @@ import com.larvalabs.svgandroid.SVGParser;
 import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.adapter.Adapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PlaceAdapter extends ArrayAdapter<Place> {
+public class PlaceAdapter extends ArrayAdapter<Place> implements Adapter {
     private ArrayList<Place> list;
     private int color=0;
 
@@ -160,5 +156,25 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
 
     public void setList(ArrayList<Place> list) {
         this.list = list;
+    }
+
+
+    @Override
+    public void setAdapterList(List other) {
+        try{
+            setList((ArrayList)other);
+        }catch (ClassCastException e){
+            Log.e("---GUPPY---" , "PlaceAdapter->setAdapter ClassCastException");
+        }
+    }
+
+    @Override
+    public List getAdapterList() {
+        return null;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 }
