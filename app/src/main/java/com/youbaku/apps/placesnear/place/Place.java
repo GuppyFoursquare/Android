@@ -49,6 +49,8 @@ public class Place {
     public static final String PLC_CONTACT = "plc_contact";
     public static final String PLC_LATITUDE = "plc_latitude";
     public static final String PLC_LONGITUDE = "plc_longitude";
+    public static final String PLC_INTIME = "plc_intime";
+    public static final String PLC_OUTTIME = "plc_outtime";
     public static final String PLC_INFO = "plc_info";
     public static final String PLC_IS_ACTIVE = "plc_is_active";
     public static final String RATING = "rating";
@@ -108,13 +110,14 @@ public class Place {
     public ArrayList<Comment> comments = new ArrayList<Comment>();
     public ArrayList<Deal> deals = new ArrayList<Deal>();
     public ArrayList<Photo> photos = new ArrayList<Photo>();
-    public String open = "";
-    public String close = "";
+    private String open = "";
+    private String close = "";
     public boolean liked = false;
 
-    public static ArrayList<Place> placesArrayListPopular = new ArrayList<>();
     public static ArrayList<Place> placesArrayListSearch = new ArrayList<>();
+    public static ArrayList<Place> placesArrayListPopular = new ArrayList<>();
     public static ArrayList<Place> placesArrayListNearMe = new ArrayList<>();
+    public static ArrayList<Place> placesArrayListFilter = new ArrayList<>();
 
     public static Map<String, Place> placesListNearMe = new HashMap<>();
 
@@ -129,8 +132,8 @@ public class Place {
         try {
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             Date now = format.parse(format.format(new Date()));
-            Date open = format.parse(this.open);
-            Date close = format.parse(this.close);
+            Date open = format.parse(this.getOpen());
+            Date close = format.parse(this.getClose());
             if (!now.after(open) || !now.before(close))
                 return false;
         } catch (Exception e) {
@@ -141,6 +144,11 @@ public class Place {
         return true;
     }
 
+
+
+
+
+    //---------------------------------- ENCAPSULATION -----------------------------------/
     public double getLongitude() {
         return longitude;
     }
@@ -237,7 +245,41 @@ public class Place {
         this.isActive = isActive;
     }
 
+    public float[] getDistance() {
+        return distance;
+    }
 
+    public void setDistance(float[] distance) {
+        this.distance = distance;
+    }
+
+    public String getOpen() {
+        return open;
+    }
+
+    public void setOpen(String open) {
+        this.open = open;
+    }
+
+    public String getClose() {
+        return close;
+    }
+
+    public void setClose(String close) {
+        this.close = close;
+    }
+    //---------------------------------- ENCAPSULATION -----------------------------------/
+
+
+
+
+
+
+
+
+
+
+    //---------------------------------- REQUEST PART -----------------------------------/
     /**
      * @param jsonObj
      * @param key
@@ -322,6 +364,8 @@ public class Place {
                                             place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
                                             place.setWeb(getJsonValueIfExist(jsonPlace, Place.PLC_WEBSITE));
                                             place.setPhone(getJsonValueIfExist(jsonPlace, Place.PLC_CONTACT));
+                                            place.setOpen(getJsonValueIfExist(jsonPlace, Place.PLC_INTIME));
+                                            place.setClose(getJsonValueIfExist(jsonPlace, Place.PLC_OUTTIME));
 
                                             double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
                                             double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
@@ -383,15 +427,7 @@ public class Place {
 
                                         }
 
-                                        // --GUPPY COMMENT UPDATE--
-                                        if (adapter != null) {
-                                            try {
-                                                ((Adapter) adapter).setAdapterList(resultPlaceList);
-                                                ((Adapter) adapter).notifyDataSetChanged();
-                                            }catch (ClassCastException e){
-                                                Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
-                                            }
-                                        }
+
 
                                     }else{
                                         Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Place Count 0 ");
@@ -411,6 +447,23 @@ public class Place {
                                 }
                             }
 
+
+
+                            // *********************************************************************
+                            // *********************************************************************
+                            // --GUPPY COMMENT UPDATE--
+                            // -- Finnaly update Place List --
+                            if (adapter != null) {
+                                try {
+                                    ((Adapter) adapter).setAdapterList(resultPlaceList);
+                                    ((Adapter) adapter).notifyDataSetChanged();
+                                }catch (ClassCastException e){
+                                    Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
+                                }
+                            }
+                            // *********************************************************************
+                            // *********************************************************************
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -428,6 +481,16 @@ public class Place {
 
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
+    //---------------------------------- REQUEST PART -----------------------------------/
+
+
+
+
+
+
+
+
+
 
     public static void fetchPopularPlaces(Activity activity) {
         fetchGenericPlaceList(
@@ -487,11 +550,4 @@ public class Place {
                 adapter);
     }
 
-    public float[] getDistance() {
-        return distance;
-    }
-
-    public void setDistance(float[] distance) {
-        this.distance = distance;
-    }
 }

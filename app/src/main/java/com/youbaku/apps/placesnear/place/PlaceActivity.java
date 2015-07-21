@@ -1,34 +1,26 @@
 /*
  * YouBaku Project
  *
- * Copyright (C) 2015 Guppy Organization. All rights reserved.
+ * Copyright (C) 2015 CasbianSoft. All rights reserved.
  *
  * Modified by Guppy org.
  *
- * This Activty is PlaceActivty. Places with related category are listed
- * on PlaceActivty.
+ * TODO :: This Activty is PlaceActivty. Places with related category are listed on PlaceActivty.
  */
 
 
 package com.youbaku.apps.placesnear.place;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,37 +33,20 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.SpinKitDrawable1;
-import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.location.MyLocationSet;
 import com.youbaku.apps.placesnear.place.comment.AllCommentsDownloaded;
-import com.youbaku.apps.placesnear.place.comment.Comment;
 import com.youbaku.apps.placesnear.place.deal.AllDealsDownloaded;
 import com.youbaku.apps.placesnear.place.filter.FilterFragment;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.youbaku.apps.placesnear.utils.Category;
-import com.youbaku.apps.placesnear.utils.SubCategory;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-//
+
 
 public class PlaceActivity extends ActionBarActivity implements AllCommentsDownloaded, AllDealsDownloaded, MyLocationSet {
     public static final String COLOR = "color";
@@ -96,6 +71,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     private ProgressBar bar;
 
     private PlaceListFragment listFragment;
+    private FilterFragment filterFragment;
     private FilterFragment fi;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -199,14 +175,21 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         switch (id) {
             case R.id.go_filter_menu:
-                if (!placesDownload)//!dealsDownload || !commentsDownload ||
+
+                if (Place.placesArrayListSearch!=null && Place.placesArrayListSearch.size()>0 ){
+                    if (filterFragment == null)
+                        filterFragment = new FilterFragment();
+
+                    filterFragment.setColor(Color.parseColor(App.DefaultBackgroundColor));
+                    getSupportFragmentManager().beginTransaction().addToBackStack("filter").replace(R.id.main_activity_place, filterFragment).commit();
+                    setScreen(Screen.filter);
                     return true;
-                if (fi == null)
-                    fi = new FilterFragment();
-                fi.setColor(Color.parseColor(App.DefaultBackgroundColor));
-                getSupportFragmentManager().beginTransaction().addToBackStack("filter").replace(R.id.main_activity_place, fi).commit();
-                setScreen(Screen.filter);
-                return true;
+
+                }else{
+                    Toast.makeText(this , "PlaceActivity->placesArrayListSearch is null", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+
             case android.R.id.home:
                 if (firstFilter) {
                     finish();
@@ -218,24 +201,85 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                     return true;
                 }
                 return false;
+
             case R.id.do_filter:
-                InputMethodManager man = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                man.hideSoftInputFromWindow(fi.getWindowToken(), 0);
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(filterFragment.getWindowToken(), 0);
                 getSupportFragmentManager().popBackStack();
-                listFragment.setList(list);
-                if (listFragment != null) {
-                    getSupportFragmentManager().beginTransaction().remove(listFragment).commit();
-                }
 
-                if (bar != null)
-                    bar.setVisibility(View.VISIBLE);
-
-                // --GUPPY COMMENT IMPORTANT--
-                // Generic filter methodu oluşturulup çağırılacaktır
-//                refreshList();
-
+                //-0- ACTIONBAR VIEW SETTINGs
                 doFilter.setVisible(false);
                 setSupportProgressBarIndeterminateVisibility(true);
+
+                //-1- GET FILTER PROPERTIES
+                final PlaceFilter filter = PlaceFilter.getInstance();
+
+                //-2-   APPLY FILTER TO SEARCH PLACES
+                //-2.1- sort list according to filter
+                Collections.sort(Place.placesArrayListSearch, new Comparator<Place>() {
+                    @Override
+                    public int compare(Place lhs, Place rhs) {
+
+                        if (filter.sorting == PlaceFilter.SortBy.distance) {
+                            if (lhs.getDistance()[0] < rhs.getDistance()[0]) {
+                                return -1;
+                            } else if (lhs.getDistance()[0] > rhs.getDistance()[0]) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+
+                        } else if (filter.sorting == PlaceFilter.SortBy.rating) {
+                            if (lhs.getRating() < rhs.getRating())
+                                return 1;
+                            else if (lhs.getRating() > rhs.getRating())
+                                return -1;
+                            else
+                                return 0;
+
+                        } else {
+
+                            if (lhs.likes < rhs.likes)
+                                return 1;
+                            else if (lhs.likes > rhs.likes)
+                                return -1;
+                            else
+                                return 0;
+                        }
+                    }
+                });
+
+                //-2.2- fetch places
+                Place.placesArrayListFilter.clear();
+                for(Place searchPlace : Place.placesArrayListSearch){
+                    boolean filterKeyword       = filter.keyword.length() != 0 ? searchPlace.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
+                    boolean filterDistanceKM    = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > searchPlace.getDistance()[0] / 1000 : true;
+                    boolean filterDistanceML    = filter.getDistance(PlaceFilter.DistanceSystem.ml) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.ml) > searchPlace.getDistance()[0] / 1000 * 0.6214 : true;
+                    boolean filterIsOpen        = filter.open ? searchPlace.isOpen() : true;
+                    boolean isPlaceOK = filterKeyword && filterDistanceKM && filterDistanceML && filterIsOpen ;
+
+                    if(isPlaceOK){
+                        Place.placesArrayListFilter.add(searchPlace);
+                    }
+
+                }
+
+                //-3- UPDATE ACTIONBAR
+                setSupportProgressBarIndeterminateVisibility(false);
+
+                //-4- SET VIEW
+                // --GUPPY COMMENT IMPORTANT--
+                // -- If filter return size == 0 then replace with different fragment
+                listFragment = new PlaceListFragment();
+                listFragment.setList(Place.placesArrayListFilter);
+                listFragment.setColor(App.DefaultBackgroundColor);
+                listFragment.setOnItemClickListener(listSelected);
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
+                setScreen(Screen.list);
+
+                ActionBar act = (getSupportActionBar());
+                act.setSubtitle("Filter results...");
+
                 return true;
         }
 
@@ -294,71 +338,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     @Override
     public void CommentsDownloaded() {
         commentsDownload = true;
-        checkDownloads();
     }
 
     @Override
     public void dealsDownloaded() {
         dealsDownload = true;
-        checkDownloads();
-    }
-
-
-    public void checkDownloads() {
-        //if(placesDownload && commentsDownload && dealsDownload){
-        if (placesDownload) {
-            Collections.sort(list, new Comparator<Place>() {
-                @Override
-                public int compare(Place lhs, Place rhs) {
-                    PlaceFilter fil = PlaceFilter.getInstance();
-                    if (fil.sorting == PlaceFilter.SortBy.like) {
-                        if (lhs.likes < rhs.likes)
-                            return 1;
-                        else if (lhs.likes > rhs.likes)
-                            return -1;
-                        else
-                            return 0;
-                    } else if (fil.sorting == PlaceFilter.SortBy.rating) {
-                        if (lhs.rating < rhs.rating)
-                            return 1;
-                        else if (lhs.rating > rhs.rating)
-                            return -1;
-                        else
-                            return 0;
-                    } else {
-                        if (lhs.getDistance()[0] < rhs.getDistance()[0]) {
-                            return -1;
-                        } else if (lhs.getDistance()[0] > rhs.getDistance()[0]) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    }
-
-
-                }
-            });
-
-            setSupportProgressBarIndeterminateVisibility(false);
-            setScreen(Screen.list);
-            ActionBar act = (getSupportActionBar());
-            PlaceFilter filter = PlaceFilter.getInstance();
-            String sub = String.format(getResources().getString(R.string.categorydistanceradius),
-                    App.getDistanceString(filter.metrics, filter.getDistance(filter.metrics) * 1000),
-                    list.size());
-            act.setSubtitle(sub);
-
-            if (firstFilter)
-                getSupportFragmentManager().beginTransaction().remove(fi).commit();
-            listFragment = new PlaceListFragment();
-            listFragment.setList(list);
-            listFragment.setColor(App.DefaultBackgroundColor);
-            listFragment.setOnItemClickListener(listSelected);
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
-            setScreen(Screen.list);
-            if (bar != null)
-                bar.setVisibility(View.GONE);
-        }
     }
 
 }

@@ -140,8 +140,8 @@ public class FavoritesManager {
                     p.likes = Integer.parseInt(o.getString(Place.LIKES));
                     p.setIsActive(o.getBoolean(Place.ISACTIVE));
                     p.rating = Double.parseDouble(o.getString(Place.RATING));
-                    p.open = o.getString(Place.OPENHOUR);
-                    p.close = o.getString(Place.CLOSEHOUR);
+                    p.setOpen(o.getString(Place.OPENHOUR));
+                    p.setClose(o.getString(Place.CLOSEHOUR));
                     p.setWeb(o.getString(Place.WEBPAGE));
                     p.facebook = o.getString(Place.FACEBOOK);
                     p.twitter = o.getString(Place.TWITTER);
