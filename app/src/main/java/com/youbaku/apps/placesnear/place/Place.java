@@ -304,93 +304,102 @@ public class Place {
                             resultPlaceList.clear();
                             if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
-                                JSONArray responsePlaceList = response.getJSONArray("content");
-                                if (responsePlaceList.length() > 0) {
+                                try{
 
-                                    for (int i = 0; i < responsePlaceList.length(); i++) {
+                                    JSONArray responsePlaceList = response.getJSONArray("content");
+                                    if (responsePlaceList.length() > 0) {
 
-                                        JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
+                                        for (int i = 0; i < responsePlaceList.length(); i++) {
 
-                                        //Inflate places
-                                        Place place = new Place();
-                                        place.setId(getJsonValueIfExist(jsonPlace, Place.PLC_ID));
-                                        place.setName(getJsonValueIfExist(jsonPlace, Place.PLC_NAME));
-                                        place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
-                                        place.setAddress(getJsonValueIfExist(jsonPlace, Place.PLC_ADDRESS));
-                                        place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
-                                        place.setWeb(getJsonValueIfExist(jsonPlace, Place.PLC_WEBSITE));
-                                        place.setPhone(getJsonValueIfExist(jsonPlace, Place.PLC_CONTACT));
+                                            JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
 
-                                        double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
-                                        double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
-                                        place.setLocation(latitude, longitude);
+                                            //Inflate places
+                                            Place place = new Place();
+                                            place.setId(getJsonValueIfExist(jsonPlace, Place.PLC_ID));
+                                            place.setName(getJsonValueIfExist(jsonPlace, Place.PLC_NAME));
+                                            place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
+                                            place.setAddress(getJsonValueIfExist(jsonPlace, Place.PLC_ADDRESS));
+                                            place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
+                                            place.setWeb(getJsonValueIfExist(jsonPlace, Place.PLC_WEBSITE));
+                                            place.setPhone(getJsonValueIfExist(jsonPlace, Place.PLC_CONTACT));
 
-                                        String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
-                                        place.setDescription(htmlToString);
+                                            double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
+                                            double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
+                                            place.setLocation(latitude, longitude);
 
-                                        String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
-                                        place.setIsActive(isActive.equalsIgnoreCase("1"));
+                                            String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
+                                            place.setDescription(htmlToString);
 
-                                        // GET ratings
-                                        double averageRating = 0;
-                                        JSONArray ratings = getJsonArayIfExist(jsonPlace, Place.RATING);
-                                        for (int j = 0; ratings != null && j < ratings.length(); j++) {
-                                            Comment comment = new Comment();
-                                            JSONObject jsonComment = ratings.getJSONObject(j);
-                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
+                                            place.setIsActive(isActive.equalsIgnoreCase("1"));
 
+                                            // GET ratings
+                                            double averageRating = 0;
+                                            JSONArray ratings = getJsonArayIfExist(jsonPlace, Place.RATING);
+                                            for (int j = 0; ratings != null && j < ratings.length(); j++) {
+                                                Comment comment = new Comment();
+                                                JSONObject jsonComment = ratings.getJSONObject(j);
+                                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                                                try {
+                                                    // --GUPPY COMMENT IMPORTANT--
+                                                    // -- Comments variable change to encapsulation --
+                                                    Date date = format.parse(getJsonValueIfExist(jsonComment, Place.RATING_CREATED_DATE));
+                                                    comment.created = date;
+                                                    comment.text = getJsonValueIfExist(jsonComment, Place.RATING_COMMENT);
+                                                    comment.comment_id = getJsonValueIfExist(jsonComment, Place.RATING_ID);
+                                                    comment.rating = Double.parseDouble(getJsonValueIfExist(jsonComment, Place.RATING_RATING));
+                                                    comment.name = getJsonValueIfExist(jsonComment, Place.RATING_USR_USERNAME);
+                                                    comment.user_img = getJsonValueIfExist(jsonComment, Place.RATING_USR_PROFILE_PICTURE);
+
+                                                    averageRating += comment.rating;
+
+                                                    place.comments.add(comment);
+
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                            try{
+                                                place.setRating(averageRating/(double) ratings.length());
+                                            }catch (NullPointerException e){
+                                                place.setRating(3);
+                                                Log.e("---GUPPY---", "ratings return NULL");
+                                            }
+
+
+                                            // GET distance
+                                            MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
+                                            Location.distanceBetween(my.latitude, my.longitude, place.getLatitude(), place.getLongitude(), place.getDistance());
+
+
+                                            //Put place to list
                                             try {
-                                                // --GUPPY COMMENT IMPORTANT--
-                                                // -- Comments variable change to encapsulation --
-                                                Date date = format.parse(getJsonValueIfExist(jsonComment, Place.RATING_CREATED_DATE));
-                                                comment.created = date;
-                                                comment.text = getJsonValueIfExist(jsonComment, Place.RATING_COMMENT);
-                                                comment.comment_id = getJsonValueIfExist(jsonComment, Place.RATING_ID);
-                                                comment.rating = Double.parseDouble(getJsonValueIfExist(jsonComment, Place.RATING_RATING));
-                                                comment.name = getJsonValueIfExist(jsonComment, Place.RATING_USR_USERNAME);
-                                                comment.user_img = getJsonValueIfExist(jsonComment, Place.RATING_USR_PROFILE_PICTURE);
+                                                resultPlaceList.add(place);
+                                            } catch (NullPointerException e) {
+                                                Log.e("---GUPPY---", "getGenericPlaceList > resultPlaceList parameter is null");
+                                            }
 
-                                                averageRating += comment.rating;
+                                        }
 
-                                                place.comments.add(comment);
-
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
+                                        // --GUPPY COMMENT UPDATE--
+                                        if (adapter != null) {
+                                            try {
+                                                ((Adapter) adapter).setAdapterList(resultPlaceList);
+                                                ((Adapter) adapter).notifyDataSetChanged();
+                                            }catch (ClassCastException e){
+                                                Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
                                             }
                                         }
 
-                                        try{
-                                            place.setRating(averageRating/(double) ratings.length());
-                                        }catch (NullPointerException e){
-                                            place.setRating(3);
-                                            Log.e("---GUPPY---", "ratings return NULL");
-                                        }
-
-
-                                        // GET distance
-                                        MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
-                                        Location.distanceBetween(my.latitude, my.longitude, place.getLatitude(), place.getLongitude(), place.getDistance());
-
-
-                                        //Put place to list
-                                        try {
-                                            resultPlaceList.add(place);
-                                        } catch (NullPointerException e) {
-                                            Log.e("---GUPPY---", "getGenericPlaceList > resultPlaceList parameter is null");
-                                        }
-
+                                    }else{
+                                        Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Place Count 0 ");
                                     }
 
-                                    // --GUPPY COMMENT UPDATE--
-                                    if (adapter != null) {
-                                        try {
-                                            ((Adapter) adapter).setAdapterList(resultPlaceList);
-                                            ((Adapter) adapter).notifyDataSetChanged();
-                                        }catch (ClassCastException e){
-                                            Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
-                                        }
-                                    }
-
+                                }catch (JSONException e){
+                                    Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Response Content JSONException");
+                                    e.printStackTrace();
                                 }
 
                             }else{
@@ -399,7 +408,7 @@ public class Place {
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + resultStatus);
                                 }catch (NullPointerException e){
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + "NULL");
-                                }                                 
+                                }
                             }
 
                         } catch (JSONException e) {
