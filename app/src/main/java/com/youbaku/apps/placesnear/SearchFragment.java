@@ -111,7 +111,6 @@ public class SearchFragment extends Fragment {
 
         if (Category.categoryList == null || Category.categoryList.size() == 0) {
             Category.fetchCategoryList(getActivity(), view);
-
         }
 
 

@@ -62,7 +62,7 @@ public class SubCategory {
 
     public static void fetchSubcategoryList(final Activity activity , final View view , final Category categoryObj){
         //Calling Api
-        String url = App.SitePath+"api/category.php?cat_id="+categoryObj.getObjectId();
+        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&cat_id="+categoryObj.getObjectId();
 
         JSONObject apiResponse = null;
         // Request a json response

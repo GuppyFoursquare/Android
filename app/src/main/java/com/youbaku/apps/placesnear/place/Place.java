@@ -495,7 +495,7 @@ public class Place {
     public static void fetchPopularPlaces(Activity activity) {
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?op=search&popular=1",
+                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search&popular=1",
                 null,
                 placesArrayListPopular,
                 activity,
@@ -505,7 +505,7 @@ public class Place {
     public static void fetchPopularPlaces(Activity activity, PlaceAdapter adapter) {
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?op=search&popular=1",
+                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search&popular=1",
                 null,
                 placesArrayListPopular,
                 activity,
@@ -530,12 +530,13 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.POST,
-                App.SitePath + "api/places.php?op=search",
+                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search",
                 map,
                 placesArrayListSearch,
                 activity,
                 adapter);
     }
+
 
     public static void fetchNearMePlaces(Activity activity,PlaceAdapter adapter) {
 
@@ -543,7 +544,7 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
+                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
                 null,
                 placesArrayListNearMe,
                 activity,

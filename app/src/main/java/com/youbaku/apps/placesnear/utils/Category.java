@@ -114,12 +114,11 @@ public class Category {
 
     public static void fetchCategoryList(final Activity activity , final View view){
         //Calling Api
-        String url = App.SitePath+"api/category.php";
+        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey;
 
-        JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>(){
+                (Request.Method.GET, url , new Response.Listener<JSONObject>(){
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -144,12 +143,13 @@ public class Category {
                                     categoryList.add(category);
 
                                     SubCategory.fetchSubcategoryList(activity,view,category);
-
-                                    Log.e("---GUPPY STATIC---" , "Category set :: " + category.objectId);
                                 }
 
                                 IS_CATEGORIES_FETCHED = true;
 
+                            }else if(response.getString("status").equalsIgnoreCase("FAILURE_PERMISSION")){
+                                Log.e("---GUPPY ERROR---" , "Category->fetchCategoryList-> api key missing error");
+                                Toast.makeText(activity , "API key needed" , Toast.LENGTH_SHORT).show();
                             }else{
                                 IS_CATEGORIES_FETCHED = false;
                             }

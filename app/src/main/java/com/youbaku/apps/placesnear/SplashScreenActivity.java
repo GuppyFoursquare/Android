@@ -4,10 +4,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.utils.SubCategory;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class SplashScreenActivity extends Activity {
@@ -24,26 +39,51 @@ public class SplashScreenActivity extends Activity {
 
         setContentView(R.layout.activity_splash_screen);
 
-        Thread timerThread = new Thread(){
-            public void run(){
-                try{
-                    sleep(3000);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }finally{
-                    boolean internetConnection = App.checkInternetConnection(getApplication());
-                    if(!internetConnection){
-                        App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
-                        return;
-                    }else {
-                        Intent i = new Intent(getApplication(),MainActivity.class);
-                        startActivity(i);
-                    }
 
-                }
-            }
-        };
-        timerThread.start();
+
+        String url = App.SitePath+"api/register.php";
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+
+                                JSONObject responseContent = response.getJSONObject("content");
+                                App.youbakuToken = responseContent.getString("token");
+                                App.youbakuAPIKey = responseContent.getString("apikey");
+
+                                if(!App.checkInternetConnection(getApplication())){
+                                    App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
+                                    return;
+                                }else {
+                                    Intent i = new Intent(getApplication(),MainActivity.class);
+                                    startActivity(i);
+                                }
+                            }else{
+                                Toast.makeText(getApplicationContext() , "Response not success", Toast.LENGTH_SHORT).show();
+                                Log.e("---GUPPY ERROR---", "SplassScreenActivity -> apikey request");
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
     }
 
     @Override
