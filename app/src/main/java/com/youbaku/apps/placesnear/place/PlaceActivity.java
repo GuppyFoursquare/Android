@@ -96,7 +96,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setDisplayShowCustomEnabled(true);
         act.setTitle(title);
-        act.setSubtitle("Places for " + title);
+        act.setSubtitle("YouBaku");
 
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = 0x05;
@@ -124,12 +124,16 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         // --GUPPY COMMENT UPDATE--
         listFragment = new PlaceListFragment();
-        listFragment.setAdapter(new PlaceAdapter(this,Place.placesArrayListSearch, Color.BLACK));
+        listFragment.setAdapter(new PlaceAdapter(this, Place.placesArrayListSearch, Color.BLACK));
         listFragment.setColor(App.DefaultBackgroundColor);
+        ProgressBar br=(ProgressBar) findViewById(R.id.progressBar);
+        br.setVisibility(View.INVISIBLE);
         listFragment.setOnItemClickListener(listSelected);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
-
-        Place.fetchSearchPlaces(this,listFragment.getAdapter());
+        Place.fetchSearchPlaces(this, listFragment.getAdapter());
+        act.setTitle(String.format(getResources().getString(R.string.categorydistanceradius),
+                App.getDistanceString(filter.metrics, filter.getDistance(filter.metrics) * 1000),
+                Place.placesArrayListSearch.size()));
     }
 
 

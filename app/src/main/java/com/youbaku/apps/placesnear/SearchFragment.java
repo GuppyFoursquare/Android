@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
@@ -137,6 +138,7 @@ public class SearchFragment extends Fragment {
                         Toast.makeText(getActivity(), "You should select at least one category!", Toast.LENGTH_LONG).show();
                     }
                     else{
+
                         Intent in = new Intent(getActivity(), PlaceActivity.class);
                         startActivity(in);
                     }
