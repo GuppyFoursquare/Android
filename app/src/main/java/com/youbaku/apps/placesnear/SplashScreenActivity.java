@@ -31,8 +31,15 @@ public class SplashScreenActivity extends Activity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent i = new Intent(getApplication(),MainActivity.class);
-                    startActivity(i);
+                    boolean internetConnection = App.checkInternetConnection(getApplication());
+                    if(!internetConnection){
+                        App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
+                        return;
+                    }else {
+                        Intent i = new Intent(getApplication(),MainActivity.class);
+                        startActivity(i);
+                    }
+
                 }
             }
         };

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ddd"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgInfoIcon"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/underconstruction" />
+
+    <TextView
+        android:id="@+id/tvInfoMessage"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgInfoIcon"
+        android:layout_centerHorizontal="true"
+        android:text="Bu Sayfa Yapım Aşamasındadır.."
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18dp" />
+
+    <Button
+        android:id="@+id/finishOkBtn"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/tvInfoMessage"
+        android:background="@drawable/custombuttongenoa"
+        android:text="Ok" />
+
+
+</RelativeLayout>

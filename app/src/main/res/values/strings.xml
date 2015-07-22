@@ -191,6 +191,7 @@
     <string name="searcBtnLabel">Search</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="labelGo">GO</string>
+    <string name="title_activity_info">InfoActivity</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

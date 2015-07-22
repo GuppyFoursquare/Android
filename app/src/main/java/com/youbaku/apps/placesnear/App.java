@@ -15,6 +15,7 @@ import android.app.Application;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -88,6 +89,16 @@ public class App extends Application {
     public static final boolean moderateReviews           = true;
     public static final boolean moderatePhotos            = true;
     //------------------------------------ MODERATION PARAMS -------------------------------------/
+
+
+    //------------------------------------ MESSAGE TYPES -------------------------------------/
+    public static final int typeConnection               = 1;
+    public static final int typeNull                     = 2;
+    public static final int typeInfo                     = 3;
+    public static final int typeSuccess                  = 4;
+
+    //------------------------------------ MESSAGE TYPES -------------------------------------/
+
 
 
 
@@ -327,5 +338,34 @@ public class App extends Application {
             }
         });
         builder.show();
+    }
+
+    //Generic Info Method
+    public static void showGenericInfoActivity(Context context, int typeID,String message){
+
+        String currMessage=message;
+        int iconId;
+
+        if(typeID==typeConnection){
+            iconId=R.drawable.connection_icon;
+        }
+        else if(typeID==typeNull){
+            iconId=R.drawable.sad_icon;
+        }
+        else if(typeID==typeSuccess){
+            iconId=R.drawable.tick_icon;
+        }
+        else{
+            iconId=R.drawable.warning_icon;
+        }
+
+        //Intent Operation
+        Intent in =new Intent(context,InfoActivity.class);
+
+        in.putExtra("message",message);
+        in.putExtra("imgId",""+iconId);
+
+        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(in);
     }
 }

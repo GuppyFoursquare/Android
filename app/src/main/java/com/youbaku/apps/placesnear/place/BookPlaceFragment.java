@@ -131,7 +131,7 @@ public class BookPlaceFragment extends Fragment implements OnClickListener {
                     Toast.makeText(getActivity(), getResources().getString(R.string.formvalidationmessage), Toast.LENGTH_LONG).show();
                 } else {
                     String to = Place.EMAIL;
-                    String cc = "info@youbaku.az";
+                    String cc = "info@youbaku.com";
                     String dateAndTime="Rezervasiya Tarixi :"+date.getText().toString()+" / "+time.getText().toString()+"\n";
                     String num =peopleNum.getText().toString()+ " neferlik Rezervasiya";
                     String by="Teşekkürler, "+textSubject.getText().toString();
