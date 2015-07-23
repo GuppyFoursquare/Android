@@ -53,8 +53,8 @@ public class App extends Application {
     //----------------------------------------- TOKENS -----------------------------------------/
     public static String youbakuToken=null;
     public static String youbakuAPIKey=null;
-    public static String username;
-    public static String useremail;
+    public static String username=null;
+    public static String useremail=null;
     //----------------------------------------- TOKENS -----------------------------------------/
 
 

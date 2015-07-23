@@ -115,11 +115,11 @@ public class PlaceDetailFragment extends Fragment{
 
 
         // 2- We will call api
-        String url2 = App.SitePath+"api/places.php?op=info&plc_id="+Place.ID;
+        String url = App.SitePath+"api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey+"&op=info&plc_id="+Place.ID;
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url2, apiResponse, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {

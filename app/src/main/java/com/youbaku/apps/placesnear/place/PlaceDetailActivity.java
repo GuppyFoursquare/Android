@@ -52,7 +52,7 @@ import java.util.Map;
 public class PlaceDetailActivity extends ActionBarActivity {
     private enum Screen {comments, newComment, deals, detail, senEmail}
 
-    ;
+
     private static final int IMAGE_CHOOSED_FROM_GALLERY = 5009;
     private static final int IMAGE_CHOOSED_FROM_CAMERA = 5010;
 
