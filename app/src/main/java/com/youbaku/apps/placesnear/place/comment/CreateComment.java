@@ -108,30 +108,19 @@ public class CreateComment extends Fragment {
 
                             Log.i("--- GUPPY ---", response.getString("status"));
                             String responseContent = response.getString("content");
-                            //Toast.makeText( tt ,responseContent , Toast.LENGTH_LONG).show();
-                            //Toast.makeText(getActivity(),getResources().getString(R.string.reviewsentsuccessmessage),Toast.LENGTH_LONG).show();
-                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                            bu.setMessage(getResources().getString(R.string.reviewsentsuccessmessage));
-                            bu.setPositiveButton(getResources().getString(R.string.alertokbuttonlabel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
 
-                                }
-                            });
-                            bu.show();
+                            //1.Show Generic Success Message
+                            App.showGenericInfoActivity(getActivity(),App.typeSuccess,getResources().getString(R.string.reviewsentsuccessmessage));
+
+                            //2.Go Previous Activity
+                            getActivity().getSupportFragmentManager().popBackStack();
+
+                            //3.Find correct screen using GoBack function
+                            ((PlaceDetailActivity) getActivity()).goBack();
 
                         } catch (JSONException e) {
 
-                            AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                            bu.setMessage(getResources().getString(R.string.reviewsentunsuccessmessage));
-                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-                            bu.show();
+                            App.showGenericInfoActivity(getActivity(), App.typeInfo, getResources().getString(R.string.reviewsentunsuccessmessage));
                             e.printStackTrace();
                             return;
                         }

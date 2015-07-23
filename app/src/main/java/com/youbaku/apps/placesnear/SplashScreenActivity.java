@@ -39,7 +39,10 @@ public class SplashScreenActivity extends Activity {
 
         setContentView(R.layout.activity_splash_screen);
 
-
+        if(!App.checkInternetConnection(getApplication())){
+            App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
+            return;
+        }
 
         String url = App.SitePath+"api/register.php";
         // Request a json response
