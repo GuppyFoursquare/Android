@@ -271,7 +271,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
                     App.showInternetError(this);
                     break;
                 }
-                if (App.userapikey != null) {
+                if (App.useremail != null) {
                     createComment.saveComment();
                 } else {
                     login();
@@ -336,7 +336,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
                         dialog.cancel(); // Your custom code
 
-                        String loginUrl = App.SitePath + "api/auth.php?op=login";
+                        String loginUrl = App.SitePath + "api/auth.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey +"&op=login";
 
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
@@ -354,10 +354,10 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
                                                 JSONObject responseContent = response.getJSONObject("content");
                                                 App.username = responseContent.getString("usr_username");
-                                                App.userapikey = responseContent.getString("usr_apikey");
+                                                App.useremail = responseContent.getString("usr_apikey");
 
                                                 MainActivity.doLogin.setIcon(R.drawable.ic_profilelogo);
-                                                Toast.makeText(getApplication(), App.username + " - " + App.userapikey, Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getApplication(), App.username + " - " + App.useremail, Toast.LENGTH_LONG).show();
 
                                             } else {
                                                 Toast.makeText(getApplication(), response.getString("status"), Toast.LENGTH_SHORT).show();

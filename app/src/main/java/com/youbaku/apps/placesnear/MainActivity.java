@@ -225,7 +225,7 @@ public class MainActivity extends ActionBarActivity implements
         switch (item.getItemId()) {
             case R.id.login_main_menu:
 
-                if(App.userapikey==null){
+                if(App.useremail==null){
                     login();
                 }
                 else
@@ -265,7 +265,7 @@ public class MainActivity extends ActionBarActivity implements
 
                     dialog.cancel(); // Your custom code
 
-                    String loginUrl = App.SitePath + "api/auth.php?op=login";
+                    String loginUrl = App.SitePath + "api/auth.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey +"&op=login";
 
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("name", ((EditText)alertView.findViewById(R.id.username)).getText().toString());
@@ -283,10 +283,10 @@ public class MainActivity extends ActionBarActivity implements
 
                                     JSONObject responseContent = response.getJSONObject("content");
                                     App.username = responseContent.getString("usr_username");
-                                    App.userapikey = responseContent.getString("usr_apikey");
+                                    App.useremail = responseContent.getString("usr_email");
 
                                     doLogin.setIcon(R.drawable.ic_profilelogo);
-                                    Toast.makeText( MainActivity.this ,App.username + " - " + App.userapikey , Toast.LENGTH_LONG).show();
+                                    Toast.makeText( MainActivity.this ,App.username + " - " + App.useremail , Toast.LENGTH_LONG).show();
 
                                 }else{
                                     Toast.makeText(MainActivity.this, response.getString("status") , Toast.LENGTH_SHORT).show();

@@ -88,7 +88,7 @@ public class CreateComment extends Fragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.formvalidationmessage), Toast.LENGTH_LONG).show();
             return;
         }
-        String loginUrl = App.SitePath + "api/auth.php?op=comment&apikey=" + App.userapikey;
+        String loginUrl = App.SitePath +"api/auth.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=comment";
         JSONObject apiResponse = null;
         final Activity tt = getActivity();
 

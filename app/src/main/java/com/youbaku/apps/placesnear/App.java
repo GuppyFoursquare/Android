@@ -45,7 +45,7 @@ public class App extends Application {
 
     //----------------------------------------- HTTP LINKS -----------------------------------------/
     public static final String SitePath         = "http://youbaku.com/";
-//    public static final String SitePath         = "http://192.168.2.50/youbaku/";
+//    public static final String SitePath         = "http://10.36.0.250/youbaku/";
     //----------------------------------------- HTTP LINKS-----------------------------------------/
 
 
@@ -53,6 +53,8 @@ public class App extends Application {
     //----------------------------------------- TOKENS -----------------------------------------/
     public static String youbakuToken=null;
     public static String youbakuAPIKey=null;
+    public static String username;
+    public static String useremail;
     //----------------------------------------- TOKENS -----------------------------------------/
 
 
@@ -98,6 +100,7 @@ public class App extends Application {
     //------------------------------------ MODERATION PARAMS -------------------------------------/
 
 
+
     //------------------------------------ MESSAGE TYPES -------------------------------------/
     public static final int typeConnection               = 1;
     public static final int typeNull                     = 2;
@@ -105,15 +108,6 @@ public class App extends Application {
     public static final int typeSuccess                  = 4;
 
     //------------------------------------ MESSAGE TYPES -------------------------------------/
-
-
-
-
-    //------------------------------------ USER PARAMS -------------------------------------/
-    public static String username;
-    public static String userapikey;
-    //------------------------------------ USER PARAMS -------------------------------------/
-
 
 
 
