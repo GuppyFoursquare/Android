@@ -326,7 +326,7 @@ public class Place {
      *
      *                          Example :: PlaceAdapter
      */
-    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, Activity activity, final T adapter) {
+    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, final Activity activity, final T adapter) {
 
         if (activity!=null && !App.checkInternetConnection(activity) ) {
             App.showInternetError(activity);
