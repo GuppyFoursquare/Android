@@ -5,6 +5,7 @@ package com.youbaku.apps.placesnear.place;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.util.Log;
 
@@ -40,6 +41,8 @@ public class Place {
     // ----- ----- ----- ----- ----- ----- ----- ----- -----
     // ----- ----- GENERIC FETCHING PLACES PARAMETERS ----- -----
     // ----- ----- ----- ----- ----- ----- ----- ----- -----
+    public static final String RESULT_STATUS = "status";
+    public static final String RESULT_CONTENT = "content";
     public static final String PLC_ID = "plc_id";
     public static final String PLC_NAME = "plc_name";
     public static final String PLC_EMAIL = "plc_email";
@@ -298,6 +301,18 @@ public class Place {
         return "";
     }
 
+    private static JSONObject getJsonArrayValueIfExist(JSONArray jsonObj, int key) {
+        try {
+            if (jsonObj.getJSONObject(key)!=null) {
+                return jsonObj.getJSONObject(key);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key) {
 
         try {
@@ -334,8 +349,8 @@ public class Place {
         }
 
         if(activity!=null){
-            App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " url:: " + URL);
-            App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " map:: " + parameters!=null?parameters.toString() : "MAP NULL");
+            App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " url:: " + URL);
+            App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " map:: " + ((parameters!=null)?(parameters.toString()) : "MAP NULL"));
         }
 
 
@@ -350,16 +365,19 @@ public class Place {
                         try {
 
                             resultPlaceList.clear();
-                            if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
-
+                            // ----- ----- ----- ----- - ----- ----- ----- -----
+                            // Check response is SUCCESS
+                            // ----- ----- ----- ----- - ----- ----- ----- -----
+                            if (getJsonValueIfExist(response, Place.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
+                                App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "post fetchGenericPlaceList", " responseGENERAL:: " + response.toString());
                                 try{
 
-                                    JSONArray responsePlaceList = response.getJSONArray("content");
-                                    if (responsePlaceList.length() > 0) {
-
+                                    JSONArray responsePlaceList = getJsonArayIfExist(response, Place.RESULT_CONTENT);
+                                    if(responsePlaceList!=null && responsePlaceList.length()>0) {
+                                        
                                         for (int i = 0; i < responsePlaceList.length(); i++) {
 
-                                            JSONObject jsonPlace = responsePlaceList.getJSONObject(i);
+                                            JSONObject jsonPlace = getJsonArrayValueIfExist(responsePlaceList,i);
 
                                             //Inflate places
                                             Place place = new Place();
@@ -411,11 +429,11 @@ public class Place {
                                                 }
                                             }
 
-                                            try{
-                                                place.setRating(averageRating/(double) ratings.length());
-                                            }catch (NullPointerException e){
+                                            try {
+                                                place.setRating(averageRating / (double) ratings.length());
+                                            } catch (NullPointerException e) {
                                                 place.setRating(3);
-                                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Rating Return Null---"+e.getMessage());
+                                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Rating Return Null---" + e.getMessage());
 
                                                 Log.e("---GUPPY---", "ratings return NULL");
                                             }
@@ -431,19 +449,15 @@ public class Place {
                                             try {
                                                 resultPlaceList.add(place);
                                             } catch (NullPointerException e) {
-                                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "getGenericPlaceList > resultPlaceList parameter is null---"+e.getMessage());
+                                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "getGenericPlaceList > resultPlaceList parameter is null---" + e.getMessage());
                                                 Log.e("---GUPPY---", "getGenericPlaceList > resultPlaceList parameter is null");
                                             }
 
                                         }
 
-
-
-                                    }else{
+                                    }else {
                                         Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Place Count 0 ");
                                         App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Place Count 0");
-
-
                                     }
 
                                 }catch (JSONException e){
