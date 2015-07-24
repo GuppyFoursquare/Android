@@ -333,6 +333,9 @@ public class Place {
             return;
         }
 
+        App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " url:: " + URL);
+        App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " map:: " + parameters!=null?parameters.toString() : "MAP NULL");
+
         // Request a json response
         JSONObject params = (parameters!=null) ? (new JSONObject(parameters)) : (null);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -559,7 +562,7 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
+                App.SitePath + "api/places.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
                 null,
                 placesArrayListNearMe,
                 activity,
