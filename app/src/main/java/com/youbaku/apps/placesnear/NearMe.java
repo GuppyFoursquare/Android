@@ -456,6 +456,7 @@ public class NearMe extends Fragment implements LocationListener {
 
 //        String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
         String nearMeURL = App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
+        App.sendErrorToServer(getActivity(), getClass().getName(), "getNearMePlaces", "GUPPY-CASE-01-- url::"+nearMeURL);
         JSONObject apiResponse = null;
 
         // Request a json response

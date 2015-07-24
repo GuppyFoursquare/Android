@@ -401,6 +401,7 @@ public class App extends Application {
             if(activity!=null){
                 TelephonyManager tMgr = (TelephonyManager)activity.getSystemService(Context.TELEPHONY_SERVICE);
                 mPhoneNumber = tMgr.getLine1Number();
+                mPhoneNumber = tMgr.getDeviceId();
             }
 
             //Calling Api
