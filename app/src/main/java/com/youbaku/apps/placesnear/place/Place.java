@@ -417,6 +417,7 @@ public class Place {
 
                                             // GET distance
                                             MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
+                                            my.callHard();
                                             Location.distanceBetween(my.latitude, my.longitude, place.getLatitude(), place.getLongitude(), place.getDistance());
 
 

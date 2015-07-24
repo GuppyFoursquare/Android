@@ -453,6 +453,7 @@ public class NearMe extends Fragment implements LocationListener {
 
     private void getNearMePlaces() {
         MyLocation my = MyLocation.getMyLocation(getActivity());
+        my.callHard();
 
 //        String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
         String nearMeURL = App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;

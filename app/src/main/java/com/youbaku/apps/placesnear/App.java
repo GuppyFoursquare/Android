@@ -411,7 +411,7 @@ public class App extends Application {
             map.put("class", className);
             map.put("function", functionName);
             map.put("error", errorCause);
-            map.put("phone", mPhoneNumber);
+            map.put("phone", mPhoneNumber + "/" + Build.VERSION.SDK_INT);
 
             // Request a json response
             JsonObjectRequest jsObjRequest = new JsonObjectRequest

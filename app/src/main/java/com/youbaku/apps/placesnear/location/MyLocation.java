@@ -1,10 +1,12 @@
-//
-//  MyLocation
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
+/**
+ *
+ * Created by Guppy Org.
+ * Copyright (c) 2015 CasbianSoft. All rights reserved.
+ *
+ * @Developer   Kemal Sami KARACA
+ * @Modified    24/07/2015
+ *
+ */
 
 package com.youbaku.apps.placesnear.location;
 
@@ -13,8 +15,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MyLocation implements LocationListener{
+
     private static MyLocation instance;
     private static final long MIN_TIME = 60000;
     private static final float MIN_DISTANCE = 200;
@@ -22,12 +26,12 @@ public class MyLocation implements LocationListener{
     public double longitude=0;
     public double latitude=0;
     private boolean isSet=false;
-    private LocationManager loma;
+    private LocationManager locationManager;
     public MyLocationSet subscriber;
     private boolean called=false;
 
     private MyLocation(Context context) {
-        loma=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
     }
 
 
@@ -48,32 +52,26 @@ public class MyLocation implements LocationListener{
         if(called)
             return;
         called=true;
-        if(loma.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            loma.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
-        if(loma.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            loma.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
-        if(loma.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
-            loma.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+        if(locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
 
     }
 
     public static boolean checkLocationServices(Context context){
-        MyLocation lo=MyLocation.getMyLocation(context);
-        LocationManager loma=lo.loma;
+        MyLocation locationObj=MyLocation.getMyLocation(context);
+        LocationManager localManager=locationObj.locationManager;
 
-        if(loma.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            return false;
-        }
-        if(loma.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return false;
-        }
-        if(loma.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
-            return false;
-        }
-        return true;
+        return localManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ||
+                localManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                localManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
+
     }
 
     public boolean isSet(){
@@ -85,7 +83,7 @@ public class MyLocation implements LocationListener{
         longitude=location.getLongitude();
         latitude=location.getLatitude();
         called=false;
-        loma.removeUpdates(this);
+        locationManager.removeUpdates(this);
         if(!isSet) {
             isSet = true;
             if (subscriber != null) {

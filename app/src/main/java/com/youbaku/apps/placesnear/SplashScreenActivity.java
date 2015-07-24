@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONArray;
@@ -46,12 +47,28 @@ public class SplashScreenActivity extends Activity {
 
         setContentView(R.layout.activity_splash_screen);
 
+        //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+        //----- ----- ----- ----- CHECKER PART ----- ----- ----- -----
+        //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
         if(!App.checkInternetConnection(getApplication())){
             App.showGenericInfoActivity(getApplication(), App.typeConnection, getResources().getString(R.string.networkconnectionerrormessage));
             return;
         }
+        if(!MyLocation.checkLocationServices(getApplicationContext())){
+            setContentView(R.layout.need_location_service);
+            App.sendErrorToServer(activity, getClass().getName(), "onCreate", "Location Service Not Work ");
+            return;
+        }else{
+            MyLocation location = MyLocation.getMyLocation(this);
+            location.callHard();
+        }
 
+
+        //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+        //----- ----- ----- ----- REQUEST PART ----- ----- ----- -----
+        //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
         String url = App.SitePath+"api/register.php";
+        App.sendErrorToServer(this, getClass().getName(), "onCreate", "GUPPY-CASE-01-- url::"+url);
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, new Response.Listener<JSONObject>(){

@@ -75,14 +75,7 @@ public class MainActivity extends ActionBarActivity implements
 //            Category.fetchCategoryList(this);
             setContentView(R.layout.activity_main);
         }
-
-
-
-
-        if(MyLocation.checkLocationServices(getApplicationContext())){
-            setContentView(R.layout.need_location_service);
-            return;
-        }
+        
 
         ((RelativeLayout)findViewById(R.id.main_activity_main)).setBackgroundColor(Color.parseColor(App.DefaultBackgroundColor));
         ((ProgressBar)findViewById(R.id.progress_bar_activity_main)).setVisibility(View.VISIBLE);
