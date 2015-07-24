@@ -53,12 +53,21 @@ public class MyLocation implements LocationListener{
             return;
         called=true;
         if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            longitude=location.getLongitude();
+            latitude=location.getLatitude();
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            longitude=location.getLongitude();
+            latitude=location.getLatitude();
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
         if(locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
+            Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            longitude=location.getLongitude();
+            latitude=location.getLatitude();
             locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
 
