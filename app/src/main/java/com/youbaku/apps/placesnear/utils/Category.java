@@ -212,9 +212,6 @@ public class Category {
         //AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
         //listView.setAdapter(SearchFragment.adapter);
 
-
-
-
     }
 
     public ArrayList<SubCategory> getSubCatList() {

@@ -35,7 +35,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         switch (index) {
             case 0:
                 // ListCategory fragment
-                return SearchFragment.newInstance("","");
+                return new SearchFragment();
             case 1:
                 // Search fragment
                 return new NearMe();

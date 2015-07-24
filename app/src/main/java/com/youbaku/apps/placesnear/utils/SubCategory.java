@@ -10,6 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.SearchFragment;
+import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import org.json.JSONArray;
@@ -99,7 +101,6 @@ public class SubCategory {
                                     Category.IS_SUBCATEGORIES_FETCHED = true;
                                     Category.refreshSearchFragment(activity,view);
                                 }
-
 
                             }
 

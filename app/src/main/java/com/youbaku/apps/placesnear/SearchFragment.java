@@ -116,7 +116,6 @@ public class SearchFragment extends Fragment {
 
         try {
 
-
             Category.refreshSearchFragment(getActivity(), view);
             searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,13 +144,15 @@ public class SearchFragment extends Fragment {
             });
 
 
+
         } catch (NullPointerException e) {
-            Log.e("xxxxx", e.toString());
+            App.sendErrorToServer(activity, getClass().getName() , "onCreateView", e.getMessage());
         }
 
 
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

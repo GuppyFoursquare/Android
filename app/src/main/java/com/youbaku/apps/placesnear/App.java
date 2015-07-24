@@ -25,13 +25,28 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
 import com.parse.Parse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class App extends Application {
 
@@ -368,5 +383,64 @@ public class App extends Application {
 
         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(in);
+    }
+
+
+    /**
+     *
+     * @param activity
+     *
+     * This method will be used for get Logs of Android Project
+     */
+    public static void sendErrorToServer(final Activity activity , String className, String functionName, String errorCause){
+
+        boolean wantToSendReport=true;
+        if(wantToSendReport){
+
+            String mPhoneNumber="";
+            if(activity!=null){
+                TelephonyManager tMgr = (TelephonyManager)activity.getSystemService(Context.TELEPHONY_SERVICE);
+                mPhoneNumber = tMgr.getLine1Number();
+            }
+
+            //Calling Api
+            String url = "http://192.168.2.50:8080/youbaku_LOG/youbaku";
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("class", className);
+            map.put("function", functionName);
+            map.put("error", errorCause);
+            map.put("phone", mPhoneNumber);
+
+            // Request a json response
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.POST, url, new JSONObject(map), new Response.Listener<JSONObject>(){
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+
+                                if(activity!=null && false){
+                                    Toast.makeText(activity , response.getString("resultText") , Toast.LENGTH_SHORT).show();
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
+                        }
+                    });
+
+            // Add the request to the queue
+            VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+        }
+
     }
 }

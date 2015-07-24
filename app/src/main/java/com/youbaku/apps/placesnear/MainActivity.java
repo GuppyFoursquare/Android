@@ -1,10 +1,3 @@
-//
-//  MainActivity
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
 
 package com.youbaku.apps.placesnear;
 
@@ -54,9 +47,9 @@ public class MainActivity extends ActionBarActivity implements
     private static ViewPager viewPager;
     public static TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
-    public static Activity tt;
     public static MenuItem doLogin;
     public static boolean internetConnection=true;
+    public Activity activity;
 
 
 
@@ -67,8 +60,7 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tt = this;
-
+        this.activity = this;
 
     // ********** ********** ********** ********** **********
     // Checking internet connection here
@@ -294,16 +286,9 @@ public class MainActivity extends ActionBarActivity implements
 
                             } catch (JSONException e) {
 
-                                AlertDialog.Builder bu = new AlertDialog.Builder(tt);
-                                bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                                bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                                bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                App.sendErrorToServer(activity, getClass().getName() , "login", e.getMessage());
+                                Toast.makeText( getApplicationContext(), "MainActivity login()" , Toast.LENGTH_SHORT).show();
 
-                                    }
-                                });
-                                bu.show();
                                 e.printStackTrace();
                                 return;
                             }

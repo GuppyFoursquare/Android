@@ -23,13 +23,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SplashScreenActivity extends Activity {
 
+    private Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.activity=this;
+
         //Hide title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Hide Status bar
@@ -40,7 +47,7 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash_screen);
 
         if(!App.checkInternetConnection(getApplication())){
-            App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
+            App.showGenericInfoActivity(getApplication(), App.typeConnection, getResources().getString(R.string.networkconnectionerrormessage));
             return;
         }
 
@@ -69,9 +76,11 @@ public class SplashScreenActivity extends Activity {
                             }else{
                                 Toast.makeText(getApplicationContext() , "Response not success", Toast.LENGTH_SHORT).show();
                                 Log.e("---GUPPY ERROR---", "SplassScreenActivity -> apikey request");
+                                App.sendErrorToServer(activity, getClass().getName() , "onCreate", "JSON RESPONSE not SUCCESS");
                             }
 
                         } catch (JSONException e) {
+                            App.sendErrorToServer(activity, getClass().getName() , "onCreate", e.getMessage());
                             e.printStackTrace();
                         }
 
@@ -81,6 +90,7 @@ public class SplashScreenActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
+                        App.sendErrorToServer(activity, getClass().getName(), "onCreate_Response.ErrorListener", error.getMessage());
                     }
                 });
 
