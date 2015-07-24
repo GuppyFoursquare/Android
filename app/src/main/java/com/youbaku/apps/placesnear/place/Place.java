@@ -409,6 +409,8 @@ public class Place {
                                                 place.setRating(averageRating/(double) ratings.length());
                                             }catch (NullPointerException e){
                                                 place.setRating(3);
+                                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Rating Return Null---"+e.getMessage());
+
                                                 Log.e("---GUPPY---", "ratings return NULL");
                                             }
 
@@ -422,6 +424,7 @@ public class Place {
                                             try {
                                                 resultPlaceList.add(place);
                                             } catch (NullPointerException e) {
+                                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "getGenericPlaceList > resultPlaceList parameter is null---"+e.getMessage());
                                                 Log.e("---GUPPY---", "getGenericPlaceList > resultPlaceList parameter is null");
                                             }
 
@@ -431,10 +434,15 @@ public class Place {
 
                                     }else{
                                         Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Place Count 0 ");
+                                        App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Place Count 0");
+
+
                                     }
 
                                 }catch (JSONException e){
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Response Content JSONException");
+                                    App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Response Content JSONException---" + e.getMessage());
+
                                     e.printStackTrace();
                                 }
 
@@ -444,6 +452,8 @@ public class Place {
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + resultStatus);
                                 }catch (NullPointerException e){
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + "NULL");
+                                    App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Status RETURN NULL----" + e.getMessage());
+
                                 }
                             }
 
@@ -459,6 +469,9 @@ public class Place {
                                     ((Adapter) adapter).notifyDataSetChanged();
                                 }catch (ClassCastException e){
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
+                                    App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Interface adapter casting error----" + e.getMessage());
+
+
                                 }
                             }
                             // *********************************************************************

@@ -180,9 +180,11 @@ public class NearMe extends Fragment implements LocationListener {
                 break;
             case ConnectionResult.SERVICE_MISSING:
                 Toast.makeText(getActivity(), "SERVICE MISSING", Toast.LENGTH_SHORT).show();
+                App.sendErrorToServer(getActivity(),getClass().getName(),"onCreateView","SERVICE MISSING");
                 break;
             case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
                 Toast.makeText(getActivity(), "UPDATE REQUIRED", Toast.LENGTH_SHORT).show();
+                App.sendErrorToServer(getActivity(), getClass().getName(), "onCreateView", "UPDATE REQUIRED");
                 break;
             default:
                 Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
@@ -572,7 +574,9 @@ public class NearMe extends Fragment implements LocationListener {
                             bu.show();
 
                             e.printStackTrace();
+
                             Log.e("--- GUPPY --- ", "Response JSON error");
+                            App.sendErrorToServer(getActivity(), getClass().getName(), "getNearMePlaces", "Response JSON error---"+e.getMessage());
 
                             return;
                         }

@@ -107,6 +107,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
         if (MyLocation.checkLocationServices(getApplicationContext())) {
             setContentView(R.layout.need_location_service);
+            App.sendErrorToServer(PlaceActivity.this, getClass().getName(), "onCreate", "CheckLocationServices Problem");
             return;
         }
 
@@ -134,6 +135,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         act.setTitle(String.format(getResources().getString(R.string.categorydistanceradius),
                 App.getDistanceString(filter.metrics, filter.getDistance(filter.metrics) * 1000),
                 Place.placesArrayListSearch.size()));
+
     }
 
 

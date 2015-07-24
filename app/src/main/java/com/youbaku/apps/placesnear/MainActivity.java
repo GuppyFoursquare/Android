@@ -286,7 +286,7 @@ public class MainActivity extends ActionBarActivity implements
 
                             } catch (JSONException e) {
 
-                                App.sendErrorToServer(activity, getClass().getName() , "login", e.getMessage());
+                                App.sendErrorToServer(activity, getClass().getName() , "login Errror---", e.getMessage());
                                 Toast.makeText( getApplicationContext(), "MainActivity login()" , Toast.LENGTH_SHORT).show();
 
                                 e.printStackTrace();
