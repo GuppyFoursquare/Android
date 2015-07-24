@@ -62,7 +62,7 @@ public class MyLocation implements LocationListener{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
         if(locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
-            
+
             locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
         }
 

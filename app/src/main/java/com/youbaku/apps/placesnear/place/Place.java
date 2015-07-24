@@ -555,6 +555,7 @@ public class Place {
     public static void fetchNearMePlaces(Activity activity,PlaceAdapter adapter) {
 
         MyLocation my = MyLocation.getMyLocation(MyApplication.getAppContext());
+        my.callHard();
 
         fetchGenericPlaceList(
                 Request.Method.GET,

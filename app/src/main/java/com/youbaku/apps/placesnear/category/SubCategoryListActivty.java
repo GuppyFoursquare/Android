@@ -86,7 +86,7 @@ public class SubCategoryListActivty extends ActionBarActivity {
         params.gravity=0x05;
        
 
-        if(MyLocation.checkLocationServices(getApplicationContext())){
+        if(!MyLocation.checkLocationServices(getApplicationContext())){
             setContentView(R.layout.need_location_service);
             return;
         }

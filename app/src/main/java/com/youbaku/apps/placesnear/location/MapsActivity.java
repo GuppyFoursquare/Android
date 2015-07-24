@@ -120,6 +120,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener{
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     MyLocation my = MyLocation.getMyLocation(getApplicationContext());
+                    my.callHard();
                     String uri = "http://maps.google.com/maps?f=d&hl=en&saddr=" + my.latitude + "," + my.longitude + "&daddr=" + latitude + "," + longtitude;
                     //String uri = "http://maps.google.com/maps?f=d&hl=en&saddr=" + 40.372877 + "," + 49.842825 + "&daddr=" + latitude + "," + longtitude;
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));

@@ -153,6 +153,7 @@ public class FavoritesManager {
                     ParseGeoPoint geo = o.getParseGeoPoint(Place.POSITION);
                     p.setLocation(geo.getLatitude(), geo.getLongitude());
                     MyLocation my = MyLocation.getMyLocation(context);
+                    my.callHard();
                     Location.distanceBetween(my.latitude, my.longitude, p.getLatitude(), p.getLongitude(), p.getDistance());
 
                     /*

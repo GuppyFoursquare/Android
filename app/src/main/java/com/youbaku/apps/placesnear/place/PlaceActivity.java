@@ -105,7 +105,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         pro.setIndeterminate(true);
         act.setCustomView(pro, params);
 
-        if (MyLocation.checkLocationServices(getApplicationContext())) {
+        if (!MyLocation.checkLocationServices(getApplicationContext())) {
             setContentView(R.layout.need_location_service);
             App.sendErrorToServer(PlaceActivity.this, getClass().getName(), "onCreate", "CheckLocationServices Problem");
             return;
