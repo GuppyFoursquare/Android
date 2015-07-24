@@ -5,7 +5,6 @@ package com.youbaku.apps.placesnear.place;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.support.annotation.Nullable;
 import android.text.Html;
 import android.util.Log;
 
@@ -288,7 +287,7 @@ public class Place {
      * @param key
      * @return
      */
-    private static String getJsonValueIfExist(JSONObject jsonObj, String key) {
+    public static String getJsonValueIfExist(JSONObject jsonObj, String key) {
 
         try {
             if (jsonObj.has(key)) {
@@ -301,7 +300,7 @@ public class Place {
         return "";
     }
 
-    private static JSONObject getJsonArrayValueIfExist(JSONArray jsonObj, int key) {
+    public static JSONObject getJsonArrayValueIfExist(JSONArray jsonObj, int key) {
         try {
             if (jsonObj.getJSONObject(key)!=null) {
                 return jsonObj.getJSONObject(key);
@@ -313,7 +312,7 @@ public class Place {
         return null;
     }
 
-    private static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key) {
+    public static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key) {
 
         try {
             if (jsonObj.has(key)) {
