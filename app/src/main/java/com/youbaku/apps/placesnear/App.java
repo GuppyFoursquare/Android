@@ -404,7 +404,7 @@ public class App extends Application {
             }
 
             //Calling Api
-            String url = "http://192.168.2.50:8080/youbaku_LOG/youbaku";
+            String url = "http://193.140.63.162:8080/youbaku_LOG/youbaku";
 
             Map<String, String> map = new HashMap<String, String>();
             map.put("class", className);
