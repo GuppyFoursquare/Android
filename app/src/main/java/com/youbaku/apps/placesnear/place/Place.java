@@ -333,8 +333,11 @@ public class Place {
             return;
         }
 
-        App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " url:: " + URL);
-        App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " map:: " + parameters!=null?parameters.toString() : "MAP NULL");
+        if(activity!=null){
+            App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " url:: " + URL);
+            App.sendErrorToServer(activity, "com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " map:: " + parameters!=null?parameters.toString() : "MAP NULL");
+        }
+
 
         // Request a json response
         JSONObject params = (parameters!=null) ? (new JSONObject(parameters)) : (null);
