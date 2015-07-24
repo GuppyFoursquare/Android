@@ -1,8 +1,12 @@
 package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -67,6 +71,8 @@ public class SplashScreenActivity extends Activity {
         //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
         //----- ----- ----- ----- REQUEST PART ----- ----- ----- -----
         //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
         String url = App.SitePath+"api/register.php";
         App.sendErrorToServer(this, getClass().getName(), "onCreate", "GUPPY-CASE-01-- url::"+url);
         // Request a json response
@@ -86,7 +92,11 @@ public class SplashScreenActivity extends Activity {
                                 if(!App.checkInternetConnection(getApplication())){
                                     App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
                                     return;
-                                }else {
+                                }
+                                else if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                                    buildAlertMessageNoGps();
+                                }
+                                else {
                                     Intent i = new Intent(getApplication(),MainActivity.class);
                                     startActivity(i);
                                 }
@@ -144,5 +154,24 @@ public class SplashScreenActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        App.showGenericInfoActivity(getApplication(),App.typeInfo,"We are sorry! You should first open GPS to use Application.");
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }
