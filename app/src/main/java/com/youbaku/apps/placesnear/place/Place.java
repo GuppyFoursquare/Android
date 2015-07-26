@@ -8,6 +8,7 @@ import android.location.Location;
 import android.text.Html;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -488,7 +489,7 @@ public class Place {
                             // *********************************************************************
                             // *********************************************************************
                             // --GUPPY COMMENT UPDATE--
-                            // -- Finnaly update Place List --
+                            // -- Finally update Place List --
                             if (adapter != null) {
                                 try {
                                     ((Adapter) adapter).setAdapterList(resultPlaceList);
@@ -516,7 +517,15 @@ public class Place {
                         // TODO Auto-generated method stub
 
                     }
-                });
+                })
+                {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        return headers;
+                    }
+                };
 
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
@@ -553,22 +562,14 @@ public class Place {
 
     public static void fetchSearchPlaces(Activity activity, PlaceAdapter adapter) {
 
-
-        String categories = "";
         // Preparing for parameters
         ArrayList selectedSubCategory = new ArrayList();
         for(Category c : Category.categoryList){
             for(SubCategory s : c.getSubCatList()){
                 if(s.isSelected()){
                     selectedSubCategory.add(s.getId());
-                    categories += "&src_cat[]="+s.getId();
                 }
             }
-        }
-
-        String url = App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search" ;
-        if(categories.length()!=0){
-            url += categories;
         }
 
         // Parameters
@@ -577,7 +578,7 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.POST,
-                url,
+                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search",
                 map,
                 placesArrayListSearch,
                 activity,
