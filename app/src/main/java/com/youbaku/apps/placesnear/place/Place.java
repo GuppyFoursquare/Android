@@ -295,6 +295,8 @@ public class Place {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (NullPointerException e){
+            e.printStackTrace();
         }
 
         return "";
@@ -306,6 +308,8 @@ public class Place {
                 return jsonObj.getJSONObject(key);
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
             e.printStackTrace();
         }
 
@@ -319,6 +323,8 @@ public class Place {
                 return jsonObj.getJSONArray(key);
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
             e.printStackTrace();
         }
 
