@@ -5,6 +5,7 @@ package com.youbaku.apps.placesnear.place;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.os.Build;
 import android.text.Html;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.MyApplication;
 import com.youbaku.apps.placesnear.adapter.Adapter;
+import com.youbaku.apps.placesnear.apicall.CustomRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.photo.Photo;
@@ -24,16 +26,26 @@ import com.youbaku.apps.placesnear.place.deal.Deal;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Place {
@@ -562,27 +574,47 @@ public class Place {
 
     public static void fetchSearchPlaces(Activity activity, PlaceAdapter adapter) {
 
+        String categoryList="";
+
         // Preparing for parameters
         ArrayList selectedSubCategory = new ArrayList();
         for(Category c : Category.categoryList){
             for(SubCategory s : c.getSubCatList()){
                 if(s.isSelected()){
                     selectedSubCategory.add(s.getId());
+                    categoryList += "&src_cat[]="+s.getId();
                 }
             }
         }
 
-        // Parameters
-        Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-        map.put("subcat_list", selectedSubCategory);
 
-        fetchGenericPlaceList(
-                Request.Method.POST,
-                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search",
-                map,
-                placesArrayListSearch,
-                activity,
-                adapter);
+        if(Build.VERSION.SDK_INT>=19){
+            // Parameters
+            Map<String, ArrayList> map = new HashMap<String, ArrayList>();
+            map.put("subcat_list", selectedSubCategory);
+
+            fetchGenericPlaceList(
+                    Request.Method.POST,
+                    App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search",
+                    map,
+                    placesArrayListSearch,
+                    activity,
+                    adapter);
+        }else{
+
+            fetchGenericPlaceList(
+                    Request.Method.GET,
+                    App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search" + categoryList,
+                    null,
+                    placesArrayListSearch,
+                    activity,
+                    adapter);
+        }
+    }
+
+
+    public static Response.ErrorListener createRequestErrorListener(){
+        return null;
     }
 
 

@@ -29,14 +29,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
+import com.youbaku.apps.placesnear.apicall.CustomRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
+import com.youbaku.apps.placesnear.utils.Category;
+import com.youbaku.apps.placesnear.utils.SubCategory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
