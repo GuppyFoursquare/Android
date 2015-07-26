@@ -553,14 +553,22 @@ public class Place {
 
     public static void fetchSearchPlaces(Activity activity, PlaceAdapter adapter) {
 
+
+        String categories = "";
         // Preparing for parameters
         ArrayList selectedSubCategory = new ArrayList();
         for(Category c : Category.categoryList){
             for(SubCategory s : c.getSubCatList()){
                 if(s.isSelected()){
                     selectedSubCategory.add(s.getId());
+                    categories += "&src_cat[]="+s.getId();
                 }
             }
+        }
+
+        String url = App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search" ;
+        if(categories.length()!=0){
+            url += categories;
         }
 
         // Parameters
@@ -569,7 +577,7 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.POST,
-                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search",
+                url,
                 map,
                 placesArrayListSearch,
                 activity,
