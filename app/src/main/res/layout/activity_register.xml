@@ -134,8 +134,7 @@
                 android:background="@drawable/custombuttongenoa"
                 android:textColor="@android:color/white"
                 android:text="@string/labelGoBack"/>
-
-
+            
         </RelativeLayout>
 
 

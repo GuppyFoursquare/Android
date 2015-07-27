@@ -111,6 +111,10 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
+        <activity
+            android:name=".ProfilActivity"
+            android:label="@string/title_activity_profil" >
+        </activity>
     </application>
 
 </manifest>

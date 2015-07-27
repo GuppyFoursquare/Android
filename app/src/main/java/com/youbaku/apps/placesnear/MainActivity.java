@@ -221,7 +221,8 @@ public class MainActivity extends ActionBarActivity implements
                 else
                 {
 
-                    Toast.makeText(getApplicationContext(),"Go To Profile",Toast.LENGTH_LONG).show();
+                    Intent in =new Intent(getApplication(),ProfilActivity.class);
+                    startActivity(in);
 
                 }
 
