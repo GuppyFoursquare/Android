@@ -30,8 +30,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -40,11 +43,13 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -359,7 +364,7 @@ public class Place {
      *
      *                          Example :: PlaceAdapter
      */
-    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map parameters, final ArrayList<Place> resultPlaceList, final Activity activity, final T adapter) {
+    public static <T> void fetchGenericPlaceList(int METHOD, String URL, Map<String,String> parameters, final ArrayList<Place> resultPlaceList, final Activity activity, final T adapter) {
 
         if (activity!=null && !App.checkInternetConnection(activity) ) {
             App.showInternetError(activity);
@@ -527,17 +532,9 @@ public class Place {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-
+                        App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "onErrorResponse----" + error.getMessage());
                     }
-                })
-                {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("Content-Type", "application/json; charset=utf-8");
-                        return headers;
-                    }
-                };
+                });
 
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
@@ -574,47 +571,34 @@ public class Place {
 
     public static void fetchSearchPlaces(Activity activity, PlaceAdapter adapter) {
 
-        String categoryList="";
-
         // Preparing for parameters
         ArrayList selectedSubCategory = new ArrayList();
         for(Category c : Category.categoryList){
             for(SubCategory s : c.getSubCatList()){
                 if(s.isSelected()){
                     selectedSubCategory.add(s.getId());
-                    categoryList += "&src_cat[]="+s.getId();
                 }
             }
         }
 
+        // Change selected subcategory to json string
+        JSONArray subCategoryList = new JSONArray(selectedSubCategory);
+        String subCategory = subCategoryList.toString().replaceAll("\"","");
 
-        if(Build.VERSION.SDK_INT>=19){
-            // Parameters
-            Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-            map.put("subcat_list", selectedSubCategory);
-
-            fetchGenericPlaceList(
-                    Request.Method.POST,
-                    App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search",
-                    map,
-                    placesArrayListSearch,
-                    activity,
-                    adapter);
-        }else{
-
-            fetchGenericPlaceList(
-                    Request.Method.GET,
-                    App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search" + categoryList,
-                    null,
-                    placesArrayListSearch,
-                    activity,
-                    adapter);
-        }
-    }
+        // Parameters
+        Map<String, String> map = new HashMap<String,String>();
+        map.put("subcat_list", subCategory);
+        map.put("op", "search");
 
 
-    public static Response.ErrorListener createRequestErrorListener(){
-        return null;
+        fetchGenericPlaceList(
+                Request.Method.POST,
+                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey,
+                map,
+                placesArrayListSearch,
+                activity,
+                adapter);
+
     }
 
 
