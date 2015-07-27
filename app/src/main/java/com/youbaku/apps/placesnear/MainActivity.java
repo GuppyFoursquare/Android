@@ -4,6 +4,7 @@ package com.youbaku.apps.placesnear;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -254,54 +255,62 @@ public class MainActivity extends ActionBarActivity implements
 
                     dialog.cancel(); // Your custom code
 
-                    String loginUrl = App.SitePath + "api/auth.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey +"&op=login";
+                    String loginUrl = App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey + "&op=login";
 
                     Map<String, String> map = new HashMap<String, String>();
-                    map.put("name", ((EditText)alertView.findViewById(R.id.username)).getText().toString());
-                    map.put("pass", ((EditText)alertView.findViewById(R.id.password)).getText().toString());
+                    map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
+                    map.put("pass", ((EditText) alertView.findViewById(R.id.password)).getText().toString());
 
                     JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                        (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+                            (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
 
-                        @Override
-                        public void onResponse(JSONObject response) {
+                                @Override
+                                public void onResponse(JSONObject response) {
 
-                            try {
+                                    try {
 
-                                if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+                                        if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
-                                    JSONObject responseContent = response.getJSONObject("content");
-                                    App.username = responseContent.getString("usr_username");
-                                    App.useremail = responseContent.getString("usr_email");
+                                            JSONObject responseContent = response.getJSONObject("content");
+                                            App.username = responseContent.getString("usr_username");
+                                            App.useremail = responseContent.getString("usr_email");
 
-                                    doLogin.setIcon(R.drawable.ic_profilelogo);
-                                    Toast.makeText( MainActivity.this ,App.username + " - " + App.useremail , Toast.LENGTH_LONG).show();
+                                            doLogin.setIcon(R.drawable.ic_profilelogo);
+                                            Toast.makeText(MainActivity.this, App.username + " - " + App.useremail, Toast.LENGTH_LONG).show();
 
-                                }else{
-                                    Toast.makeText(MainActivity.this, response.getString("status") , Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(MainActivity.this, response.getString("status"), Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+
+                                        App.sendErrorToServer(activity, getClass().getName(), "login Errror---", e.getMessage());
+                                        Toast.makeText(getApplicationContext(), "MainActivity login()", Toast.LENGTH_SHORT).show();
+
+                                        e.printStackTrace();
+                                        return;
+                                    }
                                 }
+                            }, new Response.ErrorListener() {
 
-                            } catch (JSONException e) {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // TODO Auto-generated method stub
 
-                                App.sendErrorToServer(activity, getClass().getName() , "login Errror---", e.getMessage());
-                                Toast.makeText( getApplicationContext(), "MainActivity login()" , Toast.LENGTH_SHORT).show();
-
-                                e.printStackTrace();
-                                return;
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // TODO Auto-generated method stub
-
-                        }
-                    });
+                                }
+                            });
 
                     // Add the request to the queue
                     VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
+                }
+            });
+
+            /* When register  button is clicked*/
+            alertDialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent in = new Intent(getApplicationContext(), RegisterActivity.class);
+                    startActivity(in);
                 }
             });
 

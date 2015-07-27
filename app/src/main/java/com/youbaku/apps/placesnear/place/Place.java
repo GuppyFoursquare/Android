@@ -397,7 +397,7 @@ public class Place {
 
                                     JSONArray responsePlaceList = getJsonArayIfExist(response, Place.RESULT_CONTENT);
                                     if(responsePlaceList!=null && responsePlaceList.length()>0) {
-                                        
+
                                         for (int i = 0; i < responsePlaceList.length(); i++) {
 
                                             JSONObject jsonPlace = getJsonArrayValueIfExist(responsePlaceList,i);

@@ -172,6 +172,14 @@
     <string name="loginrequirement">You should login first to add comment!</string>
     <string name="reservationbuttonlabel">Booking a place</string>
     <string name="labelGo">Go</string>
+    <string name="labelName">Your Name</string>
+    <string name="labelSurname">Your Surname</string>
+    <string name="labelUsername">Username</string>
+    <string name="labelPassword" />
+    <string name="labelAgainPassword" />
+    <string name="labelEmail">Email</string>
+    <string name="labelRegister">Register</string>
+    <string name="labelGoBack">Go Back</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

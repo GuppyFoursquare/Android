@@ -307,7 +307,6 @@ public class NearMe extends Fragment implements LocationListener {
 
                 }
 
-
                 return markerView;
             }
 

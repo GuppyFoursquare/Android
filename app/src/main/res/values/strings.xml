@@ -192,6 +192,15 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="labelGo">GO</string>
     <string name="title_activity_info">InfoActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="labelName">Your Name</string>
+    <string name="labelSurname">Your Surname</string>
+    <string name="labelUsername">Username</string>
+    <string name="labelPassword" >Password</string>
+    <string name="labelAgainPassword" >Password Again</string>
+    <string name="labelEmail">Email</string>
+    <string name="labelRegister">Register</string>
+    <string name="labelGoBack">Go Back</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 
