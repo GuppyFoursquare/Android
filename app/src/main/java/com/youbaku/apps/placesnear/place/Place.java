@@ -58,8 +58,6 @@ public class Place {
     // ----- ----- ----- ----- ----- ----- ----- ----- -----
     // ----- ----- GENERIC FETCHING PLACES PARAMETERS ----- -----
     // ----- ----- ----- ----- ----- ----- ----- ----- -----
-    public static final String RESULT_STATUS = "status";
-    public static final String RESULT_CONTENT = "content";
     public static final String PLC_ID = "plc_id";
     public static final String PLC_NAME = "plc_name";
     public static final String PLC_EMAIL = "plc_email";
@@ -300,54 +298,6 @@ public class Place {
 
 
     //---------------------------------- REQUEST PART -----------------------------------/
-    /**
-     * @param jsonObj
-     * @param key
-     * @return
-     */
-    public static String getJsonValueIfExist(JSONObject jsonObj, String key) {
-
-        try {
-            if (jsonObj.has(key)) {
-                return jsonObj.getString(key);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
-    public static JSONObject getJsonArrayValueIfExist(JSONArray jsonObj, int key) {
-        try {
-            if (jsonObj.getJSONObject(key)!=null) {
-                return jsonObj.getJSONObject(key);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key) {
-
-        try {
-            if (jsonObj.has(key)) {
-                return jsonObj.getJSONArray(key);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 
     // --GUPPY COMMENT IMPORTANT--
     // PlaceActivity checkDownloads() methodu entegre edilecek
@@ -391,42 +341,42 @@ public class Place {
                             // ----- ----- ----- ----- - ----- ----- ----- -----
                             // Check response is SUCCESS
                             // ----- ----- ----- ----- - ----- ----- ----- -----
-                            if (getJsonValueIfExist(response, Place.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
+                            if (App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
                                 App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "post fetchGenericPlaceList", " responseGENERAL:: " + response.toString());
                                 try{
 
-                                    JSONArray responsePlaceList = getJsonArayIfExist(response, Place.RESULT_CONTENT);
+                                    JSONArray responsePlaceList = App.getJsonArayIfExist(response, App.RESULT_CONTENT);
                                     if(responsePlaceList!=null && responsePlaceList.length()>0) {
 
                                         for (int i = 0; i < responsePlaceList.length(); i++) {
 
-                                            JSONObject jsonPlace = getJsonArrayValueIfExist(responsePlaceList,i);
+                                            JSONObject jsonPlace = App.getJsonArrayValueIfExist(responsePlaceList,i);
 
                                             //Inflate places
                                             Place place = new Place();
-                                            place.setId(getJsonValueIfExist(jsonPlace, Place.PLC_ID));
-                                            place.setName(getJsonValueIfExist(jsonPlace, Place.PLC_NAME));
-                                            place.setImgUrl(getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
-                                            place.setAddress(getJsonValueIfExist(jsonPlace, Place.PLC_ADDRESS));
-                                            place.setEmail(getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
-                                            place.setWeb(getJsonValueIfExist(jsonPlace, Place.PLC_WEBSITE));
-                                            place.setPhone(getJsonValueIfExist(jsonPlace, Place.PLC_CONTACT));
-                                            place.setOpen(getJsonValueIfExist(jsonPlace, Place.PLC_INTIME));
-                                            place.setClose(getJsonValueIfExist(jsonPlace, Place.PLC_OUTTIME));
+                                            place.setId(App.getJsonValueIfExist(jsonPlace, Place.PLC_ID));
+                                            place.setName(App.getJsonValueIfExist(jsonPlace, Place.PLC_NAME));
+                                            place.setImgUrl(App.getJsonValueIfExist(jsonPlace, Place.PLC_HEADER_IMAGE));
+                                            place.setAddress(App.getJsonValueIfExist(jsonPlace, Place.PLC_ADDRESS));
+                                            place.setEmail(App.getJsonValueIfExist(jsonPlace, Place.PLC_EMAIL));
+                                            place.setWeb(App.getJsonValueIfExist(jsonPlace, Place.PLC_WEBSITE));
+                                            place.setPhone(App.getJsonValueIfExist(jsonPlace, Place.PLC_CONTACT));
+                                            place.setOpen(App.getJsonValueIfExist(jsonPlace, Place.PLC_INTIME));
+                                            place.setClose(App.getJsonValueIfExist(jsonPlace, Place.PLC_OUTTIME));
 
-                                            double latitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
-                                            double longitude = Double.parseDouble(getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
+                                            double latitude = Double.parseDouble(App.getJsonValueIfExist(jsonPlace, Place.PLC_LATITUDE));
+                                            double longitude = Double.parseDouble(App.getJsonValueIfExist(jsonPlace, Place.PLC_LONGITUDE));
                                             place.setLocation(latitude, longitude);
 
-                                            String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
+                                            String htmlToString = String.valueOf(Html.fromHtml(Html.fromHtml(App.getJsonValueIfExist(jsonPlace, Place.PLC_INFO)).toString()));
                                             place.setDescription(htmlToString);
 
-                                            String isActive = getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
+                                            String isActive = App.getJsonValueIfExist(jsonPlace, Place.PLC_IS_ACTIVE);
                                             place.setIsActive(isActive.equalsIgnoreCase("1"));
 
                                             // GET ratings
                                             double averageRating = 0;
-                                            JSONArray ratings = getJsonArayIfExist(jsonPlace, Place.RATING);
+                                            JSONArray ratings = App.getJsonArayIfExist(jsonPlace, Place.RATING);
                                             for (int j = 0; ratings != null && j < ratings.length(); j++) {
                                                 Comment comment = new Comment();
                                                 JSONObject jsonComment = ratings.getJSONObject(j);
@@ -435,13 +385,13 @@ public class Place {
                                                 try {
                                                     // --GUPPY COMMENT IMPORTANT--
                                                     // -- Comments variable change to encapsulation --
-                                                    Date date = format.parse(getJsonValueIfExist(jsonComment, Place.RATING_CREATED_DATE));
+                                                    Date date = format.parse(App.getJsonValueIfExist(jsonComment, Place.RATING_CREATED_DATE));
                                                     comment.created = date;
-                                                    comment.text = getJsonValueIfExist(jsonComment, Place.RATING_COMMENT);
-                                                    comment.comment_id = getJsonValueIfExist(jsonComment, Place.RATING_ID);
-                                                    comment.rating = Double.parseDouble(getJsonValueIfExist(jsonComment, Place.RATING_RATING));
-                                                    comment.name = getJsonValueIfExist(jsonComment, Place.RATING_USR_USERNAME);
-                                                    comment.user_img = getJsonValueIfExist(jsonComment, Place.RATING_USR_PROFILE_PICTURE);
+                                                    comment.text = App.getJsonValueIfExist(jsonComment, Place.RATING_COMMENT);
+                                                    comment.comment_id = App.getJsonValueIfExist(jsonComment, Place.RATING_ID);
+                                                    comment.rating = Double.parseDouble(App.getJsonValueIfExist(jsonComment, Place.RATING_RATING));
+                                                    comment.name = App.getJsonValueIfExist(jsonComment, Place.RATING_USR_USERNAME);
+                                                    comment.user_img = App.getJsonValueIfExist(jsonComment, Place.RATING_USR_PROFILE_PICTURE);
 
                                                     averageRating += comment.rating;
 

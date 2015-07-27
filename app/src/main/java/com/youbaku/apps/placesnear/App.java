@@ -41,6 +41,7 @@ import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
 import com.parse.Parse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +73,60 @@ public class App extends Application {
     public static String useremail=null;
     //----------------------------------------- TOKENS -----------------------------------------/
 
+
+    //----------------------------------------- COMMON -----------------------------------------/
+    public static final String RESULT_STATUS = "status";
+    public static final String RESULT_CONTENT = "content";
+
+    /**
+     * @param jsonObj
+     * @param key
+     * @return
+     */
+    public static String getJsonValueIfExist(JSONObject jsonObj, String key) {
+
+        try {
+            if (jsonObj.has(key)) {
+                return jsonObj.getString(key);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public static JSONObject getJsonArrayValueIfExist(JSONArray jsonObj, int key) {
+        try {
+            if (jsonObj.getJSONObject(key)!=null) {
+                return jsonObj.getJSONObject(key);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static JSONArray getJsonArayIfExist(JSONObject jsonObj, String key) {
+
+        try {
+            if (jsonObj.has(key)) {
+                return jsonObj.getJSONArray(key);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    //----------------------------------------- COMMON -----------------------------------------/
 
 
     //---------------------------------- DEFAULT PLACE FILTERS -----------------------------------/

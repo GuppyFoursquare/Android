@@ -26,7 +26,7 @@
         android:src="@drawable/placeholder_user" />
 
     <TextView
-        android:id="@+id/textview_namesurname"
+        android:id="@+id/profile_usersurname"
         android:gravity="center_horizontal"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
@@ -38,23 +38,23 @@
         android:layout_marginBottom="40dp"/>
 
     <TextView
-        android:id="@+id/textview_username"
+        android:id="@+id/profile_username"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Username: alirzayev"
-        android:layout_below="@+id/textview_namesurname"
+        android:layout_below="@+id/profile_usersurname"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
 
     <TextView
-        android:id="@+id/textview_email"
+        android:id="@+id/profile_useremail"
         android:inputType="textEmailAddress"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Email: info@youbaku.com"
-        android:layout_below="@+id/textview_username"
+        android:layout_below="@+id/profile_username"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         />

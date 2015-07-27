@@ -468,7 +468,7 @@ public class NearMe extends Fragment implements LocationListener {
 
                         try {
 
-                            if (Place.getJsonValueIfExist(response,Place.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
+                            if (App.getJsonValueIfExist(response,App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
 
                                 JSONArray places = response.getJSONArray("content");
                                 setList(new ArrayList<Place>());

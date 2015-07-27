@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:orientation="vertical"
+        android:id="@+id/register_main"
         android:background="#eee">
         <TextView
             android:layout_marginBottom="15dp"
@@ -25,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="text"
             android:text="YouBaku Registration"/>
 
 
@@ -37,6 +39,7 @@
             android:paddingTop="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
+            android:inputType="text"
             android:hint="@string/labelName"
             android:background="@android:color/white" />
 
@@ -51,6 +54,7 @@
             android:paddingTop="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
+            android:inputType="text"
             android:hint="@string/labelSurname"
             android:background="@android:color/white" />
 
@@ -109,7 +113,7 @@
             android:paddingTop="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:hint="@string/labelEmail"
             android:background="@android:color/white" />
 
@@ -117,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <Button
-                android:id="@+id/registerBtn"
+                android:id="@+id/registerButton"
                 android:layout_width="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_height="wrap_content"
@@ -127,7 +131,7 @@
 
             <Button
                 android:id="@+id/registerGoBack"
-                android:layout_toLeftOf="@+id/registerBtn"
+                android:layout_toLeftOf="@+id/registerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="6dp"
@@ -143,6 +147,35 @@
     </LinearLayout>
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:id="@+id/register_load"
+        android:background="#eee">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Burada loading view eklenecek"
+            android:background="@android:color/white" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/custombuttongenoa"
+            android:textColor="@android:color/white"
+            android:text="@string/labelGoBack"/>
+    </LinearLayout>
+
 </RelativeLayout>
+
 
 

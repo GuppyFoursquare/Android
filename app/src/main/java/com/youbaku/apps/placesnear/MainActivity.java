@@ -30,18 +30,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
-import com.youbaku.apps.placesnear.apicall.CustomRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
-import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
-import com.youbaku.apps.placesnear.utils.Category;
-import com.youbaku.apps.placesnear.utils.SubCategory;
+import com.youbaku.apps.placesnear.utils.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +52,7 @@ public class MainActivity extends ActionBarActivity implements
     public static boolean internetConnection=true;
     public Activity activity;
 
+    private Menu menu;
 
 
     // Tab titles
@@ -77,7 +74,6 @@ public class MainActivity extends ActionBarActivity implements
         }else {
 
             // Progress Bar will be added
-//            Category.fetchCategoryList(this);
             setContentView(R.layout.activity_main);
         }
         
@@ -91,6 +87,7 @@ public class MainActivity extends ActionBarActivity implements
             spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
             bar.setIndeterminateDrawable(spin);
         }
+
 
     // ********** ********** ********** ********** **********
     // Initilization ActionBar
@@ -198,13 +195,26 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onResume() {
         PlaceFilter.resetFilter();
+
+        if(doLogin!=null){
+            doLogin = menu.getItem(0);
+            if(User.getInstance().getUser_name()!=null){
+                doLogin.setIcon(R.drawable.ic_profilelogo);
+            }
+        }
+
         super.onResume();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_main, this.menu);
+
         doLogin = menu.getItem(0);
+        if(User.getInstance().getUser_name()!=null){
+            doLogin.setIcon(R.drawable.ic_profilelogo);
+        }
         return true;
     }
 
@@ -215,15 +225,20 @@ public class MainActivity extends ActionBarActivity implements
         switch (item.getItemId()) {
             case R.id.login_main_menu:
 
-                if(App.useremail==null){
+                if(User.getInstance().getUser_name()==null){
                     login();
                 }
                 else
                 {
 
-                    Intent in =new Intent(getApplication(),ProfilActivity.class);
-                    startActivity(in);
+                    Map<String, String> map = new HashMap<String,String>();
+                    map.put("op", "info");
 
+                    User.userInfo(
+                            App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey,
+                            map,
+                            activity
+                    );
                 }
 
                 return true;
@@ -273,11 +288,10 @@ public class MainActivity extends ActionBarActivity implements
                                         if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
 
                                             JSONObject responseContent = response.getJSONObject("content");
-                                            App.username = responseContent.getString("usr_username");
-                                            App.useremail = responseContent.getString("usr_email");
+                                            User.getInstance().setUser_name(responseContent.getString("usr_username"));
+                                            User.getInstance().setUser_email(responseContent.getString("usr_email"));
 
                                             doLogin.setIcon(R.drawable.ic_profilelogo);
-                                            Toast.makeText(MainActivity.this, App.username + " - " + App.useremail, Toast.LENGTH_LONG).show();
 
                                         } else {
                                             Toast.makeText(MainActivity.this, response.getString("status"), Toast.LENGTH_SHORT).show();

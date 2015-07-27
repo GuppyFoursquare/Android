@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.youbaku.apps.placesnear.utils.User;
 
 
 public class ProfilActivity extends Activity {
@@ -20,6 +24,13 @@ public class ProfilActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_profil);
+
+        //Set Contents
+        ((TextView)findViewById(R.id.profile_useremail)).setText(User.getInstance().getUser_email());
+        ((TextView)findViewById(R.id.profile_username)).setText(User.getInstance().getUser_name());
+        ((TextView)findViewById(R.id.profile_usersurname)).setText(User.getInstance().getUser_lastName());
+
+        Toast.makeText(this, "Profile picture :: " + User.getInstance().getUser_profile_picture() , Toast.LENGTH_LONG).show();
 
         ImageButton backBtn=(ImageButton)findViewById(R.id.profileBactBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
