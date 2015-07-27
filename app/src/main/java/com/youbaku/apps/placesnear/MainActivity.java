@@ -196,11 +196,8 @@ public class MainActivity extends ActionBarActivity implements
     protected void onResume() {
         PlaceFilter.resetFilter();
 
-        if(doLogin!=null){
-            doLogin = menu.getItem(0);
-            if(User.getInstance().getUser_name()!=null){
-                doLogin.setIcon(R.drawable.ic_profilelogo);
-            }
+        if(doLogin!=null && User.getInstance().getUser_name()!=null){
+            doLogin.setIcon(R.drawable.ic_profilelogo);
         }
 
         super.onResume();
@@ -230,7 +227,6 @@ public class MainActivity extends ActionBarActivity implements
                 }
                 else
                 {
-
                     Map<String, String> map = new HashMap<String,String>();
                     map.put("op", "info");
 

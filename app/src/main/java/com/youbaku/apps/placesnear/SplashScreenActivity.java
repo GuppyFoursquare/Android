@@ -68,61 +68,75 @@ public class SplashScreenActivity extends Activity {
         }
 
 
-        //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-        //----- ----- ----- ----- REQUEST PART ----- ----- ----- -----
-        //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        //Check api and token are still used
+        //it will checked by request but this time we check only static value
+        if(App.youbakuAPIKey==null || App.youbakuToken==null){
 
-        String url = App.SitePath+"api/register.php";
-        App.sendErrorToServer(this, getClass().getName(), "onCreate", "GUPPY-CASE-01-- url::"+url);
-        // Request a json response
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, new Response.Listener<JSONObject>(){
+            //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+            //----- ----- ----- ----- REQUEST PART ----- ----- ----- -----
+            //----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+            final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
 
-                    @Override
-                    public void onResponse(JSONObject response) {
+            String url = App.SitePath+"api/register.php";
+            App.sendErrorToServer(this, getClass().getName(), "onCreate", "GUPPY-CASE-01-- url::"+url);
+            // Request a json response
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, new Response.Listener<JSONObject>(){
 
-                        try {
-                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+                        @Override
+                        public void onResponse(JSONObject response) {
 
-                                JSONObject responseContent = response.getJSONObject("content");
-                                App.youbakuToken = responseContent.getString("token");
-                                App.youbakuAPIKey = responseContent.getString("apikey");
+                            try {
+                                if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
-                                if(!App.checkInternetConnection(getApplication())){
-                                    App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
-                                    return;
+                                    JSONObject responseContent = response.getJSONObject("content");
+                                    App.youbakuToken = responseContent.getString("token");
+                                    App.youbakuAPIKey = responseContent.getString("apikey");
+
+                                    if(!App.checkInternetConnection(getApplication())){
+                                        App.showGenericInfoActivity(getApplication(),App.typeConnection,getResources().getString(R.string.networkconnectionerrormessage));
+                                        return;
+                                    }
+                                    else if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                                        buildAlertMessageNoGps();
+                                    }
+                                    else {
+                                        Intent i = new Intent(getApplication(),MainActivity.class);
+                                        startActivity(i);
+                                    }
+                                }else{
+                                    Toast.makeText(getApplicationContext() , "Response not success", Toast.LENGTH_SHORT).show();
+                                    Log.e("---GUPPY ERROR---", "SplassScreenActivity -> apikey request");
+                                    App.sendErrorToServer(activity, getClass().getName() , "onCreate", "JSON RESPONSE not SUCCESS");
                                 }
-                                else if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                                    buildAlertMessageNoGps();
-                                }
-                                else {
-                                    Intent i = new Intent(getApplication(),MainActivity.class);
-                                    startActivity(i);
-                                }
-                            }else{
-                                Toast.makeText(getApplicationContext() , "Response not success", Toast.LENGTH_SHORT).show();
-                                Log.e("---GUPPY ERROR---", "SplassScreenActivity -> apikey request");
-                                App.sendErrorToServer(activity, getClass().getName() , "onCreate", "JSON RESPONSE not SUCCESS");
+
+                            } catch (JSONException e) {
+                                App.sendErrorToServer(activity, getClass().getName() , "onCreate", e.getMessage());
+                                e.printStackTrace();
                             }
 
-                        } catch (JSONException e) {
-                            App.sendErrorToServer(activity, getClass().getName() , "onCreate", e.getMessage());
-                            e.printStackTrace();
                         }
+                    }, new Response.ErrorListener() {
 
-                    }
-                }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
+                            App.sendErrorToServer(activity, getClass().getName(), "onCreate_Response.ErrorListener", error.getMessage());
+                        }
+                    });
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        App.sendErrorToServer(activity, getClass().getName(), "onCreate_Response.ErrorListener", error.getMessage());
-                    }
-                });
+            // Add the request to the queue
+            VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
-        // Add the request to the queue
-        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+        }else{
+
+            //--GUPPY COMMENT IMPORTANT--
+            //Check apikey and token valid
+            //assume that there are valid keys
+            Intent i = new Intent(getApplication(),MainActivity.class);
+            startActivity(i);
+
+        }
 
     }
 
