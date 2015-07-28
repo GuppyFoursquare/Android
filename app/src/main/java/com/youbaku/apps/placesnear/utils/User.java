@@ -96,7 +96,7 @@ public class User {
                                 myProfile.setUser_firstName(App.getJsonValueIfExist(userProfile, "usr_first_name"));
                                 myProfile.setUser_lastName(App.getJsonValueIfExist(userProfile, "usr_last_name"));
                                 myProfile.setUser_name(App.getJsonValueIfExist(userProfile, "usr_username"));
-                                Toast.makeText(activity , "User::" + myProfile.getUser_name() , Toast.LENGTH_LONG).show();
+//                                Toast.makeText(activity , "User::" + myProfile.getUser_name() , Toast.LENGTH_LONG).show();
 
                                 activity.finish();
 

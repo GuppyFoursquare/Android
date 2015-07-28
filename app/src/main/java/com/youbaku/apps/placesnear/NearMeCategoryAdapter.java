@@ -10,6 +10,7 @@ package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,7 +117,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
     private void getCategoryPlaces(String mainCategoryID){
 
         //Calling Api
-        String url = App.SitePath+"api/category.php?cat_id="+mainCategoryID;
+        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&cat_id="+mainCategoryID;
 
         JSONObject apiResponse = null;
         // Request a json response
@@ -142,9 +143,13 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
                                     e.printStackTrace();
                                 }
 
+                                getPlacesWithSearch(subCategoryList);
+
+                            }else{
+                                Log.e("--GUPPY--", "getCategoryPlaces :: "  + response.toString());
                             }
 
-                            getPlacesWithSearch(subCategoryList);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -167,11 +172,18 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
 
     private void getPlacesWithSearch(ArrayList categoryList){
+        
+        // Change selected subcategory to json string
+        JSONArray subCategoryList = new JSONArray(categoryList);
+        String subCategory = subCategoryList.toString().replaceAll("\"","");
+
 
         //Calling Api
-        String url = App.SitePath+"api/places.php?op=search";
-        Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-        map.put("subcat_list", categoryList);
+        String url = App.SitePath+"api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey ;
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("op", "search");
+        map.put("subcat_list", subCategory);
+
 
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -202,6 +214,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
                                         place.setLocation(latitude, longitude);
 
                                         Place.placesListNearMe.put(place.getId(), place);
+
                                     }
                                 }catch (JSONException e){
                                     e.printStackTrace();

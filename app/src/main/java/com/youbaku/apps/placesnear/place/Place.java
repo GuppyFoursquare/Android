@@ -342,7 +342,7 @@ public class Place {
                             // Check response is SUCCESS
                             // ----- ----- ----- ----- - ----- ----- ----- -----
                             if (App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
-                                App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "post fetchGenericPlaceList", " responseGENERAL:: " + response.toString());
+
                                 try{
 
                                     JSONArray responsePlaceList = App.getJsonArayIfExist(response, App.RESULT_CONTENT);
