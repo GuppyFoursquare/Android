@@ -172,7 +172,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
 
     private void getPlacesWithSearch(ArrayList categoryList){
-        
+
         // Change selected subcategory to json string
         JSONArray subCategoryList = new JSONArray(categoryList);
         String subCategory = subCategoryList.toString().replaceAll("\"","");
