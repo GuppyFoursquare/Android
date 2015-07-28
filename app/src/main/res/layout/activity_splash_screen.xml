@@ -13,8 +13,6 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="@drawable/home_baku_logo">
-
-
     </LinearLayout>
 
 </RelativeLayout>

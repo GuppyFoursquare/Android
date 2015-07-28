@@ -26,11 +26,11 @@ public class ProfilActivity extends Activity {
         setContentView(R.layout.activity_profil);
 
         //Set Contents
-        ((TextView)findViewById(R.id.profile_useremail)).setText(User.getInstance().getUser_email());
+        String nameSurname=User.getInstance().getUser_firstName()+" "+User.getInstance().getUser_lastName();
+        ((TextView) findViewById(R.id.profile_useremail)).setText(User.getInstance().getUser_email());
         ((TextView)findViewById(R.id.profile_username)).setText(User.getInstance().getUser_name());
-        ((TextView)findViewById(R.id.profile_usersurname)).setText(User.getInstance().getUser_lastName());
+        ((TextView)findViewById(R.id.profile_usersurname)).setText(nameSurname);
 
-        Toast.makeText(this, "Profile picture :: " + User.getInstance().getUser_profile_picture() , Toast.LENGTH_LONG).show();
 
         ImageButton backBtn=(ImageButton)findViewById(R.id.profileBactBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {

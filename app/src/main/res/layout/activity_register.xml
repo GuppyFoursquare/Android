@@ -138,41 +138,39 @@
                 android:background="@drawable/custombuttongenoa"
                 android:textColor="@android:color/white"
                 android:text="@string/labelGoBack"/>
-            
         </RelativeLayout>
 
 
 
-
     </LinearLayout>
+
     </ScrollView>
+
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_margin="20dp"
+        android:layout_centerVertical="true"
         android:orientation="vertical"
         android:visibility="invisible"
         android:id="@+id/register_load"
         android:background="#eee">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:paddingBottom="15dp"
-            android:paddingTop="10dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Burada loading view eklenecek"
-            android:background="@android:color/white" />
-
-        <Button
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginRight="6dp"
-            android:background="@drawable/custombuttongenoa"
-            android:textColor="@android:color/white"
-            android:text="@string/labelGoBack"/>
+            android:id="@+id/progress_bar_activity_register"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_height="wrap_content"
+            android:text="Please Wait.."/>
     </LinearLayout>
 
 </RelativeLayout>
