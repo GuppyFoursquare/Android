@@ -19,6 +19,7 @@ import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,12 +71,16 @@ public class PlaceDetailFragment extends Fragment{
     private ImageView iconPhone;
     private ImageView iconTwit;
     private ImageView iconWeb;
+    private Button reservBtn;
     private int color=0;
     private Place p;
     private PlaceInfo pi;
     private View.OnClickListener OnCommentClick;
     private View.OnClickListener OnDealClick;
     ImageLoader mImageLoader;
+
+    private BookPlaceFragment bookPlaceFrg;
+
 
     ArrayList<Place> listData = new ArrayList<Place>();
 
@@ -112,6 +117,15 @@ public class PlaceDetailFragment extends Fragment{
         dealTitle=(TextView)view.findViewById(R.id.deal_title_place_detail);
         dealDate=(TextView)view.findViewById(R.id.deal_date_place_detail);
         dealText=(TextView)view.findViewById(R.id.deal_text_place_detail);
+        reservBtn=(Button)view.findViewById(R.id.doReserveBtn);
+        reservBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookPlaceFrg=new BookPlaceFragment();
+                getFragmentManager().beginTransaction().addToBackStack("bookplace").replace(R.id.main_activity_place_detail, bookPlaceFrg).commit();
+
+            }
+        });
 
 
         // 2- We will call api
