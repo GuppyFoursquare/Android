@@ -27,13 +27,32 @@
                 android:id="@+id/no_image_palce_detail"
                 android:scaleType="centerCrop"
                 />
-            <TextView
+            <RelativeLayout
+                android:id="@+id/reserveLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:padding="5dp"
-                android:id="@+id/top_info_place_detail" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:padding="5dp"
+                    android:id="@+id/top_info_place_detail" />
+                <Button
+                    android:id="@+id/doReserveBtn"
+                    android:background="@drawable/custombuttongenoa"
+                    android:layout_margin="7dp"
+                    android:padding="5dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Book Now"/>
+
+            </RelativeLayout>
+
 
             <TextView
                 android:layout_width="match_parent"
