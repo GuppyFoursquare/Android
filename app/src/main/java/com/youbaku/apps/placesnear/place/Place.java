@@ -431,6 +431,7 @@ public class Place {
                                     }else {
                                         Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Place Count 0 ");
                                         App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Place Count 0");
+
                                     }
 
                                 }catch (JSONException e){

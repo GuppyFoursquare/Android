@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.SpinKitDrawable1;
+import com.youbaku.apps.placesnear.adapter.Adapter;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.location.MyLocationSet;
 import com.youbaku.apps.placesnear.place.comment.AllCommentsDownloaded;
@@ -95,7 +96,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         act.setBackgroundDrawable(colorDrawable);
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setDisplayShowCustomEnabled(true);
-        act.setTitle(title);
+        act.setTitle("Places within 10km");
         act.setSubtitle("YouBaku");
 
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -104,6 +105,9 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         pro.setVisibility(View.GONE);
         pro.setIndeterminate(true);
         act.setCustomView(pro, params);
+
+        bar = (ProgressBar) findViewById(R.id.progressBar);
+
 
         if (!MyLocation.checkLocationServices(getApplicationContext())) {
             setContentView(R.layout.need_location_service);
@@ -127,14 +131,14 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         listFragment = new PlaceListFragment();
         listFragment.setAdapter(new PlaceAdapter(this, Place.placesArrayListSearch, Color.BLACK));
         listFragment.setColor(App.DefaultBackgroundColor);
-        ProgressBar br=(ProgressBar) findViewById(R.id.progressBar);
-        br.setVisibility(View.INVISIBLE);
         listFragment.setOnItemClickListener(listSelected);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_place, listFragment).commit();
         Place.fetchSearchPlaces(this, listFragment.getAdapter());
-        act.setTitle(String.format(getResources().getString(R.string.categorydistanceradius),
-                App.getDistanceString(filter.metrics, filter.getDistance(filter.metrics) * 1000),
-                Place.placesArrayListSearch.size()));
+        listFragment.getAdapter().notifyDataSetChanged();
+        ProgressBar br=(ProgressBar) findViewById(R.id.progressBar);
+        br.setVisibility(View.INVISIBLE);
+
+
 
     }
 
@@ -314,6 +318,11 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
     protected void onStop() {
         onScreen = false;
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void goBack() {

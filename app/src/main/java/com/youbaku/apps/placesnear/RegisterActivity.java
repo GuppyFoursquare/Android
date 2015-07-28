@@ -56,7 +56,16 @@ public class RegisterActivity extends Activity {
                 String registerAgainPassword = ((EditText) findViewById(R.id.registerAgainPassword)).getText().toString();
                 String registerEmail = ((EditText) findViewById(R.id.registerEmail)).getText().toString();
 
-                switchToLoading();
+                //Check input values
+                if(registerName.isEmpty()||registerSurname.isEmpty()||registerUsername.isEmpty()||registerPassword.isEmpty()||registerAgainPassword.isEmpty()||registerEmail.isEmpty()){
+                    Toast.makeText(getApplicationContext() , getResources().getString(R.string.formvalidationmessage) , Toast.LENGTH_LONG).show();
+                    switchToMain();
+                }
+                else {
+                    switchToLoading();
+                }
+
+
 
                 if(registerPassword.equalsIgnoreCase(registerAgainPassword)){
 
