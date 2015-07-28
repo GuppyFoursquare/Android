@@ -129,6 +129,8 @@ public class App extends Application {
     //----------------------------------------- COMMON -----------------------------------------/
 
 
+
+
     //---------------------------------- DEFAULT PLACE FILTERS -----------------------------------/
     public static final String  keyword                   = "";
     public static final boolean isOpen                    = false;
@@ -406,6 +408,20 @@ public class App extends Application {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 activity.finish();
+            }
+        });
+        builder.show();
+    }
+
+    public static void showUserError(final Activity activity, final boolean wantToFinishActivity , String message){
+        AlertDialog.Builder builder=new AlertDialog.Builder(activity);
+        builder.setMessage(message);
+        builder.setPositiveButton(activity.getResources().getString(R.string.alertokbuttonlabel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(wantToFinishActivity){
+                    activity.finish();
+                }
             }
         });
         builder.show();

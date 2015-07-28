@@ -115,4 +115,14 @@ public class RegisterActivity extends Activity {
         activity.findViewById(R.id.register_main).setVisibility(View.VISIBLE);
         activity.findViewById(R.id.register_load).setVisibility(View.INVISIBLE);
     }
+
+    public static void switchToLoading(Activity activity){
+        activity.findViewById(R.id.register_load).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.register_main).setVisibility(View.INVISIBLE);
+    }
+
+    public static void switchToMain(Activity activity){
+        activity.findViewById(R.id.register_main).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.register_load).setVisibility(View.INVISIBLE);
+    }
 }

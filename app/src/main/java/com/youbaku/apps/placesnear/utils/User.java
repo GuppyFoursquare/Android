@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.ProfilActivity;
+import com.youbaku.apps.placesnear.RegisterActivity;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import org.json.JSONException;
@@ -109,6 +110,10 @@ public class User {
                         }else{
                             try{
                                 String resultStatus = App.getJsonValueIfExist(response, App.RESULT_STATUS);
+                                if(resultStatus.equalsIgnoreCase("FAILURE_ALREADY_EXIST")){
+                                    RegisterActivity.switchToMain(activity);
+                                    App.showUserError(activity,false,"User already exist");
+                                }
                                 Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + resultStatus);
                             }catch (NullPointerException e){
                                 Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + "NULL");
