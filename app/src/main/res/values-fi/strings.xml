@@ -180,6 +180,7 @@
     <string name="labelEmail">Email</string>
     <string name="labelRegister">Register</string>
     <string name="labelGoBack">Go Back</string>
+    <string name="logout">Log Out</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

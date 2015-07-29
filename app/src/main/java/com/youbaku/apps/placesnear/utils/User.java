@@ -173,7 +173,7 @@ public class User {
                                 myProfile.setUser_lastName(App.getJsonValueIfExist(userProfile, "usr_last_name"));
                                 myProfile.setUser_name(App.getJsonValueIfExist(userProfile, "usr_username"));
                                 myProfile.setUser_email(App.getJsonValueIfExist(userProfile, "usr_email"));
-                                myProfile.setUser_profile_picture(App.getJsonValueIfExist(userProfile, "user_profile_picture"));
+                                myProfile.setUser_profile_picture(App.getJsonValueIfExist(userProfile, "usr_profile_picture"));
 
                                 Intent in =new Intent(activity.getApplication(),ProfilActivity.class);
                                 activity.startActivity(in);
