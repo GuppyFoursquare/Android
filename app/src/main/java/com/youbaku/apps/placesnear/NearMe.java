@@ -454,11 +454,9 @@ public class NearMe extends Fragment implements LocationListener {
         MyLocation my = MyLocation.getMyLocation(getActivity());
         my.callHard();
 
-//        String nearMeURL = App.SitePath + "api/places.php?op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
         String nearMeURL = App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
-        App.sendErrorToServer(getActivity(), getClass().getName(), "getNearMePlaces", "GUPPY-CASE-01-- url::"+nearMeURL);
-        JSONObject apiResponse = null;
 
+        JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, nearMeURL, apiResponse, new Response.Listener<JSONObject>() {
@@ -470,57 +468,49 @@ public class NearMe extends Fragment implements LocationListener {
 
                             if (App.getJsonValueIfExist(response,App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
 
-                                JSONArray places = response.getJSONArray("content");
+                                JSONArray places = App.getJsonArayIfExist(response, "content");
                                 setList(new ArrayList<Place>());
 
                                 Place.placesListNearMe.clear();
-
-                                System.out.println("places downloaded " + places.length());
-
                                 if (places.length() > 0) {
-
-                                    //firstFilter = false;
-                                    //placesDownload = true;
 
                                     //Read JsonArray
                                     for (int i = 0; i < places.length(); i++) {
-                                        JSONObject o = places.getJSONObject(i);
+                                        JSONObject o = App.getJsonArrayValueIfExist(places, i);
                                         final PlaceFilter filter = PlaceFilter.getInstance();
                                         final Place p = new Place();
 
-                                        if (o.has("rating")) {
 
-                                            JSONArray arr = o.getJSONArray("rating");
+                                        JSONArray arr = App.getJsonArayIfExist(o, "rating");
+                                        for (int j = 0; arr!=null && j < arr.length(); j++) {
+                                            final Comment c = new Comment();
+                                            JSONObject obj = App.getJsonArrayValueIfExist(arr, j);
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                                            for (int j = 0; j < arr.length(); j++) {
-                                                final Comment c = new Comment();
-                                                JSONObject obj = arr.getJSONObject(j);
-                                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            try {
+                                                Date d = format.parse(obj.getString("places_rating_created_date"));
+                                                c.created = d;
+                                                c.text = obj.getString("place_rating_comment");
+                                                c.comment_id = obj.getString("place_rating_id");
+                                                c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
+                                                c.name = obj.getString("places_rating_by");
 
-                                                try {
-                                                    Date d = format.parse(obj.getString("places_rating_created_date"));
-                                                    c.created = d;
-                                                    c.text = obj.getString("place_rating_comment");
-                                                    c.comment_id = obj.getString("place_rating_id");
-                                                    c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                    c.name = obj.getString("places_rating_by");
-
-                                                    //Getting User Image
-                                                    if (obj.isNull("usr_profile_picture")) {
-                                                        c.user_img = "";
-                                                        Log.i("---GUPPY USER IMAGE---", "No Available Image");
-                                                    } else {
-                                                        c.user_img = obj.getString("usr_profile_picture").toString();
-                                                    }
-
-                                                    p.comments.add(c);
-
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
+                                                //Getting User Image
+                                                if (obj.isNull("usr_profile_picture")) {
+                                                    c.user_img = "";
+                                                    Log.i("---GUPPY USER IMAGE---", "No Available Image");
+                                                } else {
+                                                    c.user_img = obj.getString("usr_profile_picture").toString();
                                                 }
+
+                                                p.comments.add(c);
+
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            } catch (JSONException e){
+                                                e.printStackTrace();
                                             }
                                         }
-
 
                                         double rating = 0.0;
                                         if (o.has("plc_avg_rating")) {
@@ -530,19 +520,19 @@ public class NearMe extends Fragment implements LocationListener {
                                         }
 
                                         //Inflate places
-                                        p.setId(o.getString("plc_id"));
-                                        p.setName(o.getString("plc_name"));
-                                        p.setImgUrl(o.getString("plc_header_image"));
+                                        p.setId(App.getJsonValueIfExist(o,"plc_id"));
+                                        p.setName(App.getJsonValueIfExist(o,"plc_name"));
+                                        p.setImgUrl(App.getJsonValueIfExist(o, "plc_header_image"));
                                         p.setRating(rating);
-                                        p.setAddress(o.getString("plc_address"));
-                                        p.setWeb(o.getString("plc_website"));
-                                        p.email = o.getString("plc_email");
-                                        p.setPhone(o.getString("plc_contact"));
-                                        p.setOpen(o.getString("plc_intime"));
-                                        p.setClose(o.getString("plc_outtime"));
-                                        p.setIsActive(o.getString("plc_is_active").equalsIgnoreCase("1") ? true : false);
-                                        p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(o.getString("plc_info")).toString())));
-                                        p.setLocation(Double.parseDouble(o.getString("plc_latitude")), Double.parseDouble(o.getString("plc_longitude")));
+                                        p.setAddress(App.getJsonValueIfExist(o, "plc_address"));
+                                        p.setWeb(App.getJsonValueIfExist(o, "plc_website"));
+                                        p.setEmail(App.getJsonValueIfExist(o, "plc_email"));
+                                        p.setPhone(App.getJsonValueIfExist(o, "plc_contact"));
+                                        p.setOpen(App.getJsonValueIfExist(o, "plc_intime"));
+                                        p.setClose(App.getJsonValueIfExist(o, "plc_outtime"));
+                                        p.setIsActive( App.getJsonValueIfExist(o, "plc_is_active")!=null ? App.getJsonValueIfExist(o, "plc_is_active").equalsIgnoreCase("1")  : false);
+                                        p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(App.getJsonValueIfExist(o, "plc_info")).toString())));
+                                        p.setLocation(Double.parseDouble( App.getJsonValueIfExist(o, "plc_latitude") ), Double.parseDouble(App.getJsonValueIfExist(o, "plc_longitude") ));
 
                                         getList().add(p);
 

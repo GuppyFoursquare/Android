@@ -87,7 +87,8 @@ public class App extends Application {
 
         try {
             if (jsonObj.has(key)) {
-                return jsonObj.getString(key);
+                String resultObj = jsonObj.getString(key);
+                return resultObj;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -101,7 +102,8 @@ public class App extends Application {
     public static JSONObject getJsonArrayValueIfExist(JSONArray jsonObj, int key) {
         try {
             if (jsonObj.getJSONObject(key)!=null) {
-                return jsonObj.getJSONObject(key);
+                JSONObject resultObj = jsonObj.getJSONObject(key);
+                return resultObj;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -116,7 +118,8 @@ public class App extends Application {
 
         try {
             if (jsonObj.has(key)) {
-                return jsonObj.getJSONArray(key);
+                JSONArray resultObj = jsonObj.getJSONArray(key);
+                return resultObj;
             }
         } catch (JSONException e) {
             e.printStackTrace();
