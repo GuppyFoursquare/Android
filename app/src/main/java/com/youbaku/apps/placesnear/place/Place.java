@@ -473,6 +473,7 @@ public class Place {
 
                                     ((Adapter) adapter).notifyDataSetChanged();
                                     App.showGenericInfoActivity(activity, App.typeNull, "We are sorry! Your search did not match any places. Try different categories.");
+                                    ((PlaceActivity) activity).finish();
 
                             }
                             // *********************************************************************
