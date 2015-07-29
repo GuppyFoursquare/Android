@@ -1,44 +1,71 @@
 package com.youbaku.apps.placesnear;
 
-import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.utils.User;
 
 
-public class ProfilActivity extends Activity {
+public class ProfilActivity extends ActionBarActivity {
+    private ActionBar actionBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Hide title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_profil);
+
+        // ********** ********** ********** ********** **********
+        // Initilization ActionBar
+        // ********** ********** ********** ********** **********
+        actionBar =(ActionBar) getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(App.DefaultActionBarColor)));
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setLogo(R.drawable.app_logo);
+        actionBar.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        ActionBar.LayoutParams params=new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity=0x05;
+        ProgressBar pro=new ProgressBar(this);
+        pro.setVisibility(View.GONE);
+        pro.setIndeterminate(true);
+        actionBar.setCustomView(pro, params);
+
 
         //Set Contents
         String nameSurname=User.getInstance().getUser_firstName()+" "+User.getInstance().getUser_lastName();
         ((TextView) findViewById(R.id.profile_useremail)).setText(User.getInstance().getUser_email());
         ((TextView)findViewById(R.id.profile_username)).setText(User.getInstance().getUser_name());
         ((TextView)findViewById(R.id.profile_usersurname)).setText(nameSurname);
+        ImageView profileImg=(ImageView)findViewById(R.id.imageview_profile);
+
+        //- INVISIBLE CONTACT -No contact data for user at this time
+        ((TextView)findViewById(R.id.profile_user_contact)).setVisibility(View.INVISIBLE);
 
 
-        ImageButton backBtn=(ImageButton)findViewById(R.id.profileBactBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        //Load Profile Image
+        String imgUrl = App.SitePath+"uploads/profile_images/"+ User.getInstance().getUser_profile_picture().toString(); // URL of the image
+        Picasso.with(getApplication()).load(imgUrl).placeholder(R.drawable.placeholder_user).into(profileImg);
+
+
+
+
     }
 
     @Override
@@ -53,13 +80,16 @@ public class ProfilActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 }

@@ -2,6 +2,8 @@
 <resources>
     <drawable name="selected">#F6FCFF</drawable>
     <color name="divider_color">#ccc</color>
-
     <color name="black_overlay">#66000000</color>
+
+    <color name="app_green_color">#04a968</color>
+    <color name="app_red_color">#c5273f</color>
 </resources>
