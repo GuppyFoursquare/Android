@@ -147,6 +147,8 @@ public class PlaceAdapter extends ArrayAdapter<Place> implements Adapter {
 
         rateTxt.setText(getList().get(position).rating + "/5.0");
 
+        notifyDataSetChanged();
+
         return convertView;
     }
 

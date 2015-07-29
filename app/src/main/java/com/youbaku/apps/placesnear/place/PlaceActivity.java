@@ -139,7 +139,6 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         br.setVisibility(View.INVISIBLE);
 
 
-
     }
 
 
