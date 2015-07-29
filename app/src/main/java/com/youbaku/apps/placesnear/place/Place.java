@@ -3,6 +3,7 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
@@ -466,8 +467,13 @@ public class Place {
                                     Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Interface adapter casting error");
                                     App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Interface adapter casting error----" + e.getMessage());
 
-
                                 }
+                            }
+                            if(resultPlaceList.size()==0){
+
+                                    ((Adapter) adapter).notifyDataSetChanged();
+                                    App.showGenericInfoActivity(activity, App.typeNull, "We are sorry! Your search did not match any places. Try different categories.");
+
                             }
                             // *********************************************************************
                             // *********************************************************************
@@ -544,11 +550,12 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.POST,
-                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey,
+                App.SitePath + "api/places.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey,
                 map,
                 placesArrayListSearch,
                 activity,
                 adapter);
+
 
     }
 
