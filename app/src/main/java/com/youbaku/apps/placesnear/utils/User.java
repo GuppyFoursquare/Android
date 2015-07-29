@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.ProfilActivity;
 import com.youbaku.apps.placesnear.RegisterActivity;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
@@ -106,6 +107,67 @@ public class User {
 
                                 e.printStackTrace();
                             }
+
+                        }else{
+                            try{
+                                String resultStatus = App.getJsonValueIfExist(response, App.RESULT_STATUS);
+                                if(resultStatus.equalsIgnoreCase("FAILURE_ALREADY_EXIST")){
+                                    RegisterActivity.switchToMain(activity);
+                                    App.showUserError(activity,false,"User already exist");
+                                }
+                                Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + resultStatus);
+                            }catch (NullPointerException e){
+                                Log.e("---GUPPY---", "Place -> fetchGenericPlaceList -> Status " + "NULL");
+                                App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Status RETURN NULL----" + e.getMessage());
+                            }
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "onErrorResponse----" + error.getMessage());
+                    }
+                });
+
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+    }
+
+    public static void userLogout( String URL, Map<String,String> parameters, final Activity activity) {
+
+        if (activity!=null && !App.checkInternetConnection(activity) ) {
+            App.showInternetError(activity);
+            return;
+        }
+
+        // Request a json response
+        JSONObject params = (parameters!=null) ? (new JSONObject(parameters)) : (null);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, URL, params, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        myProfile = new User();
+                        // ----- ----- ----- ----- - ----- ----- ----- -----
+                        // Check response is SUCCESS
+                        // ----- ----- ----- ----- - ----- ----- ----- -----
+                        if (App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
+
+
+
+                            //if logout, finish current activity and go to home page
+                            activity.finish();
+                            Intent in=new Intent(activity,MainActivity.class);
+                            MainActivity.doLogin.setIcon(null);
+                            activity.startActivity(in);
+
+
+
+
 
                         }else{
                             try{

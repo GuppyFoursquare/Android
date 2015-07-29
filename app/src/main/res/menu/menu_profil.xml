@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.youbaku.apps.placesnear.ProfilActivity">
-    <item android:id="@+id/login_main_menu"
+    <item android:id="@+id/logout_profile_menu"
         android:title="@string/logout"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_lock_power_off"/>

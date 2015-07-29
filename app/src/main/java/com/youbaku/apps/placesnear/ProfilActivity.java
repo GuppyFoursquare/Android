@@ -1,5 +1,7 @@
 package com.youbaku.apps.placesnear;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
@@ -14,7 +16,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.youbaku.apps.placesnear.adapter.Adapter;
 import com.youbaku.apps.placesnear.utils.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ProfilActivity extends ActionBarActivity {
@@ -83,6 +89,20 @@ public class ProfilActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+
+            case R.id.logout_profile_menu:
+                Map<String, String> map = new HashMap<String,String>();
+                map.put("op", "logout");
+
+                User.userLogout(
+                        App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey,
+                        map,
+                        ProfilActivity.this
+                );
+
+
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
