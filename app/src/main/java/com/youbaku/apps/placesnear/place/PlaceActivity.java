@@ -185,6 +185,8 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         switch (id) {
             case R.id.go_filter_menu:
 
+                getSupportActionBar().setTitle("Filter Places");
+
                 if (Place.placesArrayListSearch!=null && Place.placesArrayListSearch.size()>0 ){
                     if (filterFragment == null)
                         filterFragment = new FilterFragment();
@@ -260,6 +262,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                 //-2.2- fetch places
                 Place.placesArrayListFilter.clear();
+
                 for(Place searchPlace : Place.placesArrayListSearch){
                     boolean filterKeyword       = filter.keyword.length() != 0 ? searchPlace.getName().toLowerCase().contains(filter.keyword.toLowerCase()) : true;
                     boolean filterDistanceKM    = filter.getDistance(PlaceFilter.DistanceSystem.km) != 0 ? filter.getDistance(PlaceFilter.DistanceSystem.km) > searchPlace.getDistance()[0] / 1000 : true;
@@ -271,6 +274,10 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                         Place.placesArrayListFilter.add(searchPlace);
                     }
 
+                }
+                if(Place.placesArrayListFilter.size()==0){
+                    App.showGenericInfoActivity(PlaceActivity.this, App.typeNull, "We are sorry. No places found!");
+                    finish();
                 }
 
                 //-3- UPDATE ACTIONBAR
@@ -287,7 +294,8 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
                 setScreen(Screen.list);
 
                 ActionBar act = (getSupportActionBar());
-                act.setSubtitle("Filter results...");
+                act.setTitle("Filter Places");
+                act.setSubtitle(Place.placesArrayListFilter.size()+" place(s) found for your criteria");
 
                 return true;
         }

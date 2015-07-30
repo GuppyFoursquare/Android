@@ -468,11 +468,11 @@ public class NearMe extends Fragment implements LocationListener {
 
                             if (App.getJsonValueIfExist(response,App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
 
-                                JSONArray places = App.getJsonArayIfExist(response, "content");
+                                JSONArray places =App.getJsonArayIfExist(response, "content");
                                 setList(new ArrayList<Place>());
 
                                 Place.placesListNearMe.clear();
-                                if (places.length() > 0) {
+                                try {
 
                                     //Read JsonArray
                                     for (int i = 0; i < places.length(); i++) {
@@ -541,9 +541,13 @@ public class NearMe extends Fragment implements LocationListener {
 
                                     setUpMapIfNeeded();
 
-                                } else {
-                                    Toast.makeText(getActivity(), "Response place # is 0", Toast.LENGTH_LONG).show();
                                 }
+                                catch (NullPointerException e){
+                                    e.printStackTrace();
+                                    Toast.makeText(getActivity(), "Nearme :: No places found around you!", Toast.LENGTH_LONG).show();
+
+                                }
+
 
                                 // ----- ----- RESPONSE STATUS != SUCCESS ----- -----
                                 // ----- ----- RESPONSE STATUS != SUCCESS ----- -----

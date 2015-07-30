@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -249,6 +250,9 @@ public class PlaceDetailFragment extends Fragment{
         }
 
         if(p.comments.size()>0) {
+
+            Log.d("Comment-User_Image", p.comments.get(0).getUser_img());
+
             ((TextView)view.findViewById(R.id.comment_title_text_place_detail)).setVisibility(View.VISIBLE);
             String t = p.comments.get(0).text;
             if (t.length() > 100)
@@ -265,6 +269,7 @@ public class PlaceDetailFragment extends Fragment{
                         .placeholder(R.drawable.placeholder_user)
                         .fit()
                         .into(commentView);
+
             }
 
             if(OnCommentClick!=null){
