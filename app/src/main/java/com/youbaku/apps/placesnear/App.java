@@ -27,6 +27,9 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -40,6 +43,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
 import com.parse.Parse;
+import com.youbaku.apps.placesnear.utils.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -453,11 +457,103 @@ public class App extends Application {
         Intent in =new Intent(context,InfoActivity.class);
 
         in.putExtra("message",message);
-        in.putExtra("imgId",""+iconId);
+        in.putExtra("imgId", "" + iconId);
 
         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(in);
     }
+
+
+
+
+    /**
+     *
+     * @param currentActivity
+     *
+     * This method will be used for login to App
+     */
+    public static void login(final Activity currentActivity){
+
+        //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentActivity);
+        LayoutInflater inflater = currentActivity.getLayoutInflater();
+        final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
+        alertDialog.setView(alertView);
+
+            /* When positive  is clicked */
+        alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel(); // Your custom code
+
+                String loginUrl = App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey + "&op=login";
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
+                map.put("pass", ((EditText) alertView.findViewById(R.id.password)).getText().toString());
+
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                        (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                try {
+
+                                    if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
+
+                                        JSONObject responseContent = response.getJSONObject("content");
+                                        User.getInstance().setUser_name(responseContent.getString("usr_username"));
+                                        User.getInstance().setUser_email(responseContent.getString("usr_email"));
+
+                                        MainActivity.doLogin.setIcon(R.drawable.ic_profilelogo);
+
+                                    } else {
+                                        Toast.makeText(currentActivity, response.getString("status"), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } catch (JSONException e) {
+
+                                    App.sendErrorToServer(currentActivity, getClass().getName(), "login Errror---", e.getMessage());
+                                    Toast.makeText(currentActivity, "MainActivity login()", Toast.LENGTH_SHORT).show();
+
+                                    e.printStackTrace();
+                                    return;
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // TODO Auto-generated method stub
+
+                            }
+                        });
+
+                // Add the request to the queue
+                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+            }
+        });
+
+            /* When register  button is clicked*/
+        alertDialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent in = new Intent(currentActivity, RegisterActivity.class);
+                currentActivity.startActivity(in);
+            }
+        });
+
+            /* When negative  button is clicked*/
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Your custom code
+            }
+        });
+
+        alertDialog.show();
+    }
+
 
 
     /**

@@ -41,6 +41,7 @@ import com.youbaku.apps.placesnear.place.comment.CreateComment;
 import com.youbaku.apps.placesnear.place.deal.DealListFragment;
 import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
 import com.youbaku.apps.placesnear.utils.SubCategory;
+import com.youbaku.apps.placesnear.utils.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -271,10 +272,10 @@ public class PlaceDetailActivity extends ActionBarActivity {
                     App.showInternetError(this);
                     break;
                 }
-                if (App.useremail != null) {
-                    createComment.saveComment();
+                if (User.getInstance().getUser_name()==null) {
+                    loginNeededInfo();
                 } else {
-                    login();
+                    createComment.saveComment();
                 }
                 break;
 
@@ -313,7 +314,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void login() {
+    private void loginNeededInfo() {
 
         Toast.makeText(getApplication(), "You should login first", Toast.LENGTH_LONG).show();
         AlertDialog.Builder bu = new AlertDialog.Builder(PlaceDetailActivity.this);
@@ -324,7 +325,6 @@ public class PlaceDetailActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int which) {
 
 
-                //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlaceDetailActivity.this);
                 LayoutInflater inflater = PlaceDetailActivity.this.getLayoutInflater();
                 final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
@@ -334,70 +334,15 @@ public class PlaceDetailActivity extends ActionBarActivity {
                 alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        dialog.cancel(); // Your custom code
-
-                        String loginUrl = App.SitePath + "api/auth.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey +"&op=login";
-
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
-                        map.put("pass", ((EditText) alertView.findViewById(R.id.password)).getText().toString());
-
-                        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                                (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
-
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-
-                                        try {
-
-                                            if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
-
-                                                JSONObject responseContent = response.getJSONObject("content");
-                                                App.username = responseContent.getString("usr_username");
-                                                App.useremail = responseContent.getString("usr_apikey");
-
-                                                MainActivity.doLogin.setIcon(R.drawable.ic_profilelogo);
-                                                Toast.makeText(getApplication(), App.username + " - " + App.useremail, Toast.LENGTH_LONG).show();
-
-                                            } else {
-                                                Toast.makeText(getApplication(), response.getString("status"), Toast.LENGTH_SHORT).show();
-                                            }
-
-                                        } catch (JSONException e) {
-
-                                            AlertDialog.Builder bu = new AlertDialog.Builder(PlaceDetailActivity.this);
-                                            bu.setMessage(getResources().getString(R.string.loadingdataerrormessage));
-                                            bu.setNegativeButton(getResources().getString(R.string.alertokbuttonlabel), null);
-                                            bu.setPositiveButton(getResources().getString(R.string.retrybuttonlabel), new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                }
-                                            });
-                                            bu.show();
-                                            e.printStackTrace();
-                                            return;
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        // TODO Auto-generated method stub
-
-                                    }
-                                });
-
-                        // Add the request to the queue
-                        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
+                        //Login Request
+                        App.login(PlaceDetailActivity.this);
                     }
                 });
 
         /* When negative  button is clicked*/
                 alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // Your custom code
+                        dialog.dismiss();
                     }
                 });
 

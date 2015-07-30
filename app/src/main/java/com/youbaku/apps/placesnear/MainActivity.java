@@ -223,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.login_main_menu:
 
                 if(User.getInstance().getUser_name()==null){
-                    login();
+                    App.login(MainActivity.this);
                 }
                 else
                 {
@@ -253,87 +253,6 @@ public class MainActivity extends ActionBarActivity implements
 
 
 
-        private void login(){
-
-            //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-            LayoutInflater inflater = this.getLayoutInflater();
-            final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
-            alertDialog.setView(alertView);
-
-            /* When positive  is clicked */
-            alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.cancel(); // Your custom code
-
-                    String loginUrl = App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey + "&op=login";
-
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
-                    map.put("pass", ((EditText) alertView.findViewById(R.id.password)).getText().toString());
-
-                    JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                            (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
-
-                                @Override
-                                public void onResponse(JSONObject response) {
-
-                                    try {
-
-                                        if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
-
-                                            JSONObject responseContent = response.getJSONObject("content");
-                                            User.getInstance().setUser_name(responseContent.getString("usr_username"));
-                                            User.getInstance().setUser_email(responseContent.getString("usr_email"));
-
-                                            doLogin.setIcon(R.drawable.ic_profilelogo);
-
-                                        } else {
-                                            Toast.makeText(MainActivity.this, response.getString("status"), Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    } catch (JSONException e) {
-
-                                        App.sendErrorToServer(activity, getClass().getName(), "login Errror---", e.getMessage());
-                                        Toast.makeText(getApplicationContext(), "MainActivity login()", Toast.LENGTH_SHORT).show();
-
-                                        e.printStackTrace();
-                                        return;
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // TODO Auto-generated method stub
-
-                                }
-                            });
-
-                    // Add the request to the queue
-                    VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-                }
-            });
-
-            /* When register  button is clicked*/
-            alertDialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent in = new Intent(getApplicationContext(), RegisterActivity.class);
-                    startActivity(in);
-                }
-            });
-
-            /* When negative  button is clicked*/
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss(); // Your custom code
-                }
-            });
-
-            alertDialog.show();
-        }
 
 
     }
