@@ -3,14 +3,11 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.os.Build;
 import android.text.Html;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -18,7 +15,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.MyApplication;
 import com.youbaku.apps.placesnear.adapter.Adapter;
-import com.youbaku.apps.placesnear.apicall.CustomRequest;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.photo.Photo;
@@ -27,31 +23,16 @@ import com.youbaku.apps.placesnear.place.deal.Deal;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class Place {
@@ -126,9 +107,9 @@ public class Place {
     public String twitter = "";
     public Bitmap photo;
     public File file;
-    public ArrayList<Comment> comments = new ArrayList<Comment>();
+    private ArrayList<Comment> comments = new ArrayList<Comment>();
     public ArrayList<Deal> deals = new ArrayList<Deal>();
-    public ArrayList<Photo> photos = new ArrayList<Photo>();
+    private ArrayList<Photo> photos = new ArrayList<Photo>();
     private String open = "";
     private String close = "";
     public boolean liked = false;
@@ -396,7 +377,7 @@ public class Place {
 
                                                     averageRating += comment.rating;
 
-                                                    place.comments.add(comment);
+                                                    place.getComments().add(comment);
 
                                                 } catch (ParseException e) {
                                                     e.printStackTrace();
@@ -576,4 +557,19 @@ public class Place {
                 adapter);
     }
 
+    public ArrayList<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<Photo> photos) {
+        this.photos = photos;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
 }

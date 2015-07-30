@@ -47,7 +47,7 @@ public class PhotoActivity extends ActionBarActivity {
             actionBar.hide();
         }
 
-        arr= Place.FOR_DETAIL.photos;
+        arr= Place.FOR_DETAIL.getPhotos();
         SlideAdapter adap=new SlideAdapter(this, arr);
         pager.setAdapter(adap);
 

@@ -474,72 +474,77 @@ public class NearMe extends Fragment implements LocationListener {
                                 Place.placesListNearMe.clear();
                                 try {
 
-                                    //Read JsonArray
-                                    for (int i = 0; i < places.length(); i++) {
-                                        JSONObject o = App.getJsonArrayValueIfExist(places, i);
-                                        final PlaceFilter filter = PlaceFilter.getInstance();
-                                        final Place p = new Place();
+                                    if (places.length() > 0) {
+                                        //Read JsonArray
+                                        for (int i = 0; i < places.length(); i++) {
+                                            JSONObject o = App.getJsonArrayValueIfExist(places, i);
+                                            final PlaceFilter filter = PlaceFilter.getInstance();
+                                            final Place p = new Place();
 
 
-                                        JSONArray arr = App.getJsonArayIfExist(o, "rating");
-                                        for (int j = 0; arr!=null && j < arr.length(); j++) {
-                                            final Comment c = new Comment();
-                                            JSONObject obj = App.getJsonArrayValueIfExist(arr, j);
-                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            JSONArray arr = App.getJsonArayIfExist(o, "rating");
+                                            for (int j = 0; arr != null && j < arr.length(); j++) {
+                                                final Comment c = new Comment();
+                                                JSONObject obj = App.getJsonArrayValueIfExist(arr, j);
+                                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                                            try {
-                                                Date d = format.parse(obj.getString("places_rating_created_date"));
-                                                c.created = d;
-                                                c.text = obj.getString("place_rating_comment");
-                                                c.comment_id = obj.getString("place_rating_id");
-                                                c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
-                                                c.name = obj.getString("places_rating_by");
+                                                try {
+                                                    Date d = format.parse(obj.getString("places_rating_created_date"));
+                                                    c.created = d;
+                                                    c.text = obj.getString("place_rating_comment");
+                                                    c.comment_id = obj.getString("place_rating_id");
+                                                    c.rating = Double.parseDouble(obj.getString("place_rating_rating"));
+                                                    c.name = obj.getString("places_rating_by");
 
-                                                //Getting User Image
-                                                if (obj.isNull("usr_profile_picture")) {
-                                                    c.user_img = "";
-                                                    Log.i("---GUPPY USER IMAGE---", "No Available Image");
-                                                } else {
-                                                    c.user_img = obj.getString("usr_profile_picture").toString();
+                                                    //Getting User Image
+                                                    if (obj.isNull("usr_profile_picture")) {
+                                                        c.user_img = "";
+                                                        Log.i("---GUPPY USER IMAGE---", "No Available Image");
+                                                    } else {
+                                                        c.user_img = obj.getString("usr_profile_picture").toString();
+                                                    }
+
+                                                    p.getComments().add(c);
+
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-
-                                                p.comments.add(c);
-
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            } catch (JSONException e){
-                                                e.printStackTrace();
                                             }
+
+                                            double rating = 0.0;
+                                            if (o.has("plc_avg_rating")) {
+                                                rating = Double.parseDouble(o.getString("plc_avg_rating"));
+                                            } else {
+                                                rating = 0.0;
+                                            }
+
+                                            //Inflate places
+                                            p.setId(App.getJsonValueIfExist(o, "plc_id"));
+                                            p.setName(App.getJsonValueIfExist(o, "plc_name"));
+                                            p.setImgUrl(App.getJsonValueIfExist(o, "plc_header_image"));
+                                            p.setRating(rating);
+                                            p.setAddress(App.getJsonValueIfExist(o, "plc_address"));
+                                            p.setWeb(App.getJsonValueIfExist(o, "plc_website"));
+                                            p.setEmail(App.getJsonValueIfExist(o, "plc_email"));
+                                            p.setPhone(App.getJsonValueIfExist(o, "plc_contact"));
+                                            p.setOpen(App.getJsonValueIfExist(o, "plc_intime"));
+                                            p.setClose(App.getJsonValueIfExist(o, "plc_outtime"));
+                                            p.setIsActive(App.getJsonValueIfExist(o, "plc_is_active") != null ? App.getJsonValueIfExist(o, "plc_is_active").equalsIgnoreCase("1") : false);
+                                            p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(App.getJsonValueIfExist(o, "plc_info")).toString())));
+                                            p.setLocation(Double.parseDouble(App.getJsonValueIfExist(o, "plc_latitude")), Double.parseDouble(App.getJsonValueIfExist(o, "plc_longitude")));
+
+                                            getList().add(p);
+
+                                            Place.placesListNearMe.put(p.getId(), p);
                                         }
 
-                                        double rating = 0.0;
-                                        if (o.has("plc_avg_rating")) {
-                                            rating = Double.parseDouble(o.getString("plc_avg_rating"));
-                                        } else {
-                                            rating = 0.0;
-                                        }
+                                        setUpMapIfNeeded();
 
-                                        //Inflate places
-                                        p.setId(App.getJsonValueIfExist(o,"plc_id"));
-                                        p.setName(App.getJsonValueIfExist(o,"plc_name"));
-                                        p.setImgUrl(App.getJsonValueIfExist(o, "plc_header_image"));
-                                        p.setRating(rating);
-                                        p.setAddress(App.getJsonValueIfExist(o, "plc_address"));
-                                        p.setWeb(App.getJsonValueIfExist(o, "plc_website"));
-                                        p.setEmail(App.getJsonValueIfExist(o, "plc_email"));
-                                        p.setPhone(App.getJsonValueIfExist(o, "plc_contact"));
-                                        p.setOpen(App.getJsonValueIfExist(o, "plc_intime"));
-                                        p.setClose(App.getJsonValueIfExist(o, "plc_outtime"));
-                                        p.setIsActive( App.getJsonValueIfExist(o, "plc_is_active")!=null ? App.getJsonValueIfExist(o, "plc_is_active").equalsIgnoreCase("1")  : false);
-                                        p.setDescription(String.valueOf(Html.fromHtml(Html.fromHtml(App.getJsonValueIfExist(o, "plc_info")).toString())));
-                                        p.setLocation(Double.parseDouble( App.getJsonValueIfExist(o, "plc_latitude") ), Double.parseDouble(App.getJsonValueIfExist(o, "plc_longitude") ));
-
-                                        getList().add(p);
-
-                                        Place.placesListNearMe.put(p.getId(), p);
+                                    }else{
+                                        Toast.makeText(getActivity(), "No places found around you!", Toast.LENGTH_LONG).show();
                                     }
-
-                                    setUpMapIfNeeded();
 
                                 }
                                 catch (NullPointerException e){

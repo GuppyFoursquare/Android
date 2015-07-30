@@ -76,7 +76,7 @@ public class PhotoAdapter extends PagerAdapter {
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);*/
             //Image Location
-            String url = "http://youbaku.com/uploads/places_images/large/"+arr.get(position).url; // URL of the image
+            String url = "http://youbaku.com/uploads/places_images/large/"+ arr.get(position).getUrl(); // URL of the image
             mImageLoader = VolleySingleton.getInstance().getImageLoader();
             im.setImageUrl(url,mImageLoader);
 

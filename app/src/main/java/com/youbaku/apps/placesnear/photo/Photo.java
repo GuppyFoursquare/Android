@@ -1,11 +1,3 @@
-//
-//  Photo
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
-
 package com.youbaku.apps.placesnear.photo;
 
 public class Photo {
@@ -16,7 +8,7 @@ public class Photo {
     private static int DOWNLOADED=0;
     private static AllPhotosDownloaded SUBSCRIBER;
 
-    public String url="";
+    private String url="";
     public String place="";
     public boolean isActive=false;
 
@@ -37,5 +29,13 @@ public class Photo {
             if(Photo.SUBSCRIBER!=null)
                 Photo.SUBSCRIBER.photosDownloaded();
         }
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

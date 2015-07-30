@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -90,7 +89,7 @@ public class PlaceAdapter extends ArrayAdapter<Place> implements Adapter {
         ((TextView)convertView.findViewById(R.id.category_place_list_item)).setText(getList().get(position).getAddress());
         //((TextView)convertView.findViewById(R.id.like_text_place_list_item)).setText(list.get(position).likes+"");
         ((TextView)convertView.findViewById(R.id.location_text_place_list_item)).setText(App.getDistanceString(PlaceFilter.getInstance().metrics, getList().get(position).getDistance()[0]));
-        ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(getList().get(position).comments.size()+"");
+        ((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(getList().get(position).getComments().size()+"");
         //((TextView)convertView.findViewById(R.id.comment_text_place_list_item)).setText(list.get(position).getId()+"");
 
 
@@ -126,9 +125,9 @@ public class PlaceAdapter extends ArrayAdapter<Place> implements Adapter {
 
 
         //im.setImageDrawable(getContext().getResources().getDrawable(R.drawable.placeholder_placelist));
-        if(getList().get(position).photos!=null && getList().get(position).photos.size()>0) {
+        if(getList().get(position).getPhotos() !=null && getList().get(position).getPhotos().size()>0) {
             Picasso.with(getContext())
-                    .load(getList().get(position).photos.get(0).url)
+                    .load(getList().get(position).getPhotos().get(0).getUrl())
                     .placeholder(R.drawable.placeholder_placelist)
                     .into(im);
         }

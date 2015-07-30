@@ -184,7 +184,7 @@ public class FavoritesManager {
                                 c.rating = o.getDouble(Comment.RATING);
                                 c.isActive = true;
                                 c.place = o.getString(Comment.PLACE);
-                                p.comments.add(c);
+                                p.getComments().add(c);
                             }
                             commentCount++;
                             checkDownloads();
@@ -231,8 +231,8 @@ public class FavoritesManager {
                                 pp.isActive = true;
                                 pp.place = o.getString(Photo.PLACE);
                                 ParseFile f = o.getParseFile(Photo.PHOTO);
-                                pp.url = f.getUrl();
-                                p.photos.add(pp);
+                                pp.setUrl(f.getUrl());
+                                p.getPhotos().add(pp);
                             }
                             photoCount++;
                             checkDownloads();

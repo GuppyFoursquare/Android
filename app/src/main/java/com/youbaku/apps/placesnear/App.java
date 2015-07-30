@@ -133,6 +133,21 @@ public class App extends Application {
 
         return null;
     }
+
+    public static JSONObject getJsonObjectValueFromJsonObject(JSONObject jsonObj, String key) {
+        try {
+            if (jsonObj.getJSONObject(key)!=null) {
+                JSONObject resultObj = jsonObj.getJSONObject(key);
+                return resultObj;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     //----------------------------------------- COMMON -----------------------------------------/
 
 

@@ -23,19 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
-import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.R;
-import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.comment.CommentListFragment;
 import com.youbaku.apps.placesnear.place.comment.CreateComment;
 import com.youbaku.apps.placesnear.place.deal.DealListFragment;
@@ -43,12 +36,7 @@ import com.youbaku.apps.placesnear.place.favorites.FavoritesManager;
 import com.youbaku.apps.placesnear.utils.SubCategory;
 import com.youbaku.apps.placesnear.utils.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PlaceDetailActivity extends ActionBarActivity {
     private enum Screen {comments, newComment, deals, detail, senEmail}
@@ -398,7 +386,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             CommentListFragment comlis = new CommentListFragment();
-            comlis.setComments(p.comments);
+            comlis.setComments(p.getComments());
             setScreen(Screen.comments);
             getSupportFragmentManager().beginTransaction().addToBackStack("comments").replace(R.id.main_activity_place_detail, comlis).commit();
         }
