@@ -1,16 +1,13 @@
-package com.youbaku.apps.placesnear.adapter;
-
-/*****************************************************************************************
- * Copyright (c) 2015 Guppy org.
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ *
  * YouBaku Android App. - TabsPagerAdapter.java
  * This file is downloading category from server.
  * This adapter is for viewpager
- *
- ****************************************************************************************/
-
-/**
- * Created by orxan on 01.07.2015.
  */
+
+package com.youbaku.apps.placesnear.adapter;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;

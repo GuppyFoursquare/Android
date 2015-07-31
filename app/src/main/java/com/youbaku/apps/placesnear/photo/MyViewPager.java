@@ -1,3 +1,7 @@
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
+
 package com.youbaku.apps.placesnear.photo;
 
 import android.content.Context;
@@ -5,9 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by hsyn on 3/1/2015.
- */
+
 public class MyViewPager extends ViewPager {
 
     public MyViewPager(Context context) {

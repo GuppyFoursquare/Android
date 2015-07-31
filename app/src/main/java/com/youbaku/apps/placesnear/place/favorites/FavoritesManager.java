@@ -1,3 +1,7 @@
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
+
 package com.youbaku.apps.placesnear.place.favorites;
 
 import android.content.Context;
@@ -23,9 +27,6 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by hsyn on 3/14/2015.
- */
 public class FavoritesManager {
     private static final String PREF="favorites";
 

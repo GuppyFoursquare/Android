@@ -1,11 +1,12 @@
 /**
- *
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
+
+/**
  * Created by Guppy Org.
- * Copyright (c) 2015 CasbianSoft. All rights reserved.
  *
  * @Developer   Kemal Sami KARACA
  * @Modified    24/07/2015
- *
  */
 
 package com.youbaku.apps.placesnear.location;

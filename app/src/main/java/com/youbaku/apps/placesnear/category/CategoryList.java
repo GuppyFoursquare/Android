@@ -1,3 +1,7 @@
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
+
 /*****************************************************************************************
  * Copyright (c) 2015 Guppy org.
  * YouBaku Android App. - CategoryList.java

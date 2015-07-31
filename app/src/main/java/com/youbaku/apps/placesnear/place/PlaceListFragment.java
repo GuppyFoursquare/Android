@@ -1,3 +1,7 @@
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
+
 /******************** PAGE DETAILS ********************/
 /* @Programmer  : Kemal Sami KARACA
  * @Maintainer  : Guppy Org.

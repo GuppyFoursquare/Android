@@ -1,10 +1,6 @@
-//
-//  App
-//
-//  Places Near
-//  Created by Mobigo Bilişim Teknolojileri
-//  Copyright (c) 2015 Mobigo Bilişim Teknolojileri. All rights reserved.
-//
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
 
 package com.youbaku.apps.placesnear;
 

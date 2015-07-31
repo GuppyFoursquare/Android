@@ -1,3 +1,7 @@
+/**
+ * COPYRIGHT (C) 2015 Caspian Soft. All Rights Reserved.
+ */
+
 package com.youbaku.apps.placesnear.photo;
 
 import android.content.Context;
@@ -15,9 +19,6 @@ import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import java.util.ArrayList;
 
-/**
- * Created by hsyn on 3/7/2015.
- */
 public class SlideAdapter extends PagerAdapter {
     private ArrayList<Photo> arr;
     private Context context;
