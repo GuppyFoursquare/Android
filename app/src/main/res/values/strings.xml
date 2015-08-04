@@ -203,6 +203,7 @@
     <string name="labelGoBack">Go Back</string>
     <string name="title_activity_profil">ProfilActivity</string>
     <string name="logout">Log Out</string>
+    <string name="rateLabel"><![CDATA[Rate & Review]]></string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 
