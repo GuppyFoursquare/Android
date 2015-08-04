@@ -12,6 +12,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -22,7 +23,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -45,7 +45,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,8 +52,6 @@ public class App extends Application {
 
 
     //----------------------------------------- API KEYS -----------------------------------------/
-    public static final String ParseApplicationId         = "6HK3iYSVSpyCO8COqtuVUGwwHmlFHOBqst5iJgdf";
-    public static final String ParseClientKey             = "81QBTfBCE2GIZypCmqKkQKFLwKs36wC6eMUblUrS";
     private static final String GoogleAnalyticsCode       = "PASTE_YOUR_GOOGLE_ANALYTICS_CODE_HERE";
     //----------------------------------------- API KEYS -----------------------------------------/
 
@@ -67,16 +64,24 @@ public class App extends Application {
 
 
     //----------------------------------------- TOKENS -----------------------------------------/
-    public static String youbakuToken=null;
-    public static String youbakuAPIKey=null;
+    public static String sharedPreferenceKey    = "com.youbaku.guppy.app.kS0ok6Cb1ka3ba";
+    public static String KEY_TOKEN              = "guppy.token";
+    public static String KEY_APIKEY             = "guppy.apikey";
+    public static String KEY_ISAUTH             = "guppy.isAuth";
+    private static String youbakuToken;
+    private static String youbakuAPIKey;
     public static String username=null;
     public static String useremail=null;
     //----------------------------------------- TOKENS -----------------------------------------/
 
 
+
     //----------------------------------------- COMMON -----------------------------------------/
     public static final String RESULT_STATUS = "status";
     public static final String RESULT_CONTENT = "content";
+    //----------------------------------------- COMMON -----------------------------------------/
+
+
 
     /**
      * @param jsonObj
@@ -230,15 +235,49 @@ public class App extends Application {
     public static final int FilterTickWidthHeight         = 60;
     public static final int SVGOldColor                   = 0xff3377BB;
     public static final PlaceFilter.DistanceSystem System = PlaceFilter.DistanceSystem.km;
-    //------------------------------- DO NOT CHANGE THESE VALUES ---------------------------------/
+//------------------------------- DO NOT CHANGE THESE VALUES ---------------------------------/
+
+
+
+    //---------------------------------- ENCAPSULATION -----------------------------------/
+    //---------------------------------- ENCAPSULATION -----------------------------------/
+    public static boolean setTokenAndAPIKey(Activity activity){
+        SharedPreferences sharedPref = activity.getSharedPreferences(App.sharedPreferenceKey ,Context.MODE_PRIVATE);
+        if(sharedPref.getString(App.KEY_TOKEN, null)!=null && sharedPref.getString(App.KEY_APIKEY, null)!=null ){
+            setYoubakuToken(sharedPref.getString(App.KEY_TOKEN, null));
+            setYoubakuAPIKey(sharedPref.getString(App.KEY_APIKEY, null));
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isAuth(Activity activity){
+        SharedPreferences sharedPref = activity.getSharedPreferences(App.sharedPreferenceKey ,Context.MODE_PRIVATE);
+        return sharedPref.getBoolean(App.KEY_ISAUTH, false);
+    }
+
+    public static String getYoubakuToken() {
+        return youbakuToken;
+    }
+
+    public static void setYoubakuToken(String youbakuToken) {
+        App.youbakuToken = youbakuToken;
+    }
+
+    public static String getYoubakuAPIKey() {
+        return youbakuAPIKey;
+    }
+
+    public static void setYoubakuAPIKey(String youbakuAPIKey) {
+        App.youbakuAPIKey = youbakuAPIKey;
+    }
 
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, ParseApplicationId, ParseClientKey);
     }
 
     @SuppressLint("NewApi") public static String getPath(final Context context, final Uri uri) {
@@ -474,96 +513,6 @@ public class App extends Application {
         context.startActivity(in);
     }
 
-
-
-
-    /**
-     *
-     * @param currentActivity
-     *
-     * This method will be used for login to App
-     */
-    public static void login(final Activity currentActivity){
-
-        //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentActivity);
-        LayoutInflater inflater = currentActivity.getLayoutInflater();
-        final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
-        alertDialog.setView(alertView);
-
-            /* When positive  is clicked */
-        alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel(); // Your custom code
-
-                String loginUrl = App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey + "&op=login";
-
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
-                map.put("pass", ((EditText) alertView.findViewById(R.id.password)).getText().toString());
-
-                JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                        (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
-
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                try {
-
-                                    if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
-
-                                        JSONObject responseContent = response.getJSONObject("content");
-                                        User.getInstance().setUser_name(responseContent.getString("usr_username"));
-                                        User.getInstance().setUser_email(responseContent.getString("usr_email"));
-
-                                        MainActivity.doLogin.setIcon(R.drawable.ic_profilelogo);
-
-                                    } else {
-                                        Toast.makeText(currentActivity, response.getString("status"), Toast.LENGTH_SHORT).show();
-                                    }
-
-                                } catch (JSONException e) {
-
-                                    App.sendErrorToServer(currentActivity, getClass().getName(), "login Errror---", e.getMessage());
-                                    Toast.makeText(currentActivity, "MainActivity login()", Toast.LENGTH_SHORT).show();
-
-                                    e.printStackTrace();
-                                    return;
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // TODO Auto-generated method stub
-
-                            }
-                        });
-
-                // Add the request to the queue
-                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-            }
-        });
-
-            /* When register  button is clicked*/
-        alertDialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent in = new Intent(currentActivity, RegisterActivity.class);
-                currentActivity.startActivity(in);
-            }
-        });
-
-            /* When negative  button is clicked*/
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Your custom code
-            }
-        });
-
-        alertDialog.show();
-    }
 
 
 

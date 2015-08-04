@@ -5,9 +5,9 @@
 package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -17,30 +17,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.youbaku.apps.placesnear.adapter.TabsPagerAdapter;
-import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.place.filter.PlaceFilter;
 import com.youbaku.apps.placesnear.utils.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +60,10 @@ public class MainActivity extends ActionBarActivity implements
 
         this.activity = this;
 
-    // ********** ********** ********** ********** **********
+        App.setTokenAndAPIKey(this);
+
+
+        // ********** ********** ********** ********** **********
     // Checking internet connection here
     // ********** ********** ********** ********** **********
         internetConnection=App.checkInternetConnection(this);
@@ -199,7 +195,7 @@ public class MainActivity extends ActionBarActivity implements
     protected void onResume() {
         PlaceFilter.resetFilter();
 
-        if(doLogin!=null && User.getInstance().getUser_name()!=null){
+        if(doLogin!=null && App.isAuth(activity)){
             doLogin.setIcon(R.drawable.ic_profilelogo);
         }
 
@@ -212,7 +208,7 @@ public class MainActivity extends ActionBarActivity implements
         getMenuInflater().inflate(R.menu.menu_main, this.menu);
 
         doLogin = menu.getItem(0);
-        if(User.getInstance().getUser_name()!=null){
+        if(App.isAuth(activity)){
             doLogin.setIcon(R.drawable.ic_profilelogo);
         }
         return true;
@@ -225,8 +221,8 @@ public class MainActivity extends ActionBarActivity implements
         switch (item.getItemId()) {
             case R.id.login_main_menu:
 
-                if(User.getInstance().getUser_name()==null){
-                    App.login(MainActivity.this);
+                if(!App.isAuth(activity)){
+                    User.userLogin(MainActivity.this);
                 }
                 else
                 {
@@ -234,7 +230,7 @@ public class MainActivity extends ActionBarActivity implements
                     map.put("op", "info");
 
                     User.userInfo(
-                            App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey,
+                            App.SitePath + "api/auth.php?token=" + App.getYoubakuToken() + "&apikey=" + App.getYoubakuAPIKey(),
                             map,
                             activity
                     );
@@ -255,9 +251,6 @@ public class MainActivity extends ActionBarActivity implements
     }
 
 
-
-
-
-    }
+}
 
 

@@ -101,6 +101,7 @@ public class NearMe extends Fragment implements LocationListener {
     private ArrayList<Category> catlist;
     private NearMeCategoryAdapter adap;
     private LinearLayout l;
+    private int zoomValue = 15;
 
 
     private OnFragmentInteractionListener mListener;
@@ -162,8 +163,14 @@ public class NearMe extends Fragment implements LocationListener {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
                             nearMeMap = googleMap;
+                            nearMeMap.setMyLocationEnabled(true);
                             nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
                             nearMeMap.setOnMarkerClickListener(markerClickListener);
+
+                            MyLocation my = MyLocation.getMyLocation(getActivity());
+                            userLocation = new LatLng(my.latitude, my.longitude);
+                            CameraUpdate ca = CameraUpdateFactory.newLatLngZoom(userLocation, zoomValue);
+                            nearMeMap.animateCamera(ca);
 
                             // --- If places are already fetched then not fetch again
                             if (Place.placesListNearMe == null || Place.placesListNearMe.size() == 0) {
@@ -340,7 +347,7 @@ public class NearMe extends Fragment implements LocationListener {
         //nearMeMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.nearmefragmap)).getMap();
         MyLocation my = MyLocation.getMyLocation(getActivity());
         userLocation = new LatLng(my.latitude, my.longitude);
-        CameraUpdate ca = CameraUpdateFactory.newLatLngZoom(userLocation, 12);
+        CameraUpdate ca = CameraUpdateFactory.newLatLngZoom(userLocation, zoomValue);
         nearMeMap.animateCamera(ca);
         nearMeMap.setOnMapClickListener(mapClickListener);
 
@@ -393,7 +400,7 @@ public class NearMe extends Fragment implements LocationListener {
 
         //Calling Api
 //        String url = App.SitePath + "api/category.php";
-        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey;
+        String url = App.SitePath+"api/category.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey();
 
         JSONObject apiResponse = null;
         // Request a json response
@@ -458,7 +465,7 @@ public class NearMe extends Fragment implements LocationListener {
         MyLocation my = MyLocation.getMyLocation(getActivity());
         my.callHard();
 
-        String nearMeURL = App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
+        String nearMeURL = App.SitePath + "api/places.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude;
 
         JSONObject apiResponse = null;
         // Request a json response

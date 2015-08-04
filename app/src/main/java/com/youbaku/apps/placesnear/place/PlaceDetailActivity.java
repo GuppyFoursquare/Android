@@ -6,6 +6,7 @@ package com.youbaku.apps.placesnear.place;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -50,6 +51,8 @@ public class PlaceDetailActivity extends ActionBarActivity {
     private MenuItem bookingPlace;
     private boolean directDetail = false;
     private File photoFile;
+    private Activity activity;
+    private ProgressDialog progress;
 
 
     @Override
@@ -57,6 +60,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
+        this.activity = this;
         setContentView(R.layout.activity_place_detail);
         p = Place.FOR_DETAIL;
 
@@ -92,83 +96,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*if(resultCode==RESULT_OK && requestCode==IMAGE_CHOOSED_FROM_GALLERY){
-            if(!App.checkInternetConnection(this)){
-                App.showInternetError(this);
-                return;
-            }
-            setSupportProgressBarIndeterminateVisibility(true);
-            Toast.makeText(getApplicationContext(),R.string.uplaodinglabel,Toast.LENGTH_LONG).show();
-
-            Uri ur=data.getData();
-            String adres=App.getPath(this,ur);
-            File fi=new File(adres);
-            p.file=fi;
-            BitmapFactory.Options opt=new BitmapFactory.Options();
-            opt.inJustDecodeBounds=true;
-            BitmapFactory.decodeFile(adres,opt);
-            opt.inSampleSize=App.getInSampleSize(opt,App.MaximumPhotoHeight,App.MaximumPhotoHeight);
-            opt.inJustDecodeBounds=false;
-            p.photo= BitmapFactory.decodeFile(adres,opt);
-
-            ByteArrayOutputStream out=new ByteArrayOutputStream();
-            p.photo.compress(Bitmap.CompressFormat.JPEG,100,out);
-            byte[] arr=out.toByteArray();
-            ParseFile file=new ParseFile(p.file.getName(), arr);
-            ParseObject obj = new ParseObject("Photos");
-            obj.put(Place.PLACE, p.id);
-            obj.put(Place.PHOTO, file);
-            obj.put(Place.ISACTIVE,!App.moderatePhotos);
-            obj.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    setSupportProgressBarIndeterminateVisibility(false);
-                    if(e!=null){
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),R.string.uploadfailedlabel,Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Toast.makeText(getApplicationContext(),R.string.uploadsuccesslabel,Toast.LENGTH_SHORT).show();
-                }
-            });
-        }else if(resultCode==RESULT_OK && requestCode==IMAGE_CHOOSED_FROM_CAMERA){
-            if(!App.checkInternetConnection(this)){
-                App.showInternetError(this);
-                return;
-            }
-            setSupportProgressBarIndeterminateVisibility(true);
-            Toast.makeText(getApplicationContext(),R.string.uplaodinglabel,Toast.LENGTH_LONG).show();
-
-            p.file=photoFile;
-            String adres=photoFile.getAbsolutePath();
-            BitmapFactory.Options opt=new BitmapFactory.Options();
-            opt.inJustDecodeBounds=true;
-            BitmapFactory.decodeFile(adres,opt);
-            opt.inSampleSize=App.getInSampleSize(opt,App.MaximumPhotoHeight,App.MaximumPhotoHeight);
-            opt.inJustDecodeBounds=false;
-            p.photo= BitmapFactory.decodeFile(adres,opt);
-
-            ByteArrayOutputStream out=new ByteArrayOutputStream();
-            p.photo.compress(Bitmap.CompressFormat.JPEG,100,out);
-            byte[] arr=out.toByteArray();
-            ParseFile file=new ParseFile(p.file.getName(), arr);
-            ParseObject obj = new ParseObject("Photos");
-            obj.put(Place.PLACE, p.id);
-            obj.put(Place.PHOTO, file);
-            obj.put(Place.ISACTIVE,!App.moderatePhotos);
-            obj.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    setSupportProgressBarIndeterminateVisibility(false);
-                    if(e!=null){
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),R.string.uploadfailedlabel,Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Toast.makeText(getApplicationContext(),R.string.uploadsuccesslabel,Toast.LENGTH_SHORT).show();
-                }
-            });
-        }*/
+       
     }
 
     @Override
@@ -256,10 +184,19 @@ public class PlaceDetailActivity extends ActionBarActivity {
                     App.showInternetError(this);
                     break;
                 }
-                if (User.getInstance().getUser_name()==null) {
+                if (!App.isAuth(activity)) {
                     loginNeededInfo();
                 } else {
-                    createComment.saveComment();
+
+                    if(progress!=null){
+                        progress.dismiss();
+                    }
+                    progress = new ProgressDialog(activity, AlertDialog.THEME_HOLO_LIGHT);
+                    progress.setTitle("Sending Comment");
+                    progress.setMessage("Please wait while sending comment");
+                    progress.show();
+
+                    createComment.saveComment(activity,progress);
                 }
                 break;
 
@@ -319,7 +256,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         //Login Request
-                        App.login(PlaceDetailActivity.this);
+                        User.userLogin(PlaceDetailActivity.this);
                     }
                 });
 

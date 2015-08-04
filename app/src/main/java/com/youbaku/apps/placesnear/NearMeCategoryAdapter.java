@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,7 +19,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.category.SubCategoryListActivty;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.utils.Category;
 import com.youbaku.apps.placesnear.utils.SubCategory;
@@ -30,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -113,7 +109,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
     private void getCategoryPlaces(String mainCategoryID){
 
         //Calling Api
-        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&cat_id="+mainCategoryID;
+        String url = App.SitePath+"api/category.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&cat_id="+mainCategoryID;
 
         JSONObject apiResponse = null;
         // Request a json response
@@ -175,7 +171,7 @@ public class NearMeCategoryAdapter extends ArrayAdapter<Category> {
 
 
         //Calling Api
-        String url = App.SitePath+"api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey ;
+        String url = App.SitePath+"api/places.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey();
         Map<String, String> map = new HashMap<String, String>();
         map.put("op", "search");
         map.put("subcat_list", subCategory);

@@ -5,7 +5,7 @@
 package com.youbaku.apps.placesnear.utils;
 
 import android.app.Activity;
-import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
@@ -18,20 +18,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.AnimatedExpandableListView;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.SearchFragment;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
-import com.youbaku.apps.placesnear.category.adapters.SubCategoryAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class Category {
 
@@ -118,7 +117,7 @@ public class Category {
 
     public static void fetchCategoryList(final Activity activity , final View view){
         //Calling Api
-        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey;
+        String url = App.SitePath+"api/category.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey();
 
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -152,8 +151,14 @@ public class Category {
                                 IS_CATEGORIES_FETCHED = true;
 
                             }else if(response.getString("status").equalsIgnoreCase("FAILURE_PERMISSION")){
-                                Log.e("---GUPPY ERROR---" , "Category->fetchCategoryList-> api key missing error");
-                                Toast.makeText(activity , "API key needed" , Toast.LENGTH_SHORT).show();
+
+                                //We should get new apikey and token
+                                RegisterAPI.callRegister(activity );
+
+                                //Error Info
+                                Log.e("531-FAILURE_PERMISSION" , "Category->fetchCategoryList-> api key missing error");
+                                Toast.makeText(activity , "We are try to register again..." , Toast.LENGTH_SHORT).show();
+
                             }else{
                                 IS_CATEGORIES_FETCHED = false;
                             }

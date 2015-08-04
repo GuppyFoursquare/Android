@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -36,7 +37,9 @@ import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 import com.squareup.picasso.Picasso;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MapsActivity;
 import com.youbaku.apps.placesnear.photo.MyViewPager;
@@ -44,7 +47,6 @@ import com.youbaku.apps.placesnear.photo.Photo;
 import com.youbaku.apps.placesnear.photo.PhotoActivity;
 import com.youbaku.apps.placesnear.photo.PhotoAdapter;
 import com.youbaku.apps.placesnear.place.comment.Comment;
-import com.youbaku.apps.placesnear.place.deal.Deal;
 import com.youbaku.apps.placesnear.web.WebActivity;
 
 import org.json.JSONArray;
@@ -153,7 +155,7 @@ public class PlaceDetailFragment extends Fragment{
          *
          *
          */
-        String url = App.SitePath+"api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey+"&op=info&plc_id="+Place.ID;
+        String url = App.SitePath+"api/places.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() +"&op=info&plc_id="+Place.ID;
         JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -181,6 +183,7 @@ public class PlaceDetailFragment extends Fragment{
                                         activePlace.setPhone(App.getJsonValueIfExist(responseContent, Place.PLC_CONTACT));
                                         activePlace.setOpen(App.getJsonValueIfExist(responseContent, Place.PLC_INTIME));
                                         activePlace.setClose(App.getJsonValueIfExist(responseContent, Place.PLC_OUTTIME));
+                                        activePlace.setPlaceIsOpen(App.getJsonValueIfExist(responseContent, Place.PLC_IS_OPEN));
 
                                         double latitude = Double.parseDouble(App.getJsonValueIfExist(responseContent, Place.PLC_LATITUDE));
                                         double longitude = Double.parseDouble(App.getJsonValueIfExist(responseContent, Place.PLC_LONGITUDE));
@@ -248,11 +251,7 @@ public class PlaceDetailFragment extends Fragment{
                                         try{
 
                                                 // Set Title Info part
-                                                if(activePlace.isOpen()) {
-                                                    topInfo.setText(activePlace.getName() + " : " + getResources().getString(R.string.openbuttonlabel));
-                                                }else{
-                                                    topInfo.setText(activePlace.getName() + " : " + getResources().getString(R.string.closedbuttonlabel));
-                                                }
+                                                topInfo.setText(activePlace.getName() + " : " + (activePlace.getPlaceIsOpen().equalsIgnoreCase("1") ? getResources().getString(R.string.openbuttonlabel) : getResources().getString(R.string.closedbuttonlabel)));
 
 
                                                 // ----- ----- -----
@@ -415,6 +414,16 @@ public class PlaceDetailFragment extends Fragment{
                                         }
 
                                     }
+
+
+                            }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                                //We should get new apikey and token
+                                RegisterAPI.callRegister(activity);
+
+                                //Error Info
+                                Log.e("531-FAILURE_PERMISSION" , "PlaceDetailFragment->onViewCreated-> api key missing error");
+                                Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
 
                             }
 

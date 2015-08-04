@@ -5,9 +5,8 @@
 package com.youbaku.apps.placesnear.place.comment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -34,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
@@ -78,13 +78,13 @@ public class CreateComment extends Fragment {
 
     }
 
-    public void saveComment() {
+    public void saveComment(final Activity activity , final ProgressDialog progress) {
 
         if (comment.getText().toString().equals("") || String.valueOf(c.rating).equals("")) {
             Toast.makeText(getActivity(), getResources().getString(R.string.formvalidationmessage), Toast.LENGTH_LONG).show();
             return;
         }
-        String loginUrl = App.SitePath +"api/auth.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=comment";
+        String loginUrl = App.SitePath +"api/auth.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&op=comment";
         JSONObject apiResponse = null;
         final Activity tt = getActivity();
 
@@ -94,32 +94,54 @@ public class CreateComment extends Fragment {
         map.put("message", comment.getText().toString());
         map.put("score", String.valueOf(c.rating));
 
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        try {
+                        progress.dismiss();
+                        if (App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
+                                try {
 
-                            Log.i("--- GUPPY ---", response.getString("status"));
-                            String responseContent = response.getString("content");
+                                    String responseContent = response.getString("content");
 
-                            //1.Show Generic Success Message
-                            App.showGenericInfoActivity(getActivity(),App.typeSuccess,getResources().getString(R.string.reviewsentsuccessmessage));
+                                    //1.Show Generic Success Message
+                                    App.showGenericInfoActivity(getActivity(),App.typeSuccess,getResources().getString(R.string.reviewsentsuccessmessage));
 
-                            //2.Go Previous Activity
-                            getActivity().getSupportFragmentManager().popBackStack();
+                                    //2.Go Previous Activity
+                                    getActivity().getSupportFragmentManager().popBackStack();
 
-                            //3.Find correct screen using GoBack function
-                            ((PlaceDetailActivity) getActivity()).goBack();
+                                    //3.Find correct screen using GoBack function
+                                    ((PlaceDetailActivity) getActivity()).goBack();
 
-                        } catch (JSONException e) {
+                                } catch (JSONException e) {
 
-                            App.showGenericInfoActivity(getActivity(), App.typeInfo, getResources().getString(R.string.reviewsentunsuccessmessage));
-                            e.printStackTrace();
+                                    App.showGenericInfoActivity(getActivity(), App.typeInfo, getResources().getString(R.string.reviewsentunsuccessmessage));
+                                    e.printStackTrace();
+                                    return;
+                                }
+
+                        }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                            //We should get new apikey and token
+                            RegisterAPI.callRegister(activity);
+
+                            //Error Info
+                            Log.e("531-FAILURE_PERMISSION" , "CreateComment->saveComment-> api key missing error");
+                            Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
+
+                        }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_COMMENT_MULTIPLE")){
+
+                            App.showGenericInfoActivity(getActivity(), App.typeInfo, "Bu mekana daha önceden yorum yaptınız...");
+                            return;
+
+                        }else {
+
+                            App.showGenericInfoActivity(getActivity(), App.typeInfo, "Unexpected error occur");
                             return;
                         }
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -133,62 +155,6 @@ public class CreateComment extends Fragment {
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
-
-
-
-     /*
-        ((PlaceDetailActivity)getActivity()).setSupportProgressBarIndeterminateVisibility(true);
-        setEditable(false);
-        final double rat=(Place.FOR_DETAIL.rating+c.rating*2)/2;
-        ParseObject o=new ParseObject(App.PARSE_COMMENTS);
-        o.put(Comment.PLACE,c.place);
-        o.put(Comment.RATING,(c.rating*2)+"");
-        o.put(Comment.EMAIL,c.email);
-        o.put(Comment.ISACTIVE,c.isActive);
-        o.put(Comment.NAME, c.name);
-        o.put(Comment.TEXT, c.text);
-        System.out.println(c.place+" "+c.rating+" "+c.email+" "+c.name+" "+c.text);
-        o.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e!=null){
-                    setEditable(false);
-                    e.printStackTrace();
-                    ((ActionBarActivity)getActivity()).setSupportProgressBarIndeterminateVisibility(false);
-                    Toast.makeText(getActivity(),getResources().getString(R.string.reviewsentunsuccessmessage),Toast.LENGTH_LONG).show();
-                    return;
-                }
-                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(App.PARSE_PLACES);
-                //query.whereEqualTo(Place.ID, Place.FOR_DETAIL.id);
-                query.getInBackground(Place.FOR_DETAIL.id,new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject parseObject, ParseException e) {
-                        if(e!=null){
-                            setEditable(false);
-                            e.printStackTrace();
-                            ((ActionBarActivity)getActivity()).setSupportProgressBarIndeterminateVisibility(false);
-                            Toast.makeText(getActivity(),getResources().getString(R.string.reviewsentunsuccessmessage),Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        parseObject.put(Place.RATING,rat+"");
-                        parseObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                setEditable(false);
-                                if(e!=null){
-                                    e.printStackTrace();
-                                    ((ActionBarActivity)getActivity()).setSupportProgressBarIndeterminateVisibility(false);
-                                    Toast.makeText(getActivity(),getResources().getString(R.string.reviewsentunsuccessmessage),Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-                                saveDone();
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    */
 
     }
 

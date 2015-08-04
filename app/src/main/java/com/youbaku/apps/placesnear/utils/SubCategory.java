@@ -6,16 +6,18 @@ package com.youbaku.apps.placesnear.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
-import com.youbaku.apps.placesnear.SearchFragment;
-import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
+import com.youbaku.apps.placesnear.MainActivity;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 
 import org.json.JSONArray;
@@ -68,7 +70,7 @@ public class SubCategory {
 
     public static void fetchSubcategoryList(final Activity activity , final View view , final Category categoryObj){
         //Calling Api
-        String url = App.SitePath+"api/category.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&cat_id="+categoryObj.getObjectId();
+        String url = App.SitePath+"api/category.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&cat_id="+categoryObj.getObjectId();
 
         JSONObject apiResponse = null;
         // Request a json response
@@ -104,7 +106,20 @@ public class SubCategory {
                                 if(Category.FETCHED_SUBCATEGORY_NUM==Category.categoryList.size()){
                                     Category.IS_SUBCATEGORIES_FETCHED = true;
                                     Category.refreshSearchFragment(activity,view);
+
+
+                                    activity.finish();
+                                    activity.startActivity(activity.getIntent());
                                 }
+
+                            }else if(response.getString("status").equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                                //We should get new apikey and token
+                                RegisterAPI.callRegister(activity);
+
+                                //Error Info
+                                Log.e("531-FAILURE_PERMISSION" , "SubCategory->fetchSubcategoryList-> api key missing error");
+                                Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
 
                             }
 

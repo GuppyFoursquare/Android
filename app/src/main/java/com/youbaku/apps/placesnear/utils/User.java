@@ -5,8 +5,15 @@
 package com.youbaku.apps.placesnear.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -16,12 +23,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.ProfilActivity;
+import com.youbaku.apps.placesnear.R;
 import com.youbaku.apps.placesnear.RegisterActivity;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+import com.youbaku.apps.placesnear.place.Place;
+import com.youbaku.apps.placesnear.place.PlaceDetailActivity;
+import com.youbaku.apps.placesnear.place.comment.Comment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -65,6 +78,113 @@ public class User {
 
 
     //---------------------------------- REQUEST PART -----------------------------------/
+    /**
+     *
+     * @param currentActivity
+     *
+     * This method will be used for login to App
+     */
+    public static void userLogin(final Activity currentActivity){
+
+        //Toast.makeText(getApplicationContext(), "Login is clicked", Toast.LENGTH_LONG).show();
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentActivity);
+        LayoutInflater inflater = currentActivity.getLayoutInflater();
+        final View alertView = inflater.inflate(R.layout.dialog_login_layout, null);
+        alertDialog.setView(alertView);
+
+            /* When positive  is clicked */
+        alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel(); // Your custom code
+
+                String loginUrl = App.SitePath + "api/auth.php?token=" + App.getYoubakuToken() + "&apikey=" + App.getYoubakuAPIKey() + "&op=login";
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("name", ((EditText) alertView.findViewById(R.id.username)).getText().toString());
+                map.put("pass", ((EditText) alertView.findViewById(R.id.password)).getText().toString());
+
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                        (Request.Method.POST, loginUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                try {
+
+                                    if (response.getString("status").equalsIgnoreCase("SUCCESS")) {
+
+                                        JSONObject responseContent = response.getJSONObject("content");
+                                        User.getInstance().setUser_name(responseContent.getString("usr_username"));
+                                        User.getInstance().setUser_email(responseContent.getString("usr_email"));
+
+                                        SharedPreferences sharedPref = currentActivity.getSharedPreferences(App.sharedPreferenceKey, Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putBoolean(App.KEY_ISAUTH, true);
+                                        editor.commit();
+
+                                        MainActivity.doLogin.setIcon(R.drawable.ic_profilelogo);
+
+                                    }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                                        //We should get new apikey and token
+                                        RegisterAPI.callRegister(currentActivity);
+
+                                        //Error Info
+                                        Log.e("531-FAILURE_PERMISSION" , "User->userRegister-> api key missing error");
+                                        Toast.makeText(currentActivity, "We are try to register again...", Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        Toast.makeText(currentActivity, response.getString("status"), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } catch (JSONException e) {
+
+                                    App.sendErrorToServer(currentActivity, getClass().getName(), "login Errror---", e.getMessage());
+                                    Toast.makeText(currentActivity, "MainActivity login()", Toast.LENGTH_SHORT).show();
+
+                                    e.printStackTrace();
+                                    return;
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // TODO Auto-generated method stub
+
+                            }
+                        });
+
+                // Add the request to the queue
+                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+            }
+        });
+
+            /* When register  button is clicked*/
+        alertDialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent in = new Intent(currentActivity, RegisterActivity.class);
+                currentActivity.startActivity(in);
+            }
+        });
+
+            /* When negative  button is clicked*/
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Your custom code
+            }
+        });
+
+        alertDialog.show();
+    }
+
+
+
+
+
+
     /**
      * @param URL
      * @param parameters
@@ -111,6 +231,17 @@ public class User {
 
                                 e.printStackTrace();
                             }
+
+
+                        }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                            //We should get new apikey and token
+                            RegisterAPI.callRegister(activity);
+
+                            //Error Info
+                            Log.e("531-FAILURE_PERMISSION" , "User->userRegister-> api key missing error");
+                            Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
+
 
                         }else{
                             try{
@@ -162,6 +293,10 @@ public class User {
                         if (App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
 
 
+                            SharedPreferences sharedPref = activity.getSharedPreferences(App.sharedPreferenceKey, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putBoolean(App.KEY_ISAUTH, false);
+                            editor.commit();
 
                             //if logout, finish current activity and go to home page
                             activity.finish();
@@ -170,7 +305,14 @@ public class User {
                             activity.startActivity(in);
 
 
+                        }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PERMISSION")){
 
+                            //We should get new apikey and token
+                            RegisterAPI.callRegister(activity);
+
+                            //Error Info
+                            Log.e("531-FAILURE_PERMISSION" , "User->userLogout-> api key missing error");
+                            Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
 
 
                         }else{
@@ -251,6 +393,15 @@ public class User {
                                 e.printStackTrace();
                             }
 
+                        }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                            //We should get new apikey and token
+                            RegisterAPI.callRegister(activity);
+
+                            //Error Info
+                            Log.e("531-FAILURE_PERMISSION" , "User->userInfo-> api key missing error");
+                            Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
+
                         }else{
                             try{
                                 String resultStatus = App.getJsonValueIfExist(response, App.RESULT_STATUS);
@@ -277,6 +428,7 @@ public class User {
 
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
+
 
     //---------------------------------- REQUEST PART -----------------------------------/
     //---------------------------------- REQUEST PART -----------------------------------/

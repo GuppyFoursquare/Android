@@ -5,23 +5,35 @@
 package com.youbaku.apps.placesnear;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.squareup.picasso.Picasso;
-import com.youbaku.apps.placesnear.adapter.Adapter;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.utils.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +41,15 @@ import java.util.Map;
 
 public class ProfilActivity extends ActionBarActivity {
     private ActionBar actionBar;
-
+    private Activity activity;
+    private AlertDialog.Builder logoutDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profil);
+        this.activity = this;
 
         // ********** ********** ********** ********** **********
         // Initilization ActionBar
@@ -76,6 +90,42 @@ public class ProfilActivity extends ActionBarActivity {
 
 
 
+        // -------------------------------------------------------------------- //
+        // -------------------------------------------------------------------- //
+        // -------------------------------------------------------------------- //
+        logoutDialog = new AlertDialog.Builder(this);
+        View logoutView = getLayoutInflater().inflate(R.layout.dialog_logout_layout, null);
+        logoutDialog.setView(logoutView);
+
+            /* When positive  is clicked */
+        logoutDialog.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel(); // Your custom code
+
+                Map<String, String> map = new HashMap<String,String>();
+                map.put("op", "logout");
+
+                User.userLogout(
+                        App.SitePath + "api/auth.php?token=" + App.getYoubakuToken() + "&apikey=" + App.getYoubakuAPIKey(),
+                        map,
+                        ProfilActivity.this
+                );
+
+            }
+        });
+
+            /* When negative  button is clicked*/
+        logoutDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Your custom code
+            }
+        });
+
+
+
+
+
     }
 
     @Override
@@ -96,17 +146,7 @@ public class ProfilActivity extends ActionBarActivity {
                 return true;
 
             case R.id.logout_profile_menu:
-                Map<String, String> map = new HashMap<String,String>();
-                map.put("op", "logout");
-
-                User.userLogout(
-                        App.SitePath + "api/auth.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey,
-                        map,
-                        ProfilActivity.this
-                );
-
-
-
+                logoutDialog.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

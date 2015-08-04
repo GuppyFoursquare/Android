@@ -4,6 +4,7 @@
 
 package com.youbaku.apps.placesnear;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.adapter.ExpandableListviewAdapter;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.place.Place;
 import com.youbaku.apps.placesnear.place.PlaceActivity;
@@ -113,46 +115,18 @@ public class SearchFragment extends Fragment {
 
         searchBtn = (Button) view.findViewById(R.id.searcBtn);
 
+
+
         if (Category.categoryList == null || Category.categoryList.size() == 0) {
-            Category.fetchCategoryList(getActivity(), view);
+
+            // fetch categories & subcategories
+            fetchCategoryList(getActivity(), view);
+
+        }else{
+
+            setScreen(activity , view);
+
         }
-
-
-        try {
-
-            Category.refreshSearchFragment(getActivity(), view);
-            searchBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    //GET SELECTED SUBCATEGORIES
-                    ArrayList selectedSubCategory = new ArrayList();
-                    for(Category c : Category.categoryList){
-                        for(SubCategory s : c.getSubCatList()){
-                            if(s.isSelected()){
-                                selectedSubCategory.add(s.getId());
-                            }
-                        }
-
-                    }
-
-                    if(selectedSubCategory.size()==0 ){
-                        Toast.makeText(getActivity(), "You should select at least one category!", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-
-                        Intent in = new Intent(getActivity(), PlaceActivity.class);
-                        startActivity(in);
-                    }
-                }
-            });
-
-
-
-        } catch (NullPointerException e) {
-            App.sendErrorToServer(activity, getClass().getName() , "onCreateView", e.getMessage());
-        }
-
 
         return view;
     }
@@ -164,6 +138,9 @@ public class SearchFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
+
 
 
     /**
@@ -181,74 +158,134 @@ public class SearchFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    //Pulling list from category web service
-    private void getCategoryList() {
 
+    // *********************************************************************************************
+    // ---------- ---------- ---------- UI OPERATIONS ---------- ---------- ----------
+    // *********************************************************************************************
+
+    private void setScreen(Activity activity , View expandableView){
+
+        if(SearchFragment.adapter!=null){
+            final AnimatedExpandableListView listView = (AnimatedExpandableListView)expandableView.findViewById(R.id.listView);
+            SearchFragment.adapter.setItems(Category.categoryList);
+            listView.setAdapter(SearchFragment.adapter);
+            listView.expandGroup(0);
+
+
+            // In order to show animations, we need to use a custom click handler
+            // for our ExpandableListView.
+            listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
+                    // We call collapseGroupWithAnimation(int) and
+                    // expandGroupWithAnimation(int) to animate group
+                    // expansion/collapse.
+                    if (listView.isGroupExpanded(groupPosition)) {
+                        listView.collapseGroupWithAnimation(groupPosition);
+                    } else {
+                        listView.expandGroupWithAnimation(groupPosition);
+                    }
+
+                    return true;
+                }
+
+            });
+
+        }else{
+            SearchFragment.adapter = new ExpandableListviewAdapter(activity , Category.categoryList);
+        }
+
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //GET SELECTED SUBCATEGORIES
+                ArrayList selectedSubCategory = new ArrayList();
+                for(Category c : Category.categoryList){
+                    for(SubCategory s : c.getSubCatList()){
+                        if(s.isSelected()){
+                            selectedSubCategory.add(s.getId());
+                        }
+                    }
+
+                }
+
+                if(selectedSubCategory.size()==0 ){
+                    Toast.makeText(getActivity(), "You should select at least one category!", Toast.LENGTH_LONG).show();
+                }
+                else{
+
+                    Intent in = new Intent(getActivity(), PlaceActivity.class);
+                    startActivity(in);
+                }
+            }
+        });
+
+    }
+
+
+
+
+
+
+    // *********************************************************************************************
+    // ---------- ---------- ---------- API CALLS ---------- ---------- ----------
+    // *********************************************************************************************
+
+    private void fetchCategoryList(final Activity activity , final View view){
         //Calling Api
-        String url = App.SitePath + "api/category.php";
+        String url = App.SitePath+"api/category.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey();
 
-        JSONObject apiResponse = null;
         // Request a json response
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, url , new Response.Listener<JSONObject>(){
 
                     @Override
                     public void onResponse(JSONObject response) {
 
                         try {
 
-                            ArrayList list = new ArrayList<Category>();
-                            JSONArray jArray = response.getJSONArray("content");
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
 
+                                Category.categoryList = new ArrayList<Category>();
+                                JSONArray responseCategoryList = response.getJSONArray("content");
 
-                            //Read JsonArray
-                            for (int i = 0; i < jArray.length(); i++) {
-                                JSONObject obj = jArray.getJSONObject(i);
+                                //Read JsonArray
+                                for (int i = 0; i < responseCategoryList.length(); i++) {
+                                    JSONObject obj = responseCategoryList.getJSONObject(i);
 
-                                final Category c = new Category();
-                                c.title = obj.getString("cat_name") + "";
-                                c.setObjectId(obj.getString("cat_id"));
-                                c.iconURL = obj.getString("cat_image");
-                                list.add(c);
+                                    Category category = new Category();
 
-                            }
+                                    category.title=obj.getString("cat_name");
+                                    category.objectId = obj.getString("cat_id");
+                                    category.iconURL=obj.getString("cat_image");
+                                    Category.categoryList.add(category);
 
-
-                            //Setting Adapter
-                            adapter = new ExpandableListviewAdapter(getActivity(), list);
-                            listView = (AnimatedExpandableListView) view.findViewById(R.id.listView);
-                            listView.setAdapter(adapter);
-
-
-                            //set initial expand status to listview
-                            listView.expandGroup(0);
-
-                            // In order to show animations, we need to use a custom click handler
-                            // for our ExpandableListView.
-                            listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-                                @Override
-                                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                                    // We call collapseGroupWithAnimation(int) and
-                                    // expandGroupWithAnimation(int) to animate group
-                                    // expansion/collapse.
-
-
-                                    if (listView.isGroupExpanded(groupPosition)) {
-                                        listView.collapseGroupWithAnimation(groupPosition);
-                                    } else {
-                                        listView.expandGroupWithAnimation(groupPosition);
-
-                                    }
-
-                                    return true;
+                                    // Fetch subcategory List
+                                    fetchSubcategoryList(activity, view, category);
                                 }
 
-                            });
+                                Category.IS_CATEGORIES_FETCHED = true;
 
+                            }else if(response.getString("status").equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                                //We should get new apikey and token
+                                RegisterAPI.callRegister(activity);
+
+                                //Error Info
+                                Log.e("531-FAILURE_PERMISSION" , "Category->fetchCategoryList-> api key missing error");
+                                Toast.makeText(activity , "We are try to register again..." , Toast.LENGTH_SHORT).show();
+
+                            }else{
+                                Category.IS_CATEGORIES_FETCHED = false;
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Category.IS_CATEGORIES_FETCHED = false;
                         }
 
                     }
@@ -257,12 +294,91 @@ public class SearchFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
+                        Category.IS_CATEGORIES_FETCHED = false;
+                    }
+                });
 
+        // Add the request to the queue
+        VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
+
+    }
+
+
+
+
+
+
+    private void fetchSubcategoryList(final Activity activity , final View view , final Category categoryObj){
+        //Calling Api
+        String url = App.SitePath+"api/category.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&cat_id="+categoryObj.getObjectId();
+
+        JSONObject apiResponse = null;
+        // Request a json response
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, apiResponse, new Response.Listener<JSONObject>(){
+
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            if(response.getString("status").equalsIgnoreCase("SUCCESS")){
+
+                                categoryObj.getSubCatList().clear();
+                                JSONArray responseSubcategoryList = response.getJSONArray("content");
+
+                                //Read JsonArray
+                                for (int i = 0; i < responseSubcategoryList.length(); i++) {
+                                    JSONObject obj = responseSubcategoryList.getJSONObject(i);
+
+                                    SubCategory subcategory = new SubCategory();
+                                    subcategory.setId(obj.getString("cat_id"));
+                                    subcategory.setTitle(obj.getString("cat_name"));
+
+                                    subcategory.setSubcategoy_name(obj.getString("cat_name"));
+                                    subcategory.setSubcategoy_image(obj.getString("cat_image"));
+                                    categoryObj.getSubCatList().add(subcategory);
+                                }
+
+
+                                Category.FETCHED_SUBCATEGORY_NUM++;
+                                if(Category.FETCHED_SUBCATEGORY_NUM==Category.categoryList.size()){
+                                    Category.IS_SUBCATEGORIES_FETCHED = true;
+                                    Category.refreshSearchFragment(activity,view);
+
+                                    // refresh page
+                                    setScreen(activity,view);
+
+                                }
+
+                            }else if(response.getString("status").equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                                //We should get new apikey and token
+                                RegisterAPI.callRegister(activity);
+
+                                //Error Info
+                                Log.e("531-FAILURE_PERMISSION" , "SubCategory->fetchSubcategoryList-> api key missing error");
+                                Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("---GUPPY SubCategory---", "SubCategory JSON Exception...");
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
                     }
                 });
 
         // Add the request to the queue
         VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
     }
+
 
 }

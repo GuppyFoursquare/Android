@@ -5,18 +5,22 @@
 package com.youbaku.apps.placesnear.place;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.text.Html;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.youbaku.apps.placesnear.App;
+import com.youbaku.apps.placesnear.MainActivity;
 import com.youbaku.apps.placesnear.MyApplication;
 import com.youbaku.apps.placesnear.adapter.Adapter;
+import com.youbaku.apps.placesnear.apicall.RegisterAPI;
 import com.youbaku.apps.placesnear.apicall.VolleySingleton;
 import com.youbaku.apps.placesnear.location.MyLocation;
 import com.youbaku.apps.placesnear.photo.Photo;
@@ -53,6 +57,7 @@ public class Place {
     public static final String PLC_LONGITUDE = "plc_longitude";
     public static final String PLC_INTIME = "plc_intime";
     public static final String PLC_OUTTIME = "plc_outtime";
+    public static final String PLC_IS_OPEN = "plc_is_open";
     public static final String PLC_INFO = "plc_info";
     public static final String PLC_IS_ACTIVE = "plc_is_active";
     public static final String RATING = "rating";
@@ -80,6 +85,7 @@ public class Place {
     public static final String ISACTIVE = "isactive";
 
 
+
     public static final String DESCRIPTION = "description";
     public static final String FACEBOOK = "facebook";
     public static final String PLACE = "place";
@@ -89,6 +95,7 @@ public class Place {
     public String imgUrl;
     public String id = "";
     public String name = "";
+    private String plc_is_open="";
     private String phone = "";
     public String category = "";
     private String address = "";
@@ -270,6 +277,7 @@ public class Place {
     public void setClose(String close) {
         this.close = close;
     }
+
     //---------------------------------- ENCAPSULATION -----------------------------------/
 
 
@@ -303,11 +311,6 @@ public class Place {
         if (activity!=null && !App.checkInternetConnection(activity) ) {
             App.showInternetError(activity);
             return;
-        }
-
-        if(activity!=null){
-            App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " url:: " + URL);
-            App.sendErrorToServer(activity, ">> com.youbaku.apps.placesnear.place.Place" , "pre fetchGenericPlaceList", " map:: " + ((parameters!=null)?(parameters.toString()) : "MAP NULL"));
         }
 
 
@@ -425,6 +428,15 @@ public class Place {
                                     e.printStackTrace();
                                 }
 
+                            }else if(response.getString("status").equalsIgnoreCase("FAILURE_PERMISSION")){
+
+                                //We should get new apikey and token
+                                RegisterAPI.callRegister(activity);
+
+                                //Error Info
+                                Log.e("531-FAILURE_PERMISSION" , "Place->fetchGenericPlaceList-> api key missing error");
+                                Toast.makeText(activity, "We are try to register again...", Toast.LENGTH_SHORT).show();
+
                             }else{
                                 try{
                                     String resultStatus = response.getString("status");
@@ -451,13 +463,6 @@ public class Place {
                                     App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Interface adapter casting error----" + e.getMessage());
 
                                 }
-                            }
-                            if(resultPlaceList.size()==0){
-
-                                    ((Adapter) adapter).notifyDataSetChanged();
-                                    App.showGenericInfoActivity(activity, App.typeNull, "We are sorry! Your search did not match any places. Try different categories.");
-                                    ((PlaceActivity) activity).finish();
-
                             }
 
                             // *********************************************************************
@@ -494,7 +499,7 @@ public class Place {
     public static void fetchPopularPlaces(Activity activity) {
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search&popular=1",
+                App.SitePath + "api/places.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&op=search&popular=1",
                 null,
                 placesArrayListPopular,
                 activity,
@@ -504,7 +509,7 @@ public class Place {
     public static void fetchPopularPlaces(Activity activity, PlaceAdapter adapter) {
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?token="+App.youbakuToken+"&apikey="+App.youbakuAPIKey + "&op=search&popular=1",
+                App.SitePath + "api/places.php?token="+ App.getYoubakuToken() +"&apikey="+ App.getYoubakuAPIKey() + "&op=search&popular=1",
                 null,
                 placesArrayListPopular,
                 activity,
@@ -513,33 +518,45 @@ public class Place {
 
     public static void fetchSearchPlaces(Activity activity, PlaceAdapter adapter) {
 
-        // Preparing for parameters
-        ArrayList selectedSubCategory = new ArrayList();
-        for(Category c : Category.categoryList){
-            for(SubCategory s : c.getSubCatList()){
-                if(s.isSelected()){
-                    selectedSubCategory.add(s.getId());
+        try{
+            // Preparing for parameters
+            ArrayList selectedSubCategory = new ArrayList();
+            for(Category c : Category.categoryList){
+                for(SubCategory s : c.getSubCatList()){
+                    if(s.isSelected()){
+                        selectedSubCategory.add(s.getId());
+                    }
                 }
             }
+
+            // Change selected subcategory to json string
+            JSONArray subCategoryList = new JSONArray(selectedSubCategory);
+            String subCategory = subCategoryList.toString().replaceAll("\"","");
+
+            // Parameters
+            Map<String, String> map = new HashMap<String,String>();
+            map.put("subcat_list", subCategory);
+            map.put("op", "search");
+
+
+            fetchGenericPlaceList(
+                    Request.Method.POST,
+                    App.SitePath + "api/places.php?token=" + App.getYoubakuToken() + "&apikey=" + App.getYoubakuAPIKey(),
+                    map,
+                    placesArrayListSearch,
+                    activity,
+                    adapter);
+
+
+        }catch (NullPointerException e){
+
+            Log.e("G-RAM" ,"Clean up RAM error on Category.categoryList");
+
+            Intent i = new Intent(activity.getApplication(),MainActivity.class);
+            activity.finish();
+            activity.startActivity(i);
+
         }
-
-        // Change selected subcategory to json string
-        JSONArray subCategoryList = new JSONArray(selectedSubCategory);
-        String subCategory = subCategoryList.toString().replaceAll("\"","");
-
-        // Parameters
-        Map<String, String> map = new HashMap<String,String>();
-        map.put("subcat_list", subCategory);
-        map.put("op", "search");
-
-
-        fetchGenericPlaceList(
-                Request.Method.POST,
-                App.SitePath + "api/places.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey,
-                map,
-                placesArrayListSearch,
-                activity,
-                adapter);
 
 
     }
@@ -552,7 +569,7 @@ public class Place {
 
         fetchGenericPlaceList(
                 Request.Method.GET,
-                App.SitePath + "api/places.php?token=" + App.youbakuToken + "&apikey=" + App.youbakuAPIKey + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
+                App.SitePath + "api/places.php?token=" + App.getYoubakuToken() + "&apikey=" + App.getYoubakuAPIKey() + "&op=nearme&lat=" + my.latitude + "&lon=" + my.longitude,
                 null,
                 placesArrayListNearMe,
                 activity,
@@ -573,5 +590,13 @@ public class Place {
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getPlaceIsOpen() {
+        return plc_is_open;
+    }
+
+    public void setPlaceIsOpen(String plc_is_open) {
+        this.plc_is_open = plc_is_open;
     }
 }
