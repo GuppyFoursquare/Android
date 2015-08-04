@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -249,6 +250,14 @@ public class PlaceDetailFragment extends Fragment{
                                         //---------------------------------------------------------------------------
 
                                         try{
+
+                                                if (Build.VERSION.SDK_INT>=17 && activity.isDestroyed()) { // or call isFinishing() if min sdk version < 17
+                                                    Log.e("G-View NULL" , "PlaceDetailFragment > onViewCreated > 17v response result");
+                                                    return;
+                                                }else if(Build.VERSION.SDK_INT>=14 && activity.isFinishing()){
+                                                    Log.e("G-View NULL" , "PlaceDetailFragment > onViewCreated > 14v response result");
+                                                    return;
+                                                }
 
                                                 // Set Title Info part
                                                 topInfo.setText(activePlace.getName() + " : " + (activePlace.getPlaceIsOpen().equalsIgnoreCase("1") ? getResources().getString(R.string.openbuttonlabel) : getResources().getString(R.string.closedbuttonlabel)));
