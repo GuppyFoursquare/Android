@@ -54,7 +54,7 @@
                     android:text="Reserve"/>
 
                 <Button
-                    android:id="@+id/doRate"
+                    android:id="@+id/place_detail_rate_and_review"
                     android:background="@drawable/custombuttongenoa"
                     android:layout_toLeftOf="@+id/doReserveBtn"
                     android:layout_margin="5dp"

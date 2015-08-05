@@ -20,11 +20,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -104,6 +106,10 @@ public class NearMe extends Fragment implements LocationListener {
     private int zoomValue = 15;
 
 
+    private ToggleButton nearmeFilterMovableMap;
+    private Button nearmeFilteClose;
+    private Button nearmeFilterOpen;
+
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -145,6 +151,7 @@ public class NearMe extends Fragment implements LocationListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.nearme_maps, container, false);
 
+
         // Get Activity
         activity = getActivity();
 
@@ -166,6 +173,7 @@ public class NearMe extends Fragment implements LocationListener {
                             nearMeMap.setMyLocationEnabled(true);
                             nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
                             nearMeMap.setOnMarkerClickListener(markerClickListener);
+                            nearMeMap.setOnMapClickListener(mapClickListener);
 
                             MyLocation my = MyLocation.getMyLocation(getActivity());
                             userLocation = new LatLng(my.latitude, my.longitude);
@@ -200,6 +208,37 @@ public class NearMe extends Fragment implements LocationListener {
             default:
                 Toast.makeText(getActivity(), GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()), Toast.LENGTH_SHORT).show();
         }
+
+
+
+        nearmeFilterMovableMap = (ToggleButton)view.findViewById(R.id.nearme_toggle_enable_map_movable);
+        nearmeFilterMovableMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(nearmeFilterMovableMap.isChecked()==true){
+                    nearMeMap.getUiSettings().setScrollGesturesEnabled(true);
+                }else{
+                    nearMeMap.getUiSettings().setScrollGesturesEnabled(false);
+                }
+            }
+        });
+
+
+        nearmeFilterOpen = (Button)view.findViewById(R.id.nearme_filter_open);
+        nearmeFilterOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                l.setVisibility(View.VISIBLE);
+            }
+        });
+
+        nearmeFilteClose = (Button)view.findViewById(R.id.nearme_filter_ok);
+        nearmeFilteClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                l.setVisibility(View.INVISIBLE);
+            }
+        });
 
 
         return view;
@@ -372,7 +411,7 @@ public class NearMe extends Fragment implements LocationListener {
     GoogleMap.OnMapClickListener mapClickListener = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
-            categoryGridViewChangeVisibility();
+//            categoryGridViewChangeVisibility();
         }
     };
 

@@ -48,6 +48,7 @@ import com.youbaku.apps.placesnear.photo.Photo;
 import com.youbaku.apps.placesnear.photo.PhotoActivity;
 import com.youbaku.apps.placesnear.photo.PhotoAdapter;
 import com.youbaku.apps.placesnear.place.comment.Comment;
+import com.youbaku.apps.placesnear.place.comment.CreateComment;
 import com.youbaku.apps.placesnear.web.WebActivity;
 
 import org.json.JSONArray;
@@ -75,6 +76,7 @@ public class PlaceDetailFragment extends Fragment{
     private ImageView iconTwit;
     private ImageView iconWeb;
     private Button reservBtn;
+    private Button rateAndReview;
     private int color=0;
     private Place p = new Place();;
     private PlaceInfo pi;
@@ -138,6 +140,16 @@ public class PlaceDetailFragment extends Fragment{
 
             }
         });
+
+
+        rateAndReview=(Button)view.findViewById(R.id.place_detail_rate_and_review);
+        rateAndReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack("createcomment").replace(R.id.main_activity_place_detail, new CreateComment()).commit();
+            }
+        });
+
 
 
         // Start Progress Bar before api request
