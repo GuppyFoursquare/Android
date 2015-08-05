@@ -6,4 +6,9 @@
 
     <color name="app_green_color">#04a968</color>
     <color name="app_red_color">#c5273f</color>
+
+    <color name="app_default_color">#1f1f1f</color>
+
+
+    1f1f1f
 </resources>

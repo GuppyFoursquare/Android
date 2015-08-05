@@ -14,17 +14,303 @@
 
     </com.google.android.gms.maps.MapView>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="50dp"
+        android:text="Options"
+        android:layout_alignParentRight="true"
+        android:id="@+id/nearmeOptBtn"
+        android:layout_alignParentTop="true"/>
+
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#7000"
+        android:layout_marginTop="5dp"
+
         android:orientation="vertical"
+        android:background="@android:drawable/screen_background_dark_transparent"
         android:id="@+id/nearmecategory"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp">
+        android:padding="15dp">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/app_default_color">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nearmeFilterOptLabel"
+        android:textColor="@android:color/white"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_margin="5dp"
+        />
+
+</RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/nearme_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="#eee"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@android:color/white">
+                    <ToggleButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New ToggleButton"
+                        android:id="@+id/toggle_enable_map_movable"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/enableMapMoveable"
+                        android:layout_toLeftOf="@id/toggle_enable_map_movable"
+                        android:id="@+id/tvMapMov"
+                        android:gravity="center_vertical"
+                        android:layout_alignTop="@+id/toggle_enable_map_movable"
+                        android:layout_alignBottom="@+id/toggle_enable_map_movable"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/keywordlabel"
+                    android:layout_margin="5dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/keyword_filter_fragment"
+                    android:layout_marginBottom="15dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@android:color/white"
+                    android:hint="@string/searchboxplaceholderlabel" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@android:color/white">
+                    <ToggleButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New ToggleButton"
+                        android:id="@+id/open_toggle_filter_fragment"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/opennowfilterlabel"
+                        android:layout_toLeftOf="@id/open_toggle_filter_fragment"
+                        android:id="@+id/textView7"
+                        android:gravity="center_vertical"
+                        android:layout_alignTop="@+id/open_toggle_filter_fragment"
+                        android:layout_alignBottom="@+id/open_toggle_filter_fragment"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/open_toggle_filter_fragment"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:src="@drawable/divider"
+                        android:id="@+id/divider_filter_fragment"/>
+
+                    <ToggleButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New ToggleButton"
+                        android:id="@+id/popular_toggle_filter_fragment"
+                        android:layout_below="@+id/divider_filter_fragment"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/isverifiedfilterlabel"
+                        android:id="@+id/textView77"
+                        android:gravity="center_vertical"
+                        android:layout_toLeftOf="@id/popular_toggle_filter_fragment"
+                        android:layout_alignTop="@+id/popular_toggle_filter_fragment"
+                        android:layout_alignBottom="@+id/popular_toggle_filter_fragment"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                </RelativeLayout>
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/distancelabel"
+                    android:layout_margin="5dp"
+                    android:id="@+id/distance_length_info_text_filter_fragment" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@android:color/white">
+
+                    <SeekBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/seek_bar_filter_fragment"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+
+                        android:layout_below="@+id/seek_bar_start_text_filter_fragment"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="100m"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignLeft="@+id/seek_bar_filter_fragment"
+                        android:id="@+id/seek_bar_start_text_filter_fragment"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="15km"
+                        android:layout_above="@+id/seek_bar_filter_fragment"
+                        android:layout_alignRight="@+id/seek_bar_filter_fragment"
+                        android:id="@+id/seek_bar_end_text_filter_fragment"
+                        />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/sortsectionlabel"
+                    android:layout_margin="5dp"
+                    android:id="@+id/sort_info_text_filter_fragment" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@android:color/white">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/sort_image_filter_fragment"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/sortbydistancelabel"
+                        android:id="@+id/sort_distance_filter_fragment"
+                        android:gravity="center_vertical"
+                        android:layout_toLeftOf="@id/sort_image_filter_fragment"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/sort_distance_filter_fragment"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:src="@drawable/divider"
+                        android:id="@+id/divider_three_filter_fragment"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/sortbyratinglabel"
+                        android:id="@+id/sort_rating_filter_fragment"
+                        android:gravity="center_vertical"
+                        android:layout_toLeftOf="@id/sort_image_filter_fragment"
+                        android:layout_below="@+id/divider_three_filter_fragment"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                </RelativeLayout>
+                <Button
+                    android:id="@+id/nearmeOkBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:padding="5dp"
+                    android:layout_margin="10dp"
+                    android:text="@string/okBtnLabel"
+                    android:background="@drawable/custombuttongenoa"
+                    android:textColor="@android:color/white"/>
+
+            </LinearLayout>
+            </ScrollView>
+
+
 
         <GridView
             android:id="@+id/nearmegrid"

@@ -204,6 +204,9 @@
     <string name="title_activity_profil">ProfilActivity</string>
     <string name="logout">Log Out</string>
     <string name="rateLabel"><![CDATA[Rate & Review]]></string>
+    <string name="nearmeFilterOptLabel">Filter Options</string>
+    <string name="enableMapMoveable">Enable Map Movable</string>
+    <string name="okBtnLabel">OK</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 
