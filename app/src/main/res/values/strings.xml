@@ -208,6 +208,7 @@
     <string name="enableMapMoveable">Enable Map Movable</string>
     <string name="okBtnLabel">OK</string>
     <string name="filterByLabel">FILTER BY :</string>
+    <string name="verifyLogoutLabel">Are you sure you want to logout?</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

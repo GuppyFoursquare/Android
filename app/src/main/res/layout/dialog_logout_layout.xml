@@ -19,8 +19,7 @@
         android:paddingTop="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="Emin misiniz?"
-        android:background="@android:color/white"
+        android:text="@string/verifyLogoutLabel"
         android:layout_marginBottom="4dp" />
 
 </LinearLayout>
