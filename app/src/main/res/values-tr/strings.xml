@@ -183,6 +183,7 @@
     <string name="rateLabel"><![CDATA[Rate & Review]]></string>
     <string name="nearmeFilterOptLabel">Filter Options</string>
     <string name="okBtnLabel">OK</string>
+    <string name="filterByLabel">FILTER BY :</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

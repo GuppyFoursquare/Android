@@ -207,6 +207,7 @@
     <string name="nearmeFilterOptLabel">Filter Options</string>
     <string name="enableMapMoveable">Enable Map Movable</string>
     <string name="okBtnLabel">OK</string>
+    <string name="filterByLabel">FILTER BY :</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 
