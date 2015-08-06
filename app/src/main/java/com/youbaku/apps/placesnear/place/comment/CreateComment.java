@@ -133,12 +133,12 @@ public class CreateComment extends Fragment {
 
                         }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_COMMENT_MULTIPLE")){
 
-                            App.showGenericInfoActivity(getActivity(), App.typeInfo, "Bu mekana daha önceden yorum yaptınız...");
+                            App.showGenericInfoActivity(getActivity(), App.typeInfo, getResources().getString(R.string.multipleCommentError));
                             return;
 
                         }else {
 
-                            App.showGenericInfoActivity(getActivity(), App.typeInfo, "Unexpected error occur");
+                            App.showGenericInfoActivity(getActivity(), App.typeInfo, getResources().getString(R.string.loadingdataerrormessage));
                             return;
                         }
 

@@ -128,7 +128,7 @@ public class SplashScreenActivity extends Activity {
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+        builder.setMessage(getResources().getString(R.string.GPSdisableInfo))
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
@@ -137,7 +137,8 @@ public class SplashScreenActivity extends Activity {
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        App.showGenericInfoActivity(getApplication(),App.typeInfo,"We are sorry! You should first open GPS to use Application.");
+                        App.showGenericInfoActivity(getApplication(),App.typeInfo,getResources().getString(R.string.GPScloseInfo));
+
                         dialog.cancel();
                     }
                 });

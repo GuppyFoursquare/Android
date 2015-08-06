@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:inputType="text"
-            android:text="YouBaku Registration"/>
+            android:text="@string/yb_register_title"/>
 
 
         <EditText
@@ -170,7 +170,7 @@
             android:layout_gravity="center"
             style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_height="wrap_content"
-            android:text="Please Wait.."/>
+            android:text="@string/loadingLabel"/>
     </LinearLayout>
 
 </RelativeLayout>

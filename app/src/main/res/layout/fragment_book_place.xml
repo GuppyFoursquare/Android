@@ -18,7 +18,7 @@
         android:id="@+id/textViewSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name : "
+        android:text="@string/labelName"
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -39,7 +39,7 @@
         android:id="@+id/textViewNumberPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Number of People : "
+        android:text="@string/numberOfPeople"
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -64,7 +64,7 @@
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date : "
+        android:text="@string/dateLabel"
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -86,7 +86,7 @@
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time : "
+        android:text="@string/timeLabel"
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -108,7 +108,7 @@
         android:id="@+id/textViewContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Telephone : "
+        android:text="@string/contactLabel"
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -129,8 +129,7 @@
         android:id="@+id/textViewMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:text="Booking Detail : "
+        android:text="@string/bookingDetailLabel"
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -151,7 +150,7 @@
         android:layout_width="fill_parent"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content"
-        android:text="Send" />
+        android:text="@string/sendbuttonlabel" />
 
 
 </LinearLayout>

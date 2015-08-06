@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imgInfoIcon"
         android:layout_centerHorizontal="true"
-        android:text="Bu Sayfa Yapım Aşamasındadır.."
+        android:text="@string/underConstuctionLabel"
         android:textColor="@android:color/darker_gray"
         android:textSize="18dp" />
 
@@ -35,7 +35,7 @@
         android:textColor="@android:color/white"
         android:layout_below="@+id/tvInfoMessage"
         android:background="@drawable/custombuttongenoa"
-        android:text="Ok" />
+        android:text="@string/okBtnLabel" />
 
 
 </RelativeLayout>

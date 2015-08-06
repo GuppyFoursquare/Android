@@ -96,7 +96,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         act.setBackgroundDrawable(colorDrawable);
         act.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.buttonback));
         act.setDisplayShowCustomEnabled(true);
-        act.setTitle("Places within 10km");
+        act.setTitle(getResources().getString(R.string.placesWithinkm));
         act.setSubtitle("YouBaku");
 
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -185,7 +185,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
         switch (id) {
             case R.id.go_filter_menu:
 
-                getSupportActionBar().setTitle("Filter Places");
+                getSupportActionBar().setTitle(getResources().getString(R.string.placefilterssectionlabel));
 
                 if (Place.placesArrayListSearch!=null && Place.placesArrayListSearch.size()>0 ){
                     if (filterFragment == null)
@@ -276,7 +276,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                 }
                 if(Place.placesArrayListFilter.size()==0){
-                    App.showGenericInfoActivity(PlaceActivity.this, App.typeNull, "We are sorry. No places found!");
+                    App.showGenericInfoActivity(PlaceActivity.this, App.typeNull, getResources().getString(R.string.notFound));
                     finish();
                 }
 
@@ -295,8 +295,7 @@ public class PlaceActivity extends ActionBarActivity implements AllCommentsDownl
 
                 ActionBar act = (getSupportActionBar());
                 act.setTitle("Filter Places");
-                act.setSubtitle(Place.placesArrayListFilter.size()+" place(s) found for your criteria");
-
+                act.setSubtitle(Place.placesArrayListFilter.size() + " " + getResources().getString(R.string.nPlacesFoundForCriteria));
                 return true;
         }
 

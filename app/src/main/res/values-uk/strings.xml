@@ -186,6 +186,19 @@
     <string name="okBtnLabel">OK</string>
     <string name="filterByLabel">FILTER BY :</string>
     <string name="verifyLogoutLabel">Are you sure you want to logout?</string>
+    <string name="underConstuctionLabel">This page is under construction</string>
+    <string name="yb_register_title">YouBaku Registartion</string>
+    <string name="loadingLabel">Loading..</string>
+    <string name="dateLabel">Date</string>
+    <string name="timeLabel">Time</string>
+    <string name="contactLabel">Contact</string>
+    <string name="bookingDetailLabel">Reservation Detail</string>
+    <string name="multipleCommentError">You have already commented on this plac!</string>
+    <string name="placesWithinkm">Places within 10km</string>
+    <string name="notFound">We are sorry! No places found!</string>
+    <string name="nPlacesFoundForCriteria">\"place(s) found for your criteria\"</string>
+    <string name="GPScloseInfo">We are sorry! You should first open GPS to use Application.</string>
+    <string name="GPSdisableInfo">Your GPS seems to be disabled, do you want to enable it?</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 
