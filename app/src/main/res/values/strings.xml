@@ -223,6 +223,7 @@
     <string name="nPlacesFoundForCriteria">\"place(s) found for your criteria\"</string>
     <string name="GPScloseInfo">We are sorry! You should first open GPS to use Application.</string>
     <string name="GPSdisableInfo">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="noContactLabel">No contact number</string>
     //----------------------------------------- OTHER STRINGS ----------------------------------------/
 
 

@@ -8,7 +8,9 @@ package com.youbaku.apps.placesnear.place;
 import android.content.Intent;
 import android.graphics.Color;
 
+import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,9 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.SpinKitDrawable1;
 
 import java.util.ArrayList;
 
@@ -79,6 +83,17 @@ public class PopularPlaceFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_popular_place, container, false);
 
+        ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(View.VISIBLE);
+
+        if (Build.VERSION.SDK_INT > 10) {
+            ProgressBar bar = (ProgressBar) view.findViewById(R.id.progressBar);
+            SpinKitDrawable1 spin = new SpinKitDrawable1(getActivity());
+
+            //Burası loader'in rengini değişir
+            spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
+            bar.setIndeterminateDrawable(spin);
+        }
+
 
 
         listFragment = new PlaceListFragment();
@@ -86,6 +101,7 @@ public class PopularPlaceFragment extends Fragment {
         // OTHERWISE fetch first and set to adapter
         if(Place.placesArrayListPopular!=null && Place.placesArrayListPopular.size()>0){
             listFragment.setList(Place.placesArrayListPopular);
+            ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(View.INVISIBLE);
         }else{
             listFragment.setAdapter(new PlaceAdapter(getActivity(),Place.placesArrayListPopular, Color.BLACK));
             Place.fetchPopularPlaces(getActivity(), listFragment.getAdapter());

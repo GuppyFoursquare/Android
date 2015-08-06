@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -71,16 +72,14 @@ public class ProfilActivity extends ActionBarActivity {
         pro.setIndeterminate(true);
         actionBar.setCustomView(pro, params);
 
-
         //Set Contents
         String nameSurname=User.getInstance().getUser_firstName()+" "+User.getInstance().getUser_lastName();
         ((TextView) findViewById(R.id.profile_useremail)).setText(User.getInstance().getUser_email());
         ((TextView)findViewById(R.id.profile_username)).setText(User.getInstance().getUser_name());
         ((TextView)findViewById(R.id.profile_usersurname)).setText(nameSurname);
-        ImageView profileImg=(ImageView)findViewById(R.id.imageview_profile);
+        ((TextView)findViewById(R.id.profile_user_contact)).setText(User.getInstance().getUser_contact());
 
-        //- INVISIBLE CONTACT -No contact data for user at this time
-        ((TextView)findViewById(R.id.profile_user_contact)).setVisibility(View.INVISIBLE);
+        ImageView profileImg=(ImageView)findViewById(R.id.imageview_profile);
 
 
         //Load Profile Image

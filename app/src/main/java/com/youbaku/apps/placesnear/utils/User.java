@@ -43,6 +43,8 @@ import java.util.Map;
 public class User {
 
     private String user_name;
+    private String user_contact;
+
     private String user_firstName;
     private String user_lastName;
     private String user_email;
@@ -217,6 +219,7 @@ public class User {
 
                                 JSONObject userProfile = response.getJSONObject(App.RESULT_CONTENT);
 
+
                                 // GET response value from and set to singleton Object
                                 myProfile.setUser_firstName(App.getJsonValueIfExist(userProfile, "usr_first_name"));
                                 myProfile.setUser_lastName(App.getJsonValueIfExist(userProfile, "usr_last_name"));
@@ -376,12 +379,16 @@ public class User {
 
                                 JSONObject userProfile = response.getJSONObject(App.RESULT_CONTENT);
 
+
                                 // GET response value from and set to singleton Object
                                 myProfile.setUser_firstName(App.getJsonValueIfExist(userProfile, "usr_first_name"));
                                 myProfile.setUser_lastName(App.getJsonValueIfExist(userProfile, "usr_last_name"));
                                 myProfile.setUser_name(App.getJsonValueIfExist(userProfile, "usr_username"));
                                 myProfile.setUser_email(App.getJsonValueIfExist(userProfile, "usr_email"));
                                 myProfile.setUser_profile_picture(App.getJsonValueIfExist(userProfile, "usr_profile_picture"));
+                                myProfile.setUser_contact(App.getJsonValueIfExist(userProfile, "usr_contact"));
+
+
 
                                 Intent in =new Intent(activity.getApplication(),ProfilActivity.class);
                                 activity.startActivity(in);
@@ -482,6 +489,14 @@ public class User {
 
     public String getUser_profile_picture() {
         return user_profile_picture;
+    }
+
+    public String getUser_contact() {
+        return user_contact;
+    }
+
+    public void setUser_contact(String user_contact) {
+        this.user_contact = user_contact;
     }
 
     public void setUser_profile_picture(String user_profile_picture) {

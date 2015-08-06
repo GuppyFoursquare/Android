@@ -118,7 +118,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="+994504204747"
         android:layout_below="@+id/divider2"
         android:layout_marginTop="16dp"
         />
