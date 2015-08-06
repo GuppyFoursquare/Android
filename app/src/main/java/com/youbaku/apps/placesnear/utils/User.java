@@ -224,7 +224,12 @@ public class User {
                                 myProfile.setUser_firstName(App.getJsonValueIfExist(userProfile, "usr_first_name"));
                                 myProfile.setUser_lastName(App.getJsonValueIfExist(userProfile, "usr_last_name"));
                                 myProfile.setUser_name(App.getJsonValueIfExist(userProfile, "usr_username"));
-//                                Toast.makeText(activity , "User::" + myProfile.getUser_name() , Toast.LENGTH_LONG).show();
+
+                                // SET SharedPrefences
+                                SharedPreferences sharedPref = activity.getSharedPreferences(App.sharedPreferenceKey, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putBoolean(App.KEY_ISAUTH, true);
+                                editor.commit();
 
                                 activity.finish();
 
