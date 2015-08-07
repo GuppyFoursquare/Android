@@ -7,6 +7,7 @@ package com.youbaku.apps.placesnear.place;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -138,7 +139,7 @@ public class PlaceDetailFragment extends Fragment{
         reservBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bookPlaceFrg=new BookPlaceFragment();
+                bookPlaceFrg = new BookPlaceFragment();
                 getFragmentManager().beginTransaction().addToBackStack("bookplace").replace(R.id.main_activity_place_detail, bookPlaceFrg).commit();
 
             }
@@ -156,10 +157,27 @@ public class PlaceDetailFragment extends Fragment{
 
 
         // Start Progress Bar before api request
-        progress = new ProgressDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
-        progress.setTitle("Getting Place");
-        progress.setMessage("Loading place info");
-        progress.show();
+        ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(View.VISIBLE);
+        ((RelativeLayout)view.findViewById(R.id.main_place_detail)).setVisibility(View.INVISIBLE);
+
+
+        if (Build.VERSION.SDK_INT > 10) {
+            ProgressBar bar = (ProgressBar) view.findViewById(R.id.progressBar);
+            SpinKitDrawable1 spin = new SpinKitDrawable1(getActivity());
+
+            //Burası loader'in rengini değişir
+            spin.setColorFilter(Color.parseColor(App.LoaderColor), PorterDuff.Mode.SRC_OVER);
+            bar.setIndeterminateDrawable(spin);
+        }
+
+
+
+
+
+//        progress = new ProgressDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+//        progress.setTitle("Getting Place");
+//        progress.setMessage("Loading place info");
+//        progress.show();
 
 
         /**
@@ -185,6 +203,8 @@ public class PlaceDetailFragment extends Fragment{
 
                                     JSONObject responseContent = App.getJsonObjectValueFromJsonObject(response, App.RESULT_CONTENT);
                                     if(responseContent!=null){
+
+
 
                                         //---------------------------------------------------------------------------
                                         //----- ----- ----- ----- ----- SET RESPONSE VALUE ----- ----- ----- ----- -----
@@ -451,8 +471,10 @@ public class PlaceDetailFragment extends Fragment{
 
                             }
 
+                        // Set INVISIBLE IF Service return any places
+                        ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(View.INVISIBLE);
+                        ((RelativeLayout)view.findViewById(R.id.main_place_detail)).setVisibility(View.VISIBLE);
 
-                            progress.dismiss();
 
                     }
                 }, new Response.ErrorListener() {

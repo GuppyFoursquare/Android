@@ -172,7 +172,7 @@ public class App extends Application {
 
 
     //------------------------------------- DEFAULT COLORS ---------------------------------------/
-    public static final String DefaultActionBarColor      = "#1f1f1f";
+    public static final String DefaultActionBarColor      = "#1F1F1F";
     public static final String BackgroundGrayColor        = "#EFEFF4";
     public static final String DefaultBackgroundColor     = "#414142";
     public static final String CategoryListLabelColor     = "#ffffff";

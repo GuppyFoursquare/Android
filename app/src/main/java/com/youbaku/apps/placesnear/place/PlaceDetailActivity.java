@@ -78,7 +78,7 @@ public class PlaceDetailActivity extends ActionBarActivity {
         pro.setIndeterminate(true);
         act.setCustomView(pro, params);
 
-        ((RelativeLayout) findViewById(R.id.main_activity_place_detail)).setBackgroundColor(Color.parseColor(App.BackgroundGrayColor));
+        ((RelativeLayout) findViewById(R.id.main_activity_place_detail)).setBackgroundColor(Color.parseColor(App.DefaultBackgroundColor));
 
         PlaceDetailFragment det = new PlaceDetailFragment(Color.parseColor(App.GreenColor));
         det.setOnCommentClick(toCommentList);
