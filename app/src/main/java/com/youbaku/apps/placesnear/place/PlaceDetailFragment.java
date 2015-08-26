@@ -140,6 +140,9 @@ public class PlaceDetailFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 bookPlaceFrg = new BookPlaceFragment();
+                Bundle args = new Bundle();
+                args.putString("PLCID", activePlace.getId());
+                bookPlaceFrg.setArguments(args);
                 getFragmentManager().beginTransaction().addToBackStack("bookplace").replace(R.id.main_activity_place_detail, bookPlaceFrg).commit();
 
             }

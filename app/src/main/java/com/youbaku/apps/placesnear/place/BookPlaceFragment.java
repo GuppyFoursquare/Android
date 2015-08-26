@@ -5,9 +5,11 @@
 package com.youbaku.apps.placesnear.place;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,10 +29,21 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.youbaku.apps.placesnear.App;
 import com.youbaku.apps.placesnear.R;
+import com.youbaku.apps.placesnear.apicall.VolleySingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +75,11 @@ public class BookPlaceFragment extends Fragment implements OnClickListener {
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
+
+    // ----- ALERT DIALOG PARAMETER -----
+    // -----------------------------------
+    private AlertDialog alertDialog;
+    private AlertDialog.Builder alertDialogBuilder;
 
     private SimpleDateFormat dateFormatter;
 
@@ -101,7 +120,6 @@ public class BookPlaceFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_book_place, container, false);
 
@@ -131,32 +149,107 @@ public class BookPlaceFragment extends Fragment implements OnClickListener {
             @Override
             public void onClick(View v) {
 
-                if (time.getText().toString().isEmpty() ||date.getText().toString().isEmpty() ||contact.getText().toString().isEmpty() ||textSubject.getText().toString().isEmpty() || textMessage.getText().toString().isEmpty()) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.formvalidationmessage), Toast.LENGTH_LONG).show();
-                } else {
-                    String to = Place.EMAIL;
-                    String cc = "info@youbaku.com";
-                    String dateAndTime="Rezervasiya Tarixi :"+date.getText().toString()+" / "+time.getText().toString()+"\n";
-                    String num =peopleNum.getText().toString()+ " neferlik Rezervasiya";
-                    String by="Teşekkürler, "+textSubject.getText().toString();
-                    String subject = "YouBaku Mobile App :"+ num;
-                    String message = dateAndTime +textMessage.getText().toString()+"\n\n"+by;
+                Map<String,String> parameters = new HashMap<String,String>();
+                parameters.put("op", "book");
+                parameters.put("plc_id", getArguments().getString("PLCID"));
+                parameters.put("book_comer_number", peopleNum.getText().toString());
+                parameters.put("book_date", date.getText().toString());
+                parameters.put("book_time", time.getText().toString());
+                parameters.put("book_contact", contact.getText().toString());
+                parameters.put("book_detail", textMessage.getText().toString());
 
-                    Intent email = new Intent(Intent.ACTION_SEND);
-                    email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
-                    email.putExtra(Intent.EXTRA_CC, new String[]{cc});
-                    //email.putExtra(Intent.EXTRA_BCC, new String[]{to});
-                    email.putExtra(Intent.EXTRA_SUBJECT, subject);
-                    email.putExtra(Intent.EXTRA_TEXT, message);
+                String url = App.SitePath + "api/auth.php?token=" + App.getYoubakuToken() + "&apikey=" + App.getYoubakuAPIKey();
 
-                    //need this to prompts email client only
-                    email.setType("message/rfc822");
+                // Request a json response
+                JSONObject params = (parameters!=null) ? (new JSONObject(parameters)) : (null);
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                        (Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
 
-                    startActivity(Intent.createChooser(email, "Choose an Email client :"));
+                            @Override
+                            public void onResponse(JSONObject response) {
 
 
-                }
+                                if (App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("SUCCESS")) {
 
+                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+                                        // set title
+                                        alertDialogBuilder.setTitle("Reservation Info");
+
+                                        // set dialog message
+                                        alertDialogBuilder
+                                                .setMessage("SUCCESS Operation")
+                                                .setCancelable(false)
+                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        //getFragmentManager().beginTransaction().addToBackStack("bookplace").replace(R.id.main_activity_place_detail, new PlaceDetailFragment()).commit();
+                                                        getFragmentManager().popBackStack();
+                                                    }
+                                                });
+                                        alertDialog = alertDialogBuilder.create();
+                                        alertDialog.show();
+
+                                }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_AUTH")){
+
+                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+                                        // set title
+                                        alertDialogBuilder.setTitle("Reservation Info");
+
+                                        // set dialog message
+                                        alertDialogBuilder
+                                                .setMessage("You should first login")
+                                                .setCancelable(false)
+                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        // if this button is clicked, close
+                                                        // current activity
+                                                        //MainActivity.this.finish();
+                                                    }
+                                                })
+                                                .setNegativeButton("Cance", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        // if this button is clicked, just close
+                                                        // the dialog box and do nothing
+                                                        dialog.cancel();
+                                                    }
+                                                });
+                                        alertDialog = alertDialogBuilder.create();
+                                        alertDialog.show();
+
+                                }else if(App.getJsonValueIfExist(response, App.RESULT_STATUS).equalsIgnoreCase("FAILURE_PARAM_MISMATCH")){
+
+                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+                                        // set title
+                                        alertDialogBuilder.setTitle("Reservation Info");
+
+                                        // set dialog message
+                                        alertDialogBuilder
+                                                .setMessage(App.getJsonValueIfExist(response, App.RESULT_CONTENT))
+                                                .setCancelable(false)
+                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        dialog.cancel();
+                                                    }
+                                                });
+                                        alertDialog = alertDialogBuilder.create();
+                                        alertDialog.show();
+                                }
+
+
+                            }
+
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
+                            //App.sendErrorToServer(getActivity(), getClass().getName(), "fetchGenericPlaceList", "onErrorResponse----" + error.getMessage());
+                        }
+                    });
+
+                VolleySingleton.getInstance().getRequestQueue().add(jsObjRequest);
 
             }
         });
