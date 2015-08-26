@@ -390,9 +390,9 @@ public class Place {
                                             }
 
                                             try {
-                                                place.setRating(averageRating / (double) ratings.length());
+                                                place.setRating(Double.parseDouble(App.getJsonValueIfExist(jsonPlace, "rating_avg").equalsIgnoreCase("-1") ? "0" : App.getJsonValueIfExist(jsonPlace, "rating_avg")));
                                             } catch (NullPointerException e) {
-                                                place.setRating(3);
+                                                place.setRating(0);
                                                 App.sendErrorToServer(activity, getClass().getName(), "fetchGenericPlaceList", "Rating Return Null---" + e.getMessage());
 
                                                 Log.e("---GUPPY---", "ratings return NULL");
